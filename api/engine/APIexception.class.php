@@ -18,6 +18,6 @@ class APIexception extends Exception{
 			"message" => $this->message,
 			"code" => $this->code
 			);
-		return Output::encode($msg, "xml");
+		return Output::encode($msg);
 	}
 }
