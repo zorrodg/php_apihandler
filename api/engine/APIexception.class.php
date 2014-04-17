@@ -18,9 +18,6 @@ class APIexception extends Exception{
 			"message" => $this->message,
 			"code" => $this->code
 			);
-		switch(DEFAULT_OUTPUT){
-			case "json":
-				return json_encode($msg);
-		}
+		return Output::encode($msg, "xml");
 	}
 }
