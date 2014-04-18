@@ -20,11 +20,17 @@ final class Dictionary{
 
 	}
 
-	static public function get(){
+	static public function get($search = NULL){
 		$arr = array();
 		foreach(self::$registry as $key => $value){
 			$arr[$key] = $value;
 		}
+		if($search){
+			if(isset($arr[$search]))
+				return $arr[$search];
+			return false;
+		}
+
 		return $arr;
 	}
 }
