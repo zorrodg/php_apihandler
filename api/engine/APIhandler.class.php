@@ -20,13 +20,6 @@ class APIhandler{
 	 */
 	public function __construct(){
 		$this->server = new Server();
-
-		// try {
-		//     $API = new MercadoAPI($_REQUEST['request'], $_SERVER['HTTP_ORIGIN'], json_decode(file_get_contents("php://input")), $_REQUEST['output']);
-		//     echo $API->processAPI();
-		// } catch (Exception $e) {
-		//     echo json_encode(Array('error' => $e->getMessage()));
-		// }
 	}
 
 	/**
@@ -34,10 +27,8 @@ class APIhandler{
 	 * @return void
 	 */
 	public function debug($var = NULL){
-		$var = $var ?: $this->server;
-		print "Debugger: <br><pre>";
-		print_r($var);
-		print "</pre>";
+		$var = $var ?: $this->server->to_array();
+		return Output::encode($var, $this->server->output);
 	}
 
 	/**
@@ -46,7 +37,7 @@ class APIhandler{
 	 * @param  string $url The url of the service
 	 * @return mixed  response
 	 */
-	private function getData($url){
+	/*private function getData($url){
 
 	  // Get file and directory names from url request
 	  preg_match('/'.preg_quote(API_URL, "/").'(.*)\?/', $url, $matches);
@@ -80,19 +71,19 @@ class APIhandler{
 	    return $res;
 	  }
 	}
-
+*/
 	/**
 	 * Returns cURL data
 	 * 
 	 * @param  string $url The url of the service
 	 * @return mixed  response
 	 */
-	private function getCurl($url){
+	/*private function getCurl($url){
 	   $ch = curl_init();
 	   curl_setopt($ch, CURLOPT_URL, $url);
 	   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	   $res = curl_exec($ch);
 	   curl_close($ch);
 	   return $res;
-	}
+	}*/
 }

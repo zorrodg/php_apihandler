@@ -22,7 +22,7 @@ final class Server{
 		$this->_server['original_endpoint'] = $_REQUEST['request_endpoint'];
 		$this->_server['output'] = isset($_REQUEST['output']) ? $_REQUEST['output'] : DEFAULT_OUTPUT;
 		$this->_server['origin'] = $_SERVER['HTTP_ORIGIN'];
-		$this->_server['data'] = json_decode(file_get_contents("php://input"));
+		$this->_server['data'] = json_decode(file_get_contents("php://input")) ?: "";
 		$this->_server['method'] = $_SERVER['REQUEST_METHOD'];
 		if ($this->_server['method'] == 'POST' && array_key_exists('HTTP_X_HTTP_METHOD', $_SERVER)) {
             if ($_SERVER['HTTP_X_HTTP_METHOD'] == 'DELETE') {
@@ -40,6 +40,14 @@ final class Server{
 	public function __get($key){
 		if(array_key_exists($key, $this->_server))
 			return $this->_server[$key];
+	}
+
+	public function to_array(){
+		$arr;
+		foreach($this->_server as $key => $value){
+			$arr[$key]=$value;
+		}
+		return $arr;
 	}
 
 	private function parseRequest($request){

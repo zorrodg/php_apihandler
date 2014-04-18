@@ -26,13 +26,14 @@ function __autoload($class){
 	require_once "engine/" . $class .".class.php";
 }
 
+require_once "registered_endpoints/Getters.endpoint.php";
+
 //Loads API
 try{
 	$API = new APIhandler();
-	$API->debug();	
+	echo $API->debug($dictionary->show_registered());	
 }
 catch(APIexception $e){
 	echo $e->output();
 }
-
 ?>
