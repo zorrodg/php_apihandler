@@ -16,9 +16,21 @@ class APIhandler{
 	private $server;
 
 	/**
+	 * Holds endpoint registry
+	 * @var Dictionary class
+	 */
+	private $dictionary;
+
+	/**
 	 * Creates the handler with current query
 	 */
 	public function __construct(){
+
+		$this->dictionary = new Dictionary();
+
+		//TODO: Create file caller.
+		include_once "registered_endpoints/Getters.endpoint.php";
+
 		$this->server = new Server();
 	}
 
@@ -27,8 +39,12 @@ class APIhandler{
 	 * @return void
 	 */
 	public function debug($var = NULL){
-		$var = $var ?: $this->server->to_array();
+		$var = $var ?: $this->server->get();
 		return Output::encode($var, $this->server->output);
+	}
+
+	public function get_dictionary(){
+		return Output::encode($this->dictionary->get());
 	}
 
 	/**

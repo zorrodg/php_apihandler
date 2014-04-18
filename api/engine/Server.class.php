@@ -42,7 +42,7 @@ final class Server{
 			return $this->_server[$key];
 	}
 
-	public function to_array(){
+	public function get(){
 		$arr;
 		foreach($this->_server as $key => $value){
 			$arr[$key]=$value;

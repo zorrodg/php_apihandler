@@ -1,8 +1,8 @@
 <?php
 
-class Getter{
+class Getter extends Endpoint{
 
-	public function __construct(MethodDictionary $dictionary, $endpoint){
-		$dictionary->register($endpoint);
+	public function __construct(Dictionary $dictionary, $endpoint){
+		parent::__construct($dictionary, $endpoint);
 	}
 }
