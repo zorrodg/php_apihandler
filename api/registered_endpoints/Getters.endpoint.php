@@ -1,5 +1,7 @@
 <?php
 
-new Getter($this->dictionary, "teams");
-new Getter($this->dictionary, "teams/group");
-new Getter($this->dictionary, "matches");
+new Getter("teams", array(
+	"description"=>"Get all teams"
+	));
+new Getter("teams/group");
+new Getter("matches");

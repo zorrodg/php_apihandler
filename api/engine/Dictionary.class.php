@@ -2,21 +2,29 @@
 
 final class Dictionary{
 
-	private $register = array();
+	static private $registry = array();
 
-	public function register($endpoint){
-		if(!in_array($endpoint, $this->register))
-			$this->register[] = $endpoint;
-		else
-			throw new APIexception('Duplicated endpoint on dictionary', 4);
+	static public function register($endpoint){
+		if (count(self::$registry) > 0){
+			foreach(self::$registry as $registry){
+				if(!in_array($endpoint['endpoint'], $registry)){
+					self::$registry[] = $endpoint;
+					break;
+				} else {
+					throw new APIexception('Duplicated endpoint on dictionary', 4);
+				}	
+			}
+		} else {
+			self::$registry[] = $endpoint;
+		}
 
 	}
 
-	public function get(){
-		$arr;
-		foreach($this->register as $key => $value){
-			$arr[$key]=$value;
+	static public function get(){
+		$arr = array();
+		foreach(self::$registry as $key => $value){
+			$arr[$key] = $value;
 		}
-		return $arr;r;
+		return $arr;
 	}
 }

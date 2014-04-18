@@ -1,13 +1,12 @@
 <?php
 
 abstract class Endpoint{
-	public function __construct(Dictionary $dictionary, $endpoint){
+	public function __construct($endpoint){
 		try{
-			$dictionary->register($endpoint);
+			Dictionary::register($endpoint);
 		}
 		catch(APIexception $e){
 			die($e->output());
-		}
-		
+		}	
 	}
 }

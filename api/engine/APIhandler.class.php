@@ -44,7 +44,7 @@ class APIhandler{
 	}
 
 	public function get_dictionary(){
-		return Output::encode($this->dictionary->get());
+		return Output::encode(Dictionary::get());
 	}
 
 	/**
