@@ -10,6 +10,6 @@ class Getter extends Endpoint{
 			);
 		parent::__construct($ep);
 
-		$this->print_query();
+		//$this->print_query();
 	}
 }

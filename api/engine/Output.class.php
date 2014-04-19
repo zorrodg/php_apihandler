@@ -45,21 +45,20 @@ class Output{
 		}
 	}
 
-    private function XML_encode($items){
+    static private function XML_encode($items){
     	$output = '';
     	if(!is_object($items) && !is_array($items))
             $items = explode(',', $items);
 
         foreach($items as $key => $item){
-            $output.='<'.$key.'>';
-            if(is_object($items) && !is_scalar($items)){
-                $output.=self::XML_encode($item);
-            }elseif(is_array($items) && !is_scalar($item) && !is_numeric($key) && !is_null($item)){
+            $output.='<'.(!is_numeric($key) ? $key : "item").'>';
+
+            if(!is_scalar($item) && isset($item)) {
                 $output.=self::XML_encode($item);
             } else {
                 $output.=$item;
             }
-            $output.='</'.$key.'>';
+            $output.='</'.(!is_numeric($key) ? $key : "item").'>';
         }
 
         return $output;
