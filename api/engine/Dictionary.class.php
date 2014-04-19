@@ -35,12 +35,13 @@ final class Dictionary{
 	}
 
 	static public function exists($search){
-		//TODO: Include search with url args
+		$epsearch = preg_replace('/\/(\d+)/', '/:var', $search);
+
 		foreach(self::$registry as $key => $value){
-			foreach($value as $k => $v){
-				if($search === $v) 
-					return true;
-			}
+			$epvalue = preg_replace('/\/\:(\w+)/', '/:var', $value['endpoint']);
+			
+			if($epsearch === $epvalue)
+				return $value['endpoint'];
 		}
 		throw new APIexception('Endpoint not found', 7);
 	}
