@@ -26,11 +26,8 @@ final class Dictionary{
 		foreach(self::$registry as $key => $value){
 			$arr[$key] = $value;
 			if($search){
-				foreach($value as $k => $v){
-					if($search === $v) 
-						return $arr[$key];
-				}
-				throw new APIexception('No endpoint registered', 7);
+				if($search === $value['endpoint']) 
+					return $arr[$key];
 			}
 		}
 
@@ -45,6 +42,6 @@ final class Dictionary{
 					return true;
 			}
 		}
-		return false;
+		throw new APIexception('Endpoint not found', 7);
 	}
 }

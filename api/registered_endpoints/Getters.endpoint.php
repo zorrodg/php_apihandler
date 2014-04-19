@@ -5,11 +5,11 @@ new Getter("teams", array(
 	"create_new_table" => true,
 	"columns" => array("name|string", "group|char")
 	));
-new Getter("teams/edit/:id",array(
+new Getter("teams/create",array(
 		"columns" => array("name|string", "group|char")
 	));
-new Getter("matches/create",array(
-		"columns" => array("hour", "score")
+new Getter("teams/edit/:id",array(
+		"columns" => array("name", "score")
 	));
 new Getter("groups/delete/:id");
 new Getter("groups/:match");

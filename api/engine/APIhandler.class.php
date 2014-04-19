@@ -36,8 +36,9 @@ class APIhandler{
 	}
 
 	public function search_current_endpoint(){
-		var_dump(Dictionary::exists($this->server->original_endpoint));
-		//return Output::encode(Dictionary::get($this->server->original_endpoint), $this->server->output);
+		$og_endpoint = $this->server->original_endpoint;
+		if(Dictionary::exists($og_endpoint))
+			return Output::encode(Dictionary::get($og_endpoint), $this->server->output);
 	}
 
 	/**
