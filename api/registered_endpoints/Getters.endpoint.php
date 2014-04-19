@@ -6,8 +6,10 @@ new Getter("teams", array(
 	"columns" => array("name|string", "group|char")
 	));
 new Getter("teams/edit/:id",array(
-		"filter" => array("group")
+		"columns" => array("name|string", "group|char")
 	));
-new Getter("matches");
-new Getter("groups/:id");
+new Getter("matches/create",array(
+		"columns" => array("hour", "score")
+	));
+new Getter("groups/delete/:id");
 new Getter("groups/:match");

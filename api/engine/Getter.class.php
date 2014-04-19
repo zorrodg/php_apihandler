@@ -9,7 +9,5 @@ class Getter extends Endpoint{
 			"params" => $params
 			);
 		parent::__construct($ep);
-
-		//$this->print_query();
 	}
 }

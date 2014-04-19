@@ -10,7 +10,7 @@ class Database{
 		"select" => array("get", "select", "show", "search", "login"),
 		"update" => array("update", "edit"),
 		"insert" => array("put","insert", "create", "new"),
-		"delete" => array("delete", "remove", "clear")
+		"delete" => array("delete", "remove", "clear", "destroy")
 		);
 
 
@@ -56,10 +56,51 @@ class Database{
 				break;
 			case 'INSERT':
 				$query.=" INTO";
+				if(isset($params['columns'])){
+					$cols = array();
+					$vals = array();
+					foreach($params['columns'] as $col){
+						$col = explode("|", $col);
+						$cols[] = $col[0];
+						$vals[] = "'%s'";
+					}
+					$set = " (".implode(',',$cols).") VALUES (".implode(',',$vals).")";
+				} else {
+					throw New APIexception('No columns to insert', 6);
+				}
+				break;
+
+			case 'UPDATE':
+				if(isset($params['columns'])){
+					$cols = array();
+					foreach($params['columns'] as $col){
+						$col = explode("|", $col);
+						$cols[] = "$col[0]='%s'";
+					}
+					$set = " SET ".implode(',',$cols);
+				} else {
+					throw New APIexception('No columns to update', 6);
+				}
+				break;
+			case 'DELETE':
+				$query.=" FROM";
 				break;
 		}
 
 		$query.=" $table";
+
+		if(isset($set))
+			$query.=$set;
+
+		if(isset($params['filters'])){
+			$query .= " WHERE ";
+			$f=array();
+			foreach($params['filters'] as $filter){
+				$f[] = "$filter='%s'";
+			}
+			$filters = implode(' AND ', $f);
+			$query.=$filters;
+		}
 
 		return $query;
 	}

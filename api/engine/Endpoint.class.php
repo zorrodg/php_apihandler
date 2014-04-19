@@ -13,7 +13,7 @@ abstract class Endpoint{
 		}	
 	}
 
-	public function print_query(){
+	public function print_endpoint(){
 		print_r($this->ep->print_query());
 	}
 
@@ -38,14 +38,15 @@ abstract class Endpoint{
 
 		foreach($ep as $filter){
 			if(preg_match('/^\:(\w+)/', $filter, $result)){
-				$endpoint['params']['filter'][] = $result[1];
+				$endpoint['params']['filters'][] = $result[1];
 			}
 		}
 
 
 		$ep = $ep[0];
 
+		$db = new Database($endpoint['method'], $ep, $verb, $endpoint['params']);
+		$endpoint['query'] = $db->print_query();
 		Dictionary::register($endpoint);
-		return new Database($endpoint['method'], $ep, $verb, $endpoint['params']);
 	}
 }

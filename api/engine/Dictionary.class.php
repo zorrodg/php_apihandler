@@ -18,6 +18,7 @@ final class Dictionary{
 			self::$registry[] = $endpoint;
 		}
 
+		return $endpoint['endpoint'];
 	}
 
 	static public function get($search = NULL){
@@ -29,10 +30,21 @@ final class Dictionary{
 					if($search === $v) 
 						return $arr[$key];
 				}
-				return false;
+				throw new APIexception('No endpoint registered', 7);
 			}
 		}
 
 		return $arr;
+	}
+
+	static public function exists($search){
+		//TODO: Include search with url args
+		foreach(self::$registry as $key => $value){
+			foreach($value as $k => $v){
+				if($search === $v) 
+					return true;
+			}
+		}
+		return false;
 	}
 }

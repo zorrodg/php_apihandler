@@ -35,8 +35,9 @@ class APIhandler{
 		return Output::encode($var, $this->server->output);
 	}
 
-	public function get_dictionary(){
-		return Output::encode(Dictionary::get(), $this->server->output);
+	public function search_current_endpoint(){
+		var_dump(Dictionary::exists($this->server->original_endpoint));
+		//return Output::encode(Dictionary::get($this->server->original_endpoint), $this->server->output);
 	}
 
 	/**
