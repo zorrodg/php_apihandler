@@ -5,5 +5,9 @@ new Getter("teams", array(
 	"create_new_table" => true,
 	"columns" => array("name|string", "group|char")
 	));
-new Getter("teams/create");
+new Getter("teams/edit/:id",array(
+		"filter" => array("group")
+	));
 new Getter("matches");
+new Getter("groups/:id");
+new Getter("groups/:match");

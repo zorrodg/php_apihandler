@@ -6,7 +6,6 @@ abstract class Endpoint{
 
 	public function __construct($endpoint){
 		try{
-			Dictionary::register($endpoint);
 			$this->ep = $this->create_endpoint($endpoint);
 		}
 		catch(APIexception $e){
@@ -26,13 +25,27 @@ abstract class Endpoint{
 
 		if(!isset($ep[0]))
 			throw new APIexception("No endpoint", 1);
-		if(isset($ep[1]))
-			$verb = $ep[1];
-		else
+
+		if(isset($ep[1])){
+			if(preg_match('/^\:(\w+)/', $ep[1], $var)){
+				$verb = NULL;
+			} else {
+				$verb = $ep[1];
+			}
+		}else{
 			$verb = NULL;
+		}
+
+		foreach($ep as $filter){
+			if(preg_match('/^\:(\w+)/', $filter, $result)){
+				$endpoint['params']['filter'][] = $result[1];
+			}
+		}
+
 
 		$ep = $ep[0];
 
+		Dictionary::register($endpoint);
 		return new Database($endpoint['method'], $ep, $verb, $endpoint['params']);
 	}
 }

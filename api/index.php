@@ -29,7 +29,7 @@ function __autoload($class){
 //Loads API
 try{
 	$API = new APIhandler();
-	echo $API->get_dictionary();	
+	echo $API->debug();	
 }
 catch(APIexception $e){
 	echo $e->output();

@@ -24,11 +24,13 @@ final class Dictionary{
 		$arr = array();
 		foreach(self::$registry as $key => $value){
 			$arr[$key] = $value;
-		}
-		if($search){
-			if(isset($arr[$search]))
-				return $arr[$search];
-			return false;
+			if($search){
+				foreach($value as $k => $v){
+					if($search === $v) 
+						return $arr[$key];
+				}
+				return false;
+			}
 		}
 
 		return $arr;

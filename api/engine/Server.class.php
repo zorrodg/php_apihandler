@@ -53,10 +53,10 @@ final class Server{
 	private function parseRequest($request){
 		$this->_server['args'] = explode('/', rtrim($request, '/'));
         $this->_server['endpoint'] = array_shift($this->_server['args']);
-        if (array_key_exists(0, $this->_server['args']) && !is_numeric($this->_server['args']))
+        if (array_key_exists(0, $this->_server['args']) && !is_numeric($this->_server['args'][0]))
             $this->_server['verb'] = array_shift($this->_server['args']);
-        if (!array_key_exists(1, $this->_server['args']))
-        	unset($this->_server['args']);
+       /* if (!array_key_exists(1, $this->_server['args']))
+        	unset($this->_server['args']);*/
 	}
 
 	private function parseQueryString(){

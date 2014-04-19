@@ -4,15 +4,18 @@ class Database{
 
 	private $query;
 
+	private $method;
+
 	private $glossary = array(
 		"select" => array("get", "select", "show", "search", "login"),
-		"update" => array("update"),
+		"update" => array("update", "edit"),
 		"insert" => array("put","insert", "create", "new"),
 		"delete" => array("delete", "remove", "clear")
 		);
 
 
 	public function __construct($method, $endpoint, $verb = NULL, $params = array()){
+		$this->method = $method;
 		if($verb)
 			$this->query = $this->construct_query($verb, $endpoint, $params);
 		else
@@ -28,8 +31,9 @@ class Database{
 
 	private function guess_verb($q){
 		foreach($this->glossary as $class => $term){
-			if(in_array(strtolower($q), $term))
+			if(in_array(strtolower($q), $term)){
 				return $class;
+			}	
 		}
 		throw New APIexception("Couldn't guess verb", 5);
 	}
