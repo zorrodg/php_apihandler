@@ -14,6 +14,7 @@ class APIexception extends Exception{
 	}
 
 	public function output(){
+		http_response_code(404);
 		$msg = array(
 			"message" => $this->message,
 			"code" => $this->code

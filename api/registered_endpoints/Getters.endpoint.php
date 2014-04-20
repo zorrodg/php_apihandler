@@ -3,7 +3,7 @@
 new Getter("teams", array(
 	"description" => "Get all teams",
 	"create_new_table" => true,
-	"columns" => array("name|string", "group|char")
+	"columns" => array("name|string|100", "group|char")
 	));
 new Getter("teams/create",array(
 		"columns" => array("name|string", "group|char")

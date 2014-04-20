@@ -45,7 +45,7 @@ abstract class Endpoint{
 
 		$ep = $ep[0];
 
-		$db = new Database($endpoint['method'], $ep, $verb, $endpoint['params']);
+		$db = new Query($endpoint['method'], $ep, $verb, $endpoint['params']);
 		$endpoint['query'] = $db->print_query();
 		Dictionary::register($endpoint);
 	}

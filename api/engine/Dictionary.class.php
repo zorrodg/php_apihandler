@@ -20,7 +20,12 @@ final class Dictionary{
 
 		return $endpoint['endpoint'];
 	}
-
+	
+	/**
+	 * Used for debugging purpouses. Remove when done
+	 * @param  [String] $search
+	 * @return [Array]
+	 */
 	static public function get($search = NULL){
 		$arr = array();
 		foreach(self::$registry as $key => $value){
