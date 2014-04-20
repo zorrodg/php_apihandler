@@ -13,10 +13,6 @@ abstract class Endpoint{
 		}	
 	}
 
-	public function print_endpoint(){
-		print_r($this->ep->print_query());
-	}
-
 	private function create_endpoint($endpoint){
 		if(!isset($endpoint['method']))
 			throw New APIexception("Unexpected Header", 2);

@@ -15,14 +15,13 @@ class Query{
 
 
 	public function __construct($method, $endpoint, $verb = NULL, $params = array()){
+		if(isset($params['create_new_table']) && isset($params['columns']))
+			$this->create_new_table($endpoint, $params['columns']);
 		$this->method = $method;
 		if($verb)
 			$this->query = $this->construct_query($verb, $endpoint, $params);
 		else
 			$this->query = $this->construct_query($method, $endpoint, $params);
-
-		if(isset($params['create_new_table']) && isset($params['columns']))
-			$this->create_new_table($endpoint, $params['columns']);
 	}
 
 	public function print_query(){
