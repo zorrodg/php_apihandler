@@ -11,7 +11,7 @@ final class Dictionary{
 					self::$registry[] = $endpoint;
 					break;
 				} else {
-					throw new APIexception('Duplicated endpoint on dictionary', 4);
+					throw new APIexception('Duplicated endpoint on dictionary', 3);
 				}	
 			}
 		} else {
@@ -20,7 +20,7 @@ final class Dictionary{
 
 		return $endpoint['endpoint'];
 	}
-	
+
 	/**
 	 * Used for debugging purpouses. Remove when done
 	 * @param  [String] $search
@@ -48,6 +48,6 @@ final class Dictionary{
 			if($epsearch === $epvalue)
 				return $value['endpoint'];
 		}
-		throw new APIexception('Endpoint not found', 7);
+		throw new APIexception('Endpoint not found', 6);
 	}
 }

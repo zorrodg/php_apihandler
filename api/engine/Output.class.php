@@ -42,6 +42,8 @@ class Output{
                 $output.= self::XML_encode($data);
                 $output.= '</response>';
 				return $output;
+            default:
+                throw new APIexception("Output not supported", 7);
 		}
 	}
 

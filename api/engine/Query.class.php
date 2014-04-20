@@ -35,7 +35,7 @@ class Query{
 				return $class;
 			}	
 		}
-		throw New APIexception("Couldn't guess verb", 5);
+		throw New APIexception("Couldn't guess verb", 4);
 	}
 
 	private function construct_query($q, $table, $params){
@@ -43,7 +43,7 @@ class Query{
 		$query = strtoupper($this->guess_verb($q));
 		switch($query){
 			case 'SELECT':
-				if(isset($params['columns'])){
+				if(isset($params['columns']) && !$params['create_new_table']){
 					$cols = array();
 					foreach($params['columns'] as $col){
 						$col = explode("|", $col);
@@ -67,7 +67,7 @@ class Query{
 					}
 					$set = " (".implode(',',$cols).") VALUES (".implode(',',$vals).")";
 				} else {
-					throw New APIexception('No columns to insert', 6);
+					throw New APIexception('No columns to insert', 5);
 				}
 				break;
 
@@ -80,7 +80,7 @@ class Query{
 					}
 					$set = " SET ".implode(',',$cols);
 				} else {
-					throw New APIexception('No columns to update', 6);
+					throw New APIexception('No columns to update', 5);
 				}
 				break;
 			case 'DELETE':
@@ -118,7 +118,6 @@ class Query{
 		$query.= "updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, ";
 		$query.= "PRIMARY KEY(id))";
 		Database::execute($query, false);
-
 	}
 
 	private function set_columns($columns){

@@ -1,7 +1,12 @@
 <?php
 
 class Database{
+
+	static private $supported_drivers = array("mysql");
+
 	static private function construct(){
+		if(array_search(DB_ENGINE, self::$supported_drivers) === false)
+			throw new APIexception("DB driver not supported", 8);
 		require_once("db_drivers/".ucfirst(DB_ENGINE).".driver.php");
 		$dbclass = ucfirst(DB_ENGINE)."_driver";
 		return new $dbclass;
@@ -9,7 +14,10 @@ class Database{
 
 	static public function execute($query, $response = TRUE){
 		$db = self::construct();
-		$db->query($query);
+		$result = $db->query($query);
+		if($response){
+			return $result;
+		}
 	}
 
 	/**

@@ -35,7 +35,7 @@ class APIhandler{
 		return Output::encode($var, $this->server->output);
 	}
 
-	public function search_current_endpoint(){
+	public function current_endpoint(){
 		$og_endpoint = $this->server->original_endpoint;
 		$og_exists = Dictionary::exists($og_endpoint);
 		if($og_exists)

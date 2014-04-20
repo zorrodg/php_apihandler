@@ -26,20 +26,6 @@ define('CACHE_TIMEOUT', 3600);
 //Default output 
 define('DEFAULT_OUTPUT',"json");
 
-
-/* DO NOT TOUCH FROM HERE */
-//Class autoloader
-function __autoload($class){
-	require_once "engine/" . $class .".class.php";
-}
-
-//Load API
-try{
-	$API = new APIhandler();
-	echo "[". $API->search_current_endpoint().",". $API->debug()."]";
-	//echo $API->debug(Dictionary::get());
-}
-catch(APIexception $e){
-	echo $e->output();
-}
+//Start API
+require_once("engine/api_start.php");
 ?>
