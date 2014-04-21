@@ -48,6 +48,14 @@ class Query{
 						$col = explode("|", $col);
 						$cols[] = "`".$col[0]."`";
 					}
+					
+					$columns = implode(',', $cols);
+					$query .= " ".$columns." FROM";
+				} elseif($params['show']){
+					$cols = array();
+					foreach($params['show'] as $col){
+						$cols[] = "`".$col."`";
+					}
 					$columns = implode(',', $cols);
 					$query .= " ".$columns." FROM";
 				} else {

@@ -12,7 +12,7 @@ class Database{
 		return new $dbclass;
 	}
 
-	static public function execute($query, $response = TRUE){
+	static public function execute($query, $response = TRUE, $args = array()){
 		$db = self::construct();
 		$result = $db->query($query);
 		if($response){

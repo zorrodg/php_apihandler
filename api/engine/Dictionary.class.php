@@ -39,6 +39,17 @@ final class Dictionary{
 		return $arr;
 	}
 
+	static public function get_query($search){
+		foreach(self::$registry as $key => $value){
+			if($search){
+				if($search === $value['endpoint']) 
+					return $value['query'];
+			}
+		}
+
+		return $arr;
+	}
+
 	static public function exists($search){
 		$epsearch = preg_replace('/\/(\d+)/', '/:var', $search);
 

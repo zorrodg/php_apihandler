@@ -39,7 +39,12 @@ class APIhandler{
 		$og_endpoint = $this->server->original_endpoint;
 		$og_exists = Dictionary::exists($og_endpoint);
 		if($og_exists)
-			return Output::encode(Dictionary::get($og_exists), $this->server->output);
+			$query = Dictionary::get_query($og_exists);
+			$args = $this->server->args;
+			$res = Database::execute($query, true, $args);
+			//print_r($query);
+			//var_dump($res);
+			return Output::encode($res, $this->server->output);
 	}
 
 	/**
