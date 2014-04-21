@@ -6,9 +6,6 @@ new Getter("teams", array(
 	"columns" => array("name|string|100", "group|char"),
 	"show" => array("name")
 	));
-new Getter("teams/create",array(
-		"columns" => array("name|string", "group|char")
-	));
 new Getter("teams/edit/:id",array(
 		"columns" => array("name", "score")
 	));

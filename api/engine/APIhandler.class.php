@@ -22,30 +22,33 @@ class APIhandler{
 
 		//TODO: Create file caller.
 		include_once "registered_endpoints/Getters.endpoint.php";
+		include_once "registered_endpoints/Posters.endpoint.php";
 
 		$this->server = new Server();
 	}
 
-	/**
-	 * Prints debugging data
-	 * @return void
-	 */
-	public function debug($var = NULL){
-		$var = $var ?: $this->server->get();
-		return Output::encode($var, $this->server->output);
-	}
-
-	public function current_endpoint(){
+	public function endpoint_process(){
 		$og_endpoint = $this->server->original_endpoint;
 		$og_exists = Dictionary::exists($og_endpoint);
 		if($og_exists)
 			$query = Dictionary::get_query($og_exists);
-			$args = $this->server->args;
-			$res = Database::execute($query, true, $args);
-			//print_r($query);
-			//var_dump($res);
-			return Output::encode($res, $this->server->output);
+			$data = $this->server->data;
+			$res = Database::execute($query, true, $data);
+			//return Output::encode($res, $this->server->output);
 	}
+
+	public function endpoint_info(){
+		$og_endpoint = $this->server->original_endpoint;
+		$og_exists = Dictionary::exists($og_endpoint);
+		if($og_exists)
+			$endpoint = Dictionary::get($og_exists);
+			return Output::encode($endpoint, $this->server->output);
+	}
+
+	public function endpoint_request(){
+		return Output::encode($this->server->get(), $this->server->output);
+	}
+
 
 	/**
 	 * Checks if data is stored in cache, otherwise request it from service.

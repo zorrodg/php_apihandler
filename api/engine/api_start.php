@@ -74,8 +74,9 @@ function __autoload($class){
 //Load API
 try{
 	$API = new APIhandler();
-	echo $API->current_endpoint();
-	//echo $API->debug(Dictionary::get());
+	//echo $API->endpoint_request();
+    echo $API->endpoint_process();
+	//echo $API->endpoint_info();
 }
 catch(APIexception $e){
 	echo $e->output();

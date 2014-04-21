@@ -117,14 +117,19 @@ class Query{
 		$table = DB_PREFIX.$table;
 		$columns = $this->set_columns($columns);
 
-		$query = "CREATE TABLE IF NOT EXISTS $table (";
+		$query = "CREATE TABLE IF NOT EXISTS `$table` (";
 		$query.= "id INT NOT NULL AUTO_INCREMENT, ";
 		foreach($columns as $c){
 			$query.= "`".$c['name']."` ". $c['type'] ."(" .$c['length'] ."), ";
 		}
 		$query.= "updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, ";
 		$query.= "PRIMARY KEY(id))";
-		Database::execute($query, false);
+		$q = array(
+			'q' => $query,
+			'columns' => array(),
+			'filters' => array()
+			);
+		Database::execute($q, false);
 	}
 
 	private function set_columns($columns){

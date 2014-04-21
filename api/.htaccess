@@ -4,6 +4,6 @@ Options +FollowSymLinks -MultiViews
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 # RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule (.*)(\.(\w+))$ index.php?request_endpoint=$1&output=$3 [QSA,NC,L]
+RewriteRule (.*)(\.(\w+))$ index.php?request_endpoint=$1&request_output=$3 [QSA,NC,L]
 # RewriteRule ([^\.].*)$ index.php?request_endpoint=$1 [QSA,NC,L]
 </IfModule>

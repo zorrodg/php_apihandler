@@ -42,7 +42,11 @@ abstract class Endpoint{
 		$ep = $ep[0];
 
 		$db = new Query($endpoint['method'], $ep, $verb, $endpoint['params']);
-		$endpoint['query'] = $db->print_query();
+		$endpoint['query'] = array(
+			"q" => $db->print_query(),
+			"columns" => !empty($endpoint['params']['columns']) ? $endpoint['params']['columns'] : "",
+			"filters" => !empty($endpoint['params']['filters']) ? $endpoint['params']['filters'] : ""
+			);
 		Dictionary::register($endpoint);
 	}
 }

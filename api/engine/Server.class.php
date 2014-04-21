@@ -15,14 +15,15 @@ final class Server{
 	public function __construct(){
 		// Requests from the same server don't have a HTTP_ORIGIN header
 		if (!array_key_exists('HTTP_ORIGIN', $_SERVER)) {
-		    $_SERVER['HTTP_ORIGIN'] = $_SERVER['SERVER_NAME'];
+			$protocol = preg_replace("/^(.*)\/(.*)/", "$1", $_SERVER['SERVER_PROTOCOL']);
+		    $_SERVER['HTTP_ORIGIN'] = strtolower($protocol)."://".$_SERVER['SERVER_NAME'];
 		}
 		if(empty($_REQUEST['request_endpoint']))
 			throw new APIexception("No endpoint", 1);
 		$this->_server['original_endpoint'] = $_REQUEST['request_endpoint'];
-		$this->_server['output'] = isset($_REQUEST['output']) ? $_REQUEST['output'] : DEFAULT_OUTPUT;
+		$this->_server['output'] = isset($_REQUEST['request_output']) ? $_REQUEST['request_output'] : DEFAULT_OUTPUT;
 		$this->_server['origin'] = $_SERVER['HTTP_ORIGIN'];
-		$this->_server['data'] = json_decode(file_get_contents("php://input")) ?: "";
+		$this->_server['data'] = $this->parsePostRequest(file_get_contents("php://input"));
 		$this->_server['method'] = $_SERVER['REQUEST_METHOD'];
 		if ($this->_server['method'] == 'POST' && array_key_exists('HTTP_X_HTTP_METHOD', $_SERVER)) {
             if ($_SERVER['HTTP_X_HTTP_METHOD'] == 'DELETE') {
@@ -61,10 +62,22 @@ final class Server{
 		$qs = explode('&', $_SERVER['QUERY_STRING']);
 		foreach($qs as $params){
 			$c = explode("=", $params);
-			if($c[0] !== "request_endpoint" && $c[0] !== "output"){
-				$this->_server[$c[0]] = $c[1];
+			if($c[0] !== "request_endpoint" && $c[0] !== "request_output"){
+				$this->_server['data'][$c[0]] = $c[1];
 			}
 		}
+	}
+
+	private function parsePostRequest($request){
+		$arr = array();
+		$request = explode('&', $request);
+		foreach($request as $param){
+			if(!empty($param)){
+				$param = explode('=', $param);
+				$arr[$param[0]] = $param[1];
+			}
+		}
+		return !empty($arr) ? $arr : "";
 	}
 	
 }
