@@ -14,8 +14,8 @@ function makeAPIcall(endpoint, method, encoding){
 		url:"api/"+endpoint+"."+encoding,
 		dataType:encoding,
 		data:{
-			'name':'team2',
-			'group':'a'
+			//'name':'team2',
+			//'group':'a'
 		},
 		method:method,
 		success:function(data){
@@ -30,8 +30,8 @@ function makeAPIcall(endpoint, method, encoding){
 
 (function(){
 	//makeAPIcall("teams", "GET", "json");
-	makeAPIcall("teams/create", "post", "json");
-	//makeAPIcall("match/123", "get", "json");
+	//makeAPIcall("teams/create", "post", "json");
+	makeAPIcall("groups/123", "get", "json");
 })()
 </script>
 </html>

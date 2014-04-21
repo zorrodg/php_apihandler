@@ -104,7 +104,7 @@ class Query{
 			$query .= " WHERE ";
 			$f=array();
 			foreach($params['filters'] as $filter){
-				$f[] = "$filter='%s'";
+				$f[] = "`$filter`='%s'";
 			}
 			$filters = implode(' AND ', $f);
 			$query.=$filters;

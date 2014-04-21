@@ -19,7 +19,7 @@ class Database{
 
 		if($response){
 			//TODO: Check if I can return affected rows.
-			var_dump($result);
+			//var_dump($result);
 			return $result;
 		}
 	}
@@ -40,9 +40,11 @@ class Database{
 		$query_string = $query['q'];
 		$query_params = array();
 		$query_filters = is_array($query['filters']) ? $query['filters'] : array();
-		foreach($query['columns'] as $param){
-			$col = explode("|", $param);
-			$query_params[] = $col[0];
+		if(!empty($query['columns'])){
+			foreach($query['columns'] as $param){
+				$col = explode("|", $param);
+				$query_params[] = $col[0];
+			}
 		}
 
 		if(!empty($data)){
@@ -50,21 +52,22 @@ class Database{
 				$w = array_search($k, $query_params);
 				if($w === false || $query_params[$w] !== $k){
 					//TODO: Replace these!!!
-					die("Key not found or not in order");
+					die("Parameter not found or not in order: ". $k);
 				}
 			}
 		}
 
-		if(!empty($filters)){
-			foreach($filters as $k => $v){
-				$w = array_search($k, $query_params);
-				if($w === false || $query_params[$w] !== $k){
-					//TODO: Replace these!!!
-					die("Key not found or not in order");
-				}
-			}
+		if(!empty($filters) && empty($query_filters)){
+			//TODO: Replace these!!!
+			die("Filter not found. ");
 		}
 
+		if(empty($filters) && !empty($query_filters)){
+			//TODO: Replace these!!!
+			die("Filter missing. ");
+		}
+
+		//var_dump($filters);
 		$all_params = array_merge($data, $filters);
 
 		if(!empty($all_params)){

@@ -19,6 +19,7 @@ class Mysql_driver{
 				if(is_object($q))
 					return $q->fetch_assoc();
 				else
+					//var_dump($this->conn->insert_id);
 					return $q;
 			}
 		}

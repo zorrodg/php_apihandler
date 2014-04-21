@@ -33,7 +33,8 @@ class APIhandler{
 		if($og_exists)
 			$query = Dictionary::get_query($og_exists);
 			$data = $this->server->data;
-			$res = Database::execute($query, true, $data);
+			$filters = $this->server->args;
+			$res = Database::execute($query, true, $data, $filters);
 			//return Output::encode($res, $this->server->output);
 	}
 

@@ -77,7 +77,7 @@ final class Server{
 				$arr[$param[0]] = $param[1];
 			}
 		}
-		return !empty($arr) ? $arr : "";
+		return $arr;
 	}
 	
 }
