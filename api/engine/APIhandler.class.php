@@ -40,7 +40,7 @@ class APIhandler{
 
 				$data = $this->server->data;
 				$filters = $this->server->args;
-				$res = Database::execute($query["q"], true, $data, $filters);
+				$res = Query::execute($query["q"], true, $data, $filters);
 
 				return Output::encode($res, $this->server->output);
 			} catch(APIexception $e){
