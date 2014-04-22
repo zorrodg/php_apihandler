@@ -141,17 +141,35 @@ class Mysql_driver extends Database{
 
 	public function modify_existing_table($table, $columns){
 		$table = DB_PREFIX.$table;
+
+		$firstQuery = "SHOW COLUMNS FROM `$table`";
+		$current_columns = array();
+		$res = $this->conn->query($firstQuery);
+		if($res){
+			while($result = $res->fetch_assoc()){
+				$current_columns[] = $result['Field'];
+			}
+		}
+
 		$columns = $this->set_columns($columns);
 
 		$query = "ALTER TABLE `$table` ";
 		//$query.= "MODIFY `id` INT NOT NULL AUTO_INCREMENT, ";
 		$arr = array();
 		foreach($columns as $c){
-			$arr[].= "MODIFY `".$c['name']."` ". $c['type'].$c['length'];
+			if(array_search($c['name'], $current_columns) !== false){
+				$arr[] = "MODIFY `".$c['name']."` ". $c['type'].$c['length'];
+				unset($current_columns[array_search($c['name'], $current_columns)]);
+			} else {
+				$arr[] = "ADD `".$c['name']."` ". $c['type'].$c['length'];
+			}
+		}
+		foreach($current_columns as $remaining){
+			if($remaining !== 'id' && $remaining !== 'updated'){
+				$arr[] = "DROP `".$remaining."` ";
+			}
 		}
 		$query.=implode(", ",$arr);
-		//$query.= "MODIFY `updated` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, ";
-		//$query.= "PRIMARY KEY(id))";
 		$q = array(
 			'q' => $query,
 			'columns' => array(),
