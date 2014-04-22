@@ -120,9 +120,9 @@ class Query{
 		$query = "CREATE TABLE IF NOT EXISTS `$table` (";
 		$query.= "id INT NOT NULL AUTO_INCREMENT, ";
 		foreach($columns as $c){
-			$query.= "`".$c['name']."` ". $c['type'] ."(" .$c['length'] ."), ";
+			$query.= "`".$c['name']."` ". $c['type'].$c['length'] .", ";
 		}
-		$query.= "updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, ";
+		$query.= "`updated` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, ";
 		$query.= "PRIMARY KEY(id))";
 		$q = array(
 			'q' => $query,
@@ -142,28 +142,28 @@ class Query{
 				switch($c[1]){
 					case "char":
 						$coldata["type"] = "CHAR";
-						$coldata["length"] = isset($c[2]) ? $c[2] : 1;
+						$coldata["length"] = "(" . (isset($c[2]) ? $c[2] : 1) . ")";
 						break;
 					case "text":
 						$coldata["type"] = "TEXT";
-						$coldata["length"] = NULL;
+						$coldata["length"] = "";
 						break;
 					case "int":
 						$coldata["type"] = "INT";
-						$coldata["length"] = isset($c[2]) ? $c[2] : 11;
+						$coldata["length"] = "(" . (isset($c[2]) ? $c[2] : 11) . ")";
 						break;
 					case "bigint":
 						$coldata["type"] = "BIGINT";
-						$coldata["length"] = isset($c[2]) ? $c[2] : 60;
+						$coldata["length"] = "(" . (isset($c[2]) ? $c[2] : 60) . ")";
 						break;
 					case "date":
 						$coldata["type"] = "DATETIME";
-						$coldata["length"] = NULL;
+						$coldata["length"] = "";
 						break;
 					case "string":
 					default:
 						$coldata["type"] = "VARCHAR";
-						$coldata["length"] = isset($c[2]) ? $c[2] : 200;
+						$coldata["length"] = "(" . (isset($c[2]) ? $c[2] : 200) . ")";
 						break;
 				}
 			} else {

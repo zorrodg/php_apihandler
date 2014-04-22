@@ -11,6 +11,7 @@ final class Dictionary{
 					self::$registry[] = $endpoint;
 					break;
 				} else {
+					//print_r(self::$registry);
 					throw new APIexception('Duplicated endpoint on dictionary', 3);
 				}	
 			}
@@ -43,11 +44,13 @@ final class Dictionary{
 		foreach(self::$registry as $key => $value){
 			if($search){
 				if($search === $value['endpoint']) 
-					return $value['query'];
+					return array(
+						"q" => $value['query'],
+						"method" => $value['method']
+					);
 			}
 		}
-
-		return $arr;
+		return false;
 	}
 
 	static public function exists($search){

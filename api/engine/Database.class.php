@@ -13,15 +13,18 @@ class Database{
 	}
 
 	static public function execute($query, $response = TRUE, $data = array(), $filters = array()){
-		$db = self::construct();
-		$query = self::parse_arguments($query, $data, $filters);
-		$result = $db->query($query);
-
-		if($response){
-			//TODO: Check if I can return affected rows.
-			//var_dump($result);
-			return $result;
-		}
+		try{
+			$db = self::construct();
+			$query = self::parse_arguments($query, $data, $filters);
+			$result = $db->query($query);
+			if($response){
+				//TODO: Check if I can return affected rows.
+				//var_dump($result);
+				return $result;
+			}
+		} catch(APIexception $e){
+			die($e->output());
+		}	
 	}
 
 	/**
@@ -30,7 +33,7 @@ class Database{
 	* @param string Input string
 	* @return string String with accented characters replaced
 	*/
-	private function _accented($strInput) {
+	private function accented($strInput) {
 		$strAccentedChars = "ŠŒŽšœžŸ¥µÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýÿ";
 		$strNonAccentedChars = "SOZsozYYuAAAAAAACEEEEIIIIDNOOOOOOUUUUYsaaaaaaaceeeeiiiionoooooouuuuyy";
 		return strtr($strInput, $strAccentedChars, $strNonAccentedChars);
@@ -52,19 +55,19 @@ class Database{
 				$w = array_search($k, $query_params);
 				if($w === false || $query_params[$w] !== $k){
 					//TODO: Replace these!!!
-					die("Parameter not found or not in order: ". $k);
+					throw new APIexception("Parameter not found or not in order: ". $k, 9);
 				}
 			}
 		}
 
 		if(!empty($filters) && empty($query_filters)){
 			//TODO: Replace these!!!
-			die("Filter not found. ");
+			throw new APIexception("Filter not found. ", 10);
 		}
 
 		if(empty($filters) && !empty($query_filters)){
 			//TODO: Replace these!!!
-			die("Filter missing. ");
+			throw new APIexception("Filter missing. ", 10);
 		}
 
 		//var_dump($filters);

@@ -30,12 +30,23 @@ class APIhandler{
 	public function endpoint_process(){
 		$og_endpoint = $this->server->original_endpoint;
 		$og_exists = Dictionary::exists($og_endpoint);
-		if($og_exists)
-			$query = Dictionary::get_query($og_exists);
-			$data = $this->server->data;
-			$filters = $this->server->args;
-			$res = Database::execute($query, true, $data, $filters);
-			//return Output::encode($res, $this->server->output);
+		if($og_exists){
+			try{
+				$query = Dictionary::get_query($og_exists);
+				if(!$query)
+					throw new APIexception('Endpoint not found', 6);
+				elseif($query['method'] !== $this->server->method)
+					throw new APIexception('Method mismatch. You should use '.$query['method'], 11);
+
+				$data = $this->server->data;
+				$filters = $this->server->args;
+				$res = Database::execute($query["q"], true, $data, $filters);
+
+				return Output::encode($res, $this->server->output);
+			} catch(APIexception $e){
+				die($e->output());
+			}
+		}
 	}
 
 	public function endpoint_info(){

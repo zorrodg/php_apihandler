@@ -13,14 +13,24 @@ class Mysql_driver{
 	public function query($query, $response = TRUE){
 		$q = $this->conn->query($query);
 		if(!$q){
-			die("Query failed: (" . $this->conn->errno . ") " . $this->conn->error . " Query:". $query);
+			throw new APIexception("Query failed: " . $this->conn->error . " Query:". $query, $this->conn->errno);
 		} else {
 			if($response){
-				if(is_object($q))
-					return $q->fetch_assoc();
-				else
+				if(is_object($q)){
+					$arr = array();
+					while($res = $q->fetch_assoc()){
+						$arr[] = $res;
+					}
+					return $arr;
+				} elseif($this->conn->insert_id){
+					print_r($query);
+					die();
+					$q = $this->conn->query("SELECT * FROM ");
+				} else{ 
 					//var_dump($this->conn->insert_id);
 					return $q;
+				}
+					
 			}
 		}
 	}
