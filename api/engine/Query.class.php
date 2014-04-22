@@ -18,8 +18,12 @@ class Query{
 		$dbclass = ucfirst(DB_ENGINE)."_driver";
 		self::$db = new $dbclass($this->glossary);
 
-		if(isset($params['create_new_table']) && isset($params['columns']))
+		if(isset($params['create_new_table']) && isset($params['columns'])){
 			self::$db->create_new_table($endpoint, $params['columns']);
+			if(isset($params['modify_existing_table']))
+				self::$db->modify_existing_table($endpoint, $params['columns']);
+		}
+
 		$this->method = $method;
 		if($verb)
 			$this->query = self::$db->construct_query($verb, $endpoint, $params);

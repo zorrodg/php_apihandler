@@ -10,11 +10,8 @@ new Getter("teams", array(
 new Getter("groups", array(
 	"description" => "Get all groups",
 	"create_new_table" => true,
-	"columns" => array("group|string|100", "match|string", "dates|date")
+	"modify_existing_table" =>true,
+	"columns" => array("group|char", "match|string|200", "dates|date", "call|string")
 	));
 
-new Getter("teams/edit/:id",array(
-		"columns" => array("name", "score")
-	));
-new Getter("groups/delete/:id");
 new Getter("groups/:match");

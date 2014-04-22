@@ -26,6 +26,9 @@ class Mysql_driver extends Database{
 					while($res = $q->fetch_assoc()){
 						$arr[] = $res;
 					}
+					if(empty($arr))
+						throw new APIexception("No data to display", 12);
+						
 					return $arr;
 				} elseif($this->conn->insert_id){
 					preg_match("/^INSERT INTO `(\w+)`/", $query, $table);
@@ -122,12 +125,33 @@ class Mysql_driver extends Database{
 		$columns = $this->set_columns($columns);
 
 		$query = "CREATE TABLE IF NOT EXISTS `$table` (";
-		$query.= "id INT NOT NULL AUTO_INCREMENT, ";
+		$query.= "`id` INT NOT NULL AUTO_INCREMENT, ";
 		foreach($columns as $c){
 			$query.= "`".$c['name']."` ". $c['type'].$c['length'] .", ";
 		}
 		$query.= "`updated` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, ";
 		$query.= "PRIMARY KEY(id))";
+		$q = array(
+			'q' => $query,
+			'columns' => array(),
+			'filters' => array()
+			);
+		$this->query($query, false);
+	}
+
+	public function modify_existing_table($table, $columns){
+		$table = DB_PREFIX.$table;
+		$columns = $this->set_columns($columns);
+
+		$query = "ALTER TABLE `$table` ";
+		//$query.= "MODIFY `id` INT NOT NULL AUTO_INCREMENT, ";
+		$arr = array();
+		foreach($columns as $c){
+			$arr[].= "MODIFY `".$c['name']."` ". $c['type'].$c['length'];
+		}
+		$query.=implode(", ",$arr);
+		//$query.= "MODIFY `updated` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, ";
+		//$query.= "PRIMARY KEY(id))";
 		$q = array(
 			'q' => $query,
 			'columns' => array(),
