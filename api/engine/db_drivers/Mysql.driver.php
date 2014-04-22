@@ -23,9 +23,11 @@ class Mysql_driver{
 					}
 					return $arr;
 				} elseif($this->conn->insert_id){
-					print_r($query);
-					die();
-					$q = $this->conn->query("SELECT * FROM ");
+					preg_match("/^INSERT INTO `(\w+)`/", $query, $table);
+					$q = $this->conn->query("SELECT * FROM $table[1] WHERE `id`=".$this->conn->insert_id);
+					if(is_object($q)){
+						return $q->fetch_assoc();
+					}
 				} else{ 
 					//var_dump($this->conn->insert_id);
 					return $q;
