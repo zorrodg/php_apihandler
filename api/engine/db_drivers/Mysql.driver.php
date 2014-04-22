@@ -144,41 +144,47 @@ class Mysql_driver extends Database{
 
 		$firstQuery = "SHOW COLUMNS FROM `$table`";
 		$current_columns = array();
+		$current = array();
 		$res = $this->conn->query($firstQuery);
 		if($res){
 			while($result = $res->fetch_assoc()){
+				$current[] =$result;
 				$current_columns[] = $result['Field'];
 			}
+		} else {
+			return false;
 		}
 
 		$columns = $this->set_columns($columns);
 
-		$query = "ALTER TABLE `$table` ";
-		//$query.= "MODIFY `id` INT NOT NULL AUTO_INCREMENT, ";
-		$arr = array();
-		foreach($columns as $c){
-			if(array_search($c['name'], $current_columns) !== false){
-				$arr[] = "MODIFY `".$c['name']."` ". $c['type'].$c['length'];
-				unset($current_columns[array_search($c['name'], $current_columns)]);
-			} else {
-				$arr[] = "ADD `".$c['name']."` ". $c['type'].$c['length'];
+		if($this->compare_tables($current, $columns)){
+			$query = "ALTER TABLE `$table` ";
+			//$query.= "MODIFY `id` INT NOT NULL AUTO_INCREMENT, ";
+			$arr = array();
+			foreach($columns as $c){
+				if(array_search($c['name'], $current_columns) !== false){
+					$arr[] = "MODIFY `".$c['name']."` ". $c['type'].$c['length'];
+					unset($current_columns[array_search($c['name'], $current_columns)]);
+				} else {
+					$arr[] = "ADD `".$c['name']."` ". $c['type'].$c['length'];
+				}
 			}
-		}
-		foreach($current_columns as $remaining){
-			if($remaining !== 'id' && $remaining !== 'updated'){
-				$arr[] = "DROP `".$remaining."` ";
+			foreach($current_columns as $remaining){
+				if($remaining !== 'id' && $remaining !== 'updated'){
+					$arr[] = "DROP `".$remaining."` ";
+				}
 			}
+			$query.=implode(", ",$arr);
+			$q = array(
+				'q' => $query,
+				'columns' => array(),
+				'filters' => array()
+				);
+			$this->query($query, false);
 		}
-		$query.=implode(", ",$arr);
-		$q = array(
-			'q' => $query,
-			'columns' => array(),
-			'filters' => array()
-			);
-		$this->query($query, false);
 	}
 
-	public function set_columns($columns){
+	private function set_columns($columns){
 		$cdata = array();
 		foreach($columns as $c){
 			$coldata = array();
@@ -220,4 +226,32 @@ class Mysql_driver extends Database{
 		}
 		return $cdata;
 	}
+
+	/**
+	 * Checks if there are changes to current table. If they are the same, do nothing.
+	 * @param  [array] $existing existing columns
+	 * @param  [array] $new      new columns
+	 * @return [boolean]         
+	 */
+	private function compare_tables($existing, $new){
+		$count = 0;
+		for($i = 0; $i < count($existing); $i++){
+			for($j = 0; $j < count($new); $j++){
+				if($existing[$i]['Field'] !== 'id' && $existing[$i]['Field'] !== 'updated'){
+					if($existing[$i]['Field'] == $new[$j]['name'] && strtoupper($existing[$i]['Type']) == $new[$j]['type'].$new[$j]['length']){
+						$count++;
+					}
+				}
+			}
+		}
+		
+		if(count($existing)-2 == $count && count($new) == $count){
+			return false;
+		}
+
+		return true;
+	}
+
+
+
 }
