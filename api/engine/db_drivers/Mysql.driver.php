@@ -49,16 +49,7 @@ class Mysql_driver extends Database{
 		$query = strtoupper($this->guess_verb($q, $this->glossary));
 		switch($query){
 			case 'SELECT':
-				if(isset($params['columns']) && !$params['create_new_table']){
-					$cols = array();
-					foreach($params['columns'] as $col){
-						$col = explode("|", $col);
-						$cols[] = "`".$col[0]."`";
-					}
-					
-					$columns = implode(',', $cols);
-					$query .= " ".$columns." FROM";
-				} elseif(isset($params['show'])){
+				if(isset($params['show'])){
 					$cols = array();
 					foreach($params['show'] as $col){
 						$cols[] = "`".$col."`";
@@ -126,10 +117,10 @@ class Mysql_driver extends Database{
 
 		$query = "CREATE TABLE IF NOT EXISTS `$table` (";
 		$query.= "`id` INT NOT NULL AUTO_INCREMENT, ";
+		$query.= "`updated` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, ";
 		foreach($columns as $c){
 			$query.= "`".$c['name']."` ". $c['type'].$c['length'] .", ";
 		}
-		$query.= "`updated` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, ";
 		
 		foreach($columns as $c){
 			if(isset($c['key'])){
@@ -155,29 +146,31 @@ class Mysql_driver extends Database{
 		$res = $this->conn->query($firstQuery);
 		if($res){
 			while($result = $res->fetch_assoc()){
-				$current[] =$result;
+				$current[] = $result;
 				$current_columns[] = $result['Field'];
 			}
 		} else {
-			return false;
+			throw new APIexception("Table '".$table."' doesnt exists", 13);
 		}
 
 		$columns = $this->set_columns($columns);
 
 		if($this->compare_tables($current, $columns)){
 			$query = "ALTER TABLE `$table` ";
-			//$query.= "MODIFY `id` INT NOT NULL AUTO_INCREMENT, ";
 			$arr = array();
 			foreach($columns as $c){
 				if(array_search($c['name'], $current_columns) !== false){
 					$arr[] = "MODIFY `".$c['name']."` ". $c['type'].$c['length'];
-					unset($current_columns[array_search($c['name'], $current_columns)]);
 				} else {
 					$arr[] = "ADD `".$c['name']."` ". $c['type'].$c['length'];
 				}
-				if(isset($c['key']) && $c['key'] === "unique"){
+				if($current[array_search($c['name'], $current_columns)]['Key'] === "UNI")
+					$arr[] = "DROP INDEX `".$c['name']."`";
+
+				if(isset($c['key']) && $c['key'] === "UNI"){
 					$arr[] = "ADD UNIQUE (`".$c['name']."`)";
 				}
+				unset($current_columns[array_search($c['name'], $current_columns)]);
 			}
 			foreach($current_columns as $remaining){
 				if($remaining !== 'id' && $remaining !== 'updated'){
@@ -185,6 +178,7 @@ class Mysql_driver extends Database{
 				}
 			}
 			$query.=implode(", ",$arr);
+			//print_r($query);
 			$q = array(
 				'q' => $query,
 				'columns' => array(),
@@ -230,10 +224,10 @@ class Mysql_driver extends Database{
 				}
 			} else {
 				$coldata["type"] = "VARCHAR";
-				$coldata["length"] = isset($c[2]) ? $c[2] : 200;
+				$coldata["length"] = "(" . (isset($c[2]) ? $c[2] : 200) . ")";
 			}
 			if(isset($c[3])){
-				$coldata["key"] = $c[3];
+				$coldata["key"] = "UNI";
 			} else {
 				$coldata["key"] = "";
 			}

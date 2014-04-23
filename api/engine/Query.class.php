@@ -20,9 +20,10 @@ class Query{
 
 		if(isset($params['create_new_table']) && isset($params['columns'])){
 			self::$db->create_new_table($endpoint, $params['columns']);
-			if(isset($params['modify_existing_table']))
-				self::$db->modify_existing_table($endpoint, $params['columns']);
 		}
+
+		if(isset($params['modify_existing_table']))
+			self::$db->modify_existing_table($endpoint, $params['columns']);
 
 		$this->method = $method;
 		if($verb)
@@ -73,20 +74,19 @@ class Query{
 		if(!empty($data)){
 			foreach($data as $k => $v){
 				$w = array_search($k, $query_params);
-				if($w === false || $query_params[$w] !== $k){
-					//TODO: Replace these!!!
-					throw new APIexception("Parameter not found or not in order: ". $k, 9);
+				if($w === false){
+					throw new APIexception("Parameter not found : ". $k, 9);
+				} elseif($query_params[$w] !== $k){
+					throw new APIexception("Parameter not in order : ". $k, 9);
 				}
 			}
 		}
 
 		if(!empty($filters) && empty($query_filters)){
-			//TODO: Replace these!!!
 			throw new APIexception("Filter not found. ", 10);
 		}
 
 		if(empty($filters) && !empty($query_filters)){
-			//TODO: Replace these!!!
 			throw new APIexception("Filter missing. ", 10);
 		}
 
