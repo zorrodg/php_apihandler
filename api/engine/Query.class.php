@@ -16,7 +16,7 @@ class Query{
 			throw new APIexception("DB driver not supported", 8);
 		require_once("db_drivers/".ucfirst(DB_ENGINE).".driver.php");
 		$dbclass = ucfirst(DB_ENGINE)."_driver";
-		self::$db = new $dbclass($this->glossary);
+		self::$db = new $dbclass();
 
 		if(isset($params['create_new_table']) && isset($params['columns'])){
 			self::$db->create_new_table($endpoint, $params['columns']);

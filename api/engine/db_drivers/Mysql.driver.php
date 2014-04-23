@@ -58,7 +58,7 @@ class Mysql_driver extends Database{
 					
 					$columns = implode(',', $cols);
 					$query .= " ".$columns." FROM";
-				} elseif($params['show']){
+				} elseif(isset($params['show'])){
 					$cols = array();
 					foreach($params['show'] as $col){
 						$cols[] = "`".$col."`";
