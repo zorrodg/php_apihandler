@@ -130,6 +130,13 @@ class Mysql_driver extends Database{
 			$query.= "`".$c['name']."` ". $c['type'].$c['length'] .", ";
 		}
 		$query.= "`updated` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, ";
+		
+		foreach($columns as $c){
+			if(isset($c['key'])){
+				if($c['key'] === "unique")
+					$query.= "UNIQUE(`".$c['name']."`), ";
+			}
+		}
 		$query.= "PRIMARY KEY(id))";
 		$q = array(
 			'q' => $query,
@@ -167,6 +174,9 @@ class Mysql_driver extends Database{
 					unset($current_columns[array_search($c['name'], $current_columns)]);
 				} else {
 					$arr[] = "ADD `".$c['name']."` ". $c['type'].$c['length'];
+				}
+				if(isset($c['key']) && $c['key'] === "unique"){
+					$arr[] = "ADD UNIQUE (`".$c['name']."`)";
 				}
 			}
 			foreach($current_columns as $remaining){
@@ -222,6 +232,11 @@ class Mysql_driver extends Database{
 				$coldata["type"] = "VARCHAR";
 				$coldata["length"] = isset($c[2]) ? $c[2] : 200;
 			}
+			if(isset($c[3])){
+				$coldata["key"] = $c[3];
+			} else {
+				$coldata["key"] = "";
+			}
 			$cdata[] = $coldata;
 		}
 		return $cdata;
@@ -238,13 +253,12 @@ class Mysql_driver extends Database{
 		for($i = 0; $i < count($existing); $i++){
 			for($j = 0; $j < count($new); $j++){
 				if($existing[$i]['Field'] !== 'id' && $existing[$i]['Field'] !== 'updated'){
-					if($existing[$i]['Field'] == $new[$j]['name'] && strtoupper($existing[$i]['Type']) == $new[$j]['type'].$new[$j]['length']){
+					if($existing[$i]['Field'] == $new[$j]['name'] && strtoupper($existing[$i]['Type']) == $new[$j]['type'].$new[$j]['length'] && $existing[$i]['Key'] == $new[$j]['key']){
 						$count++;
 					}
 				}
 			}
 		}
-		
 		if(count($existing)-2 == $count && count($new) == $count){
 			return false;
 		}
