@@ -72,7 +72,7 @@ class Mysql_driver extends Database{
 					}
 					$set = " (".implode(',',$cols).") VALUES (".implode(',',$vals).")";
 				} else {
-					throw New APIexception('No columns to insert', 5);
+					throw new APIexception('No columns to insert', 5);
 				}
 				break;
 
@@ -85,7 +85,7 @@ class Mysql_driver extends Database{
 					}
 					$set = " SET ".implode(',',$cols);
 				} else {
-					throw New APIexception('No columns to update', 5);
+					throw new APIexception('No columns to update', 5);
 				}
 				break;
 			case 'DELETE':

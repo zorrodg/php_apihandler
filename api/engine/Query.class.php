@@ -83,18 +83,22 @@ class Query{
 		}
 
 		if(!empty($filters) && empty($query_filters)){
-			throw new APIexception("Filter not found. ", 10);
+			throw new APIexception("Filter not registered. ", 10);
 		}
 
 		if(empty($filters) && !empty($query_filters)){
-			throw new APIexception("Filter missing. ", 10);
+			throw new APIexception("Filter not found. ", 10);
 		}
 
 		//var_dump($filters);
 		$all_params = array_merge($data, $filters);
 
 		if(!empty($all_params)){
-			$query_string = vsprintf($query_string, $all_params);
+			$query_string = @vsprintf($query_string, $all_params);
+			if(empty($query_string))
+				throw new APIexception("Argument mismatch", 14);
+				
+			
 		}
 
 		return $query_string;

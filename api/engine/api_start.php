@@ -66,6 +66,36 @@ if (!function_exists('http_response_code')) {
     }
 }
 
+//Function kvsprintf()
+if(!function_exists('kvsprintf')) {
+    function kvsprintf($string, array $array){
+        preg_match_all("/\% ([a-zA-Z0-9]+)\\\$k | ([a-zA-Z0-9]+)\\\$v/x", $string, $matches, PREG_PATTERN_ORDER);
+
+        if(!empty($matches[1])){
+           foreach($matches[1] as $keyNum => $keys){
+                if(array_key_exists($keys, $array)){
+                    $posKey = $keyNum + 1;
+                    $string = preg_replace("/\% (".$keys."\\\$k) /x", "%". $posKey ."\$s", $string);
+                }
+            } 
+        }
+        
+        if(!empty($matches[2])){
+            foreach($matches[2] as $keyNum => $values){
+                if(array_key_exists($values, $array)){
+                    $posVal = $keyNum + 1;
+                    $string = preg_replace("/\% (".$values."\\\$v) /x", "%". $posVal ."\$s", $string);
+                }
+            }
+        }
+        
+
+        print_r($string);
+    }
+}
+
+kvsprintf("UPDATE table SET %matches\$k=%group\$v, %group\$k=%matches\$v", array("matches"=>"a", "group"=>"123"));
+
 //Class autoloader
 function __autoload($class){
 	require_once "engine/" . $class .".class.php";

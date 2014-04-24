@@ -74,7 +74,7 @@ final class Server{
 		foreach($request as $param){
 			if(!empty($param)){
 				$param = explode('=', $param);
-				$arr[$param[0]] = str_replace("+", " ", $param[1]);
+				$arr[$param[0]] = urldecode(str_replace("+", " ", $param[1]));
 			}
 		}
 		return $arr;
