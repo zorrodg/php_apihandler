@@ -67,8 +67,8 @@ class Mysql_driver extends Database{
 					$vals = array();
 					foreach($params['columns'] as $col){
 						$col = explode("|", $col);
-						$cols[] = "`".$col[0]."`";
-						$vals[] = "'%s'";
+						$cols[] = "`%".$col[0]."\$k`";
+						$vals[] = "'%".$col[0]."\$v'";
 					}
 					$set = " (".implode(',',$cols).") VALUES (".implode(',',$vals).")";
 				} else {
@@ -81,7 +81,7 @@ class Mysql_driver extends Database{
 					$cols = array();
 					foreach($params['columns'] as $col){
 						$col = explode("|", $col);
-						$cols[] = "`$col[0]`='%s'";
+						$cols[] = "`%$col[0]\$k`='%$col[0]\$v'";
 					}
 					$set = " SET ".implode(',',$cols);
 				} else {

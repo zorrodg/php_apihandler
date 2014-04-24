@@ -94,13 +94,11 @@ class Query{
 		$all_params = array_merge($data, $filters);
 
 		if(!empty($all_params)){
-			$query_string = @vsprintf($query_string, $all_params);
+			$query_string = kvsprintf($query_string, $all_params);
 			if(empty($query_string))
 				throw new APIexception("Argument mismatch", 14);
 				
-			
 		}
-
 		return $query_string;
 	}
 }
