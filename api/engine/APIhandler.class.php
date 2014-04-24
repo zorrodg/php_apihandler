@@ -19,10 +19,10 @@ class APIhandler{
 	 * Creates the handler with current query
 	 */
 	public function __construct(){
-
-		//TODO: Create file caller.
-		include_once "registered_endpoints/Getters.endpoint.php";
-		include_once "registered_endpoints/Posters.endpoint.php";
+		$endpoints = unserialize(ENDPOINTS);
+		foreach($endpoints as $e){
+			include_once "registered_endpoints/$e.endpoint.php";
+		}
 
 		$this->server = new Server();
 	}

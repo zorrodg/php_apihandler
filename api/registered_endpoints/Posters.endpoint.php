@@ -6,6 +6,4 @@ new Poster("teams/create",array(
 
 new Poster("teams/edit/:id",array(
 		"columns" => array("group", "matches")
-	));
-
-new Poster("groups/delete/:id");
+	)); 

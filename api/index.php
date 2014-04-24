@@ -26,6 +26,9 @@ define('CACHE_TIMEOUT', 3600);
 //Default output 
 define('DEFAULT_OUTPUT',"json");
 
+//Set endpoint files
+define('ENDPOINTS', serialize(array("Getters", "Posters", "Deleters")));
+
 //Start API
 require_once("engine/api_start.php");
 ?>

@@ -12,6 +12,8 @@ final class Server{
 
 	private $_server = array();
 
+	static private $_output = DEFAULT_OUTPUT; 
+
 	public function __construct(){
 		// Requests from the same server don't have a HTTP_ORIGIN header
 		if (!array_key_exists('HTTP_ORIGIN', $_SERVER)) {
@@ -22,6 +24,7 @@ final class Server{
 			throw new APIexception("No endpoint", 1);
 		$this->_server['original_endpoint'] = $_REQUEST['request_endpoint'];
 		$this->_server['output'] = isset($_REQUEST['request_output']) ? $_REQUEST['request_output'] : DEFAULT_OUTPUT;
+		self::$_output = $this->_server['output'];
 		$this->_server['origin'] = $_SERVER['HTTP_ORIGIN'];
 		$this->_server['data'] = $this->parsePostRequest(file_get_contents("php://input"));
 		$this->_server['method'] = $_SERVER['REQUEST_METHOD'];
@@ -49,6 +52,10 @@ final class Server{
 			$arr[$key]=$value;
 		}
 		return $arr;
+	}
+
+	static public function output(){
+		return self::$_output;
 	}
 
 	private function parseRequest($request){

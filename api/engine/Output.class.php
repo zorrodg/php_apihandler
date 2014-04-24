@@ -33,13 +33,20 @@ class Output{
 	 */
 	static public function encode($data, $output = DEFAULT_OUTPUT){
 		self::set_headers($output);
+        
+        $return["status"] = http_response_code();
+        $return["elapsed_time"] = 0;
+        $return["data"] = $data;
+
+        Stopwatch::stop();
+        $return["elapsed_time"] = Stopwatch::get_elapse();
 
 		switch ($output){
 			case "json":
-				return json_encode($data);
+				return json_encode($return);
 			case "xml":
                 $output = '<?xml version="1.0" encoding="UTF-8"?><response>';
-                $output.= self::XML_encode($data);
+                $output.= self::XML_encode($return);
                 $output.= '</response>';
 				return $output;
             default:

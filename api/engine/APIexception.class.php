@@ -19,6 +19,6 @@ class APIexception extends Exception{
 			"message" => $this->message,
 			"code" => $this->code
 			);
-		return Output::encode($msg);
+		return Output::encode($msg, Server::output());
 	}
 }

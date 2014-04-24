@@ -1,5 +1,6 @@
 <?php
 
+
 //Adding http_response_code()
 if (!function_exists('http_response_code')) {
     function http_response_code($code = NULL) {
@@ -111,6 +112,9 @@ if(!function_exists('kvsprintf')) {
 function __autoload($class){
 	require_once "engine/" . $class .".class.php";
 }
+
+//Init measure time
+Stopwatch::start();
 
 //Load API
 try{

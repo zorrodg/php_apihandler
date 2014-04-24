@@ -108,6 +108,10 @@ class Mysql_driver extends Database{
 			$query.=$filters;
 		}
 
+		if($params['limit']){
+			$query.= " LIMIT ". $params['limit'];
+		}
+
 		return $query;
 	}
 
