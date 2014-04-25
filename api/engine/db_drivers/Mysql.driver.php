@@ -46,7 +46,7 @@ class Mysql_driver extends Database{
 
 	public function construct_query($q, $table, $params){
 		$table = DB_PREFIX.$table;
-		$query = strtoupper($this->guess_verb($q, $this->glossary));
+		$query = strtoupper($this->guess_action($q, $this->glossary));
 		switch($query){
 			case 'SELECT':
 				if(isset($params['show'])){
@@ -106,10 +106,6 @@ class Mysql_driver extends Database{
 			}
 			$filters = implode(' AND ', $f);
 			$query.=$filters;
-		}
-
-		if($params['limit']){
-			$query.= " LIMIT ". $params['limit'];
 		}
 
 		return $query;

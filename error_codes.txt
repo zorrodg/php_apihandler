@@ -1,14 +1,14 @@
 ERROR CODES:
 
-1. No endpoint
-2. Unexpected Header
-3. Duplicated endpoint on dictionary
-4. Couldn't guess verb
-5. No columns to insert
-6. Endpoint not found
-7. Output not supported
-8. DB driver not supported
-9. Parameter not found or not in order
+1. 	No endpoint
+2. 	Unexpected Header
+3. 	Duplicated endpoint on dictionary
+4. 	Couldn't guess verb
+5. 	No columns to insert
+6. 	Endpoint not found
+7. 	Output not supported
+8. 	DB driver not supported
+9. 	Parameter not found or not in order
 10. Filter not found or not registered 
 11. Method mismatch 
 12. No data to display (Table is empty)

@@ -15,7 +15,7 @@ abstract class Endpoint{
 
 	private function create_endpoint($endpoint){
 		if(!isset($endpoint['method']))
-			throw New APIexception("Unexpected Header", 2);
+			throw new APIexception("Unexpected Header", 2);
 
 		$ep = explode("/", $endpoint['endpoint']);
 
@@ -43,7 +43,8 @@ abstract class Endpoint{
 
 		$query = new Query($endpoint['method'], $ep, $verb, $endpoint['params']);
 		$endpoint['query'] = array(
-			"q" => $query->print_query(),
+			"q" => $query->get_query(),
+			"action" => $query->get_action(),
 			"columns" => !empty($endpoint['params']['columns']) ? $endpoint['params']['columns'] : "",
 			"filters" => !empty($endpoint['params']['filters']) ? $endpoint['params']['filters'] : ""
 			);

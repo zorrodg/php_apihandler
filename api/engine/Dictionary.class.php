@@ -54,7 +54,12 @@ final class Dictionary{
 	}
 
 	static public function exists($search){
-		$epsearch = preg_replace('/\/(\d+)/', '/:var', $search);
+		$epsearch = explode('/', $search);
+		if(isset($epsearch[1]) && is_numeric($epsearch[1])) $epsearch[1] = ":var";
+		if(isset($epsearch[2])) $epsearch[2] = ":var";
+		if(isset($epsearch[3])) $epsearch[3] = ":var";
+		if(isset($epsearch[4])) $epsearch[4] = ":var";
+		$epsearch = implode("/", $epsearch);
 
 		foreach(self::$registry as $key => $value){
 			$epvalue = preg_replace('/\/\:(\w+)/', '/:var', $value['endpoint']);

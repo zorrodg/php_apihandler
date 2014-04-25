@@ -10,6 +10,8 @@ class Query{
 
 	private $supported_drivers = array("mysql");
 
+	private $action;
+
 	public function __construct($method, $endpoint, $verb = NULL, $params = array()){
 
 		if(array_search(DB_ENGINE, $this->supported_drivers) === false)
@@ -26,14 +28,23 @@ class Query{
 			self::$db->modify_existing_table($endpoint, $params['columns']);
 
 		$this->method = $method;
+		$this->action = self::$db->get_action();
 		if($verb)
 			$this->query = self::$db->construct_query($verb, $endpoint, $params);
 		else
 			$this->query = self::$db->construct_query($method, $endpoint, $params);
 	}
 
-	public function print_query(){
+	public function get_query(){
 		return $this->query;
+	}
+
+	public function get_action(){
+		return $this->action;
+	}
+
+	public function get_method(){
+		return $this->method;
 	}
 
 	static public function execute($query, $response = TRUE, $data = array(), $filters = array()){
@@ -99,6 +110,14 @@ class Query{
 				throw new APIexception("Argument mismatch", 14);
 				
 		}
+
+		if($params['limit']){
+			$query.= " LIMIT ". $params['limit'];
+		}
+		if($params['order']){
+			
+		}
+
 		return $query_string;
 	}
 }

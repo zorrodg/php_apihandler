@@ -29,6 +29,9 @@ define('DEFAULT_OUTPUT',"json");
 //Set endpoint files
 define('ENDPOINTS', serialize(array("Getters", "Posters", "Deleters")));
 
+//Set security
+define('SECURE_TYPE', "oauth");
+
 //Start API
 require_once("engine/api_start.php");
 ?>

@@ -23,7 +23,11 @@ class APIhandler{
 		foreach($endpoints as $e){
 			include_once "registered_endpoints/$e.endpoint.php";
 		}
-
+		if(defined('SECURE_TYPE')){
+			if(SECURE_TYPE === "oauth"){
+				require_once "lib/oauth/store/".DB_ENGINE."/apihandler.install.php";
+			}
+		}
 		$this->server = new Server();
 	}
 
