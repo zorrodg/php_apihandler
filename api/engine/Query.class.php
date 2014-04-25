@@ -82,6 +82,8 @@ class Query{
 			}
 		}
 
+		if(isset($data['token'])) unset($data['token']);
+
 		if(!empty($data)){
 			foreach($data as $k => $v){
 				$w = array_search($k, $query_params);
