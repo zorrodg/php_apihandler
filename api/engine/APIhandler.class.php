@@ -25,7 +25,10 @@ class APIhandler{
 		}
 		if(defined('SECURE_TYPE')){
 			if(SECURE_TYPE === "oauth"){
-				require_once "lib/oauth/store/".DB_ENGINE."/apihandler.install.php";
+				if(OAUTH_SERVICE === "self")
+					require_once "lib/oauth/store/".DB_ENGINE."/apihandler.install.php";
+
+				require_once "engine/oauth_services/".OAUTH_SERVICE.".oauth.php";
 			}
 		}
 		$this->server = new Server();

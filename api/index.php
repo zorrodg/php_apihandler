@@ -31,6 +31,8 @@ define('ENDPOINTS', serialize(array("Getters", "Posters", "Deleters")));
 
 //Set security
 define('SECURE_TYPE', "oauth");
+define('OAUTH_SERVICE', "self");
+define('OAUTH_CONSUMERS', serialize(array("test")));
 
 //Start API
 require_once("engine/api_start.php");

@@ -9,8 +9,8 @@ ERROR CODES:
 7. 	Output not supported
 8. 	DB driver not supported
 9. 	Parameter not found or not in order
-10. Filter not found or not registered 
-11. Method mismatch 
-12. No data to display (Table is empty)
-13. Table doesn't exists 
-14. Argument mismatch 
+10.	Filter not found or not registered 
+11.	Method mismatch 
+12.	No data to display (Table is empty)
+13.	Table doesn't exists 
+14.	Argument mismatch 
