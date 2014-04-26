@@ -108,6 +108,15 @@ class Mysql_driver extends Database{
 			$query.=$filters;
 		}
 
+		if(isset($params['sort'])){
+			$order = explode("|", $params['sort']);
+			$query.= " ORDER BY `". $order[0] . "` " . (isset($order[1]) ? strtoupper($order[1]) : "DESC");
+		}
+
+		if(isset($params['limit'])){
+			$query.= " LIMIT %limit\$v";
+		}
+
 		return $query;
 	}
 

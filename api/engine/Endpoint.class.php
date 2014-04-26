@@ -15,12 +15,12 @@ abstract class Endpoint{
 
 	private function create_endpoint($endpoint){
 		if(!isset($endpoint['method']))
-			throw new APIexception("Unexpected Header", 2);
+			throw new APIexception("Unexpected Header", 2, 400);
 
 		$ep = explode("/", $endpoint['endpoint']);
 
 		if(!isset($ep[0]))
-			throw new APIexception("No endpoint", 1);
+			throw new APIexception("No endpoint", 1, 404);
 
 		if(isset($ep[1])){
 			if(preg_match('/^\:(\w+)/', $ep[1], $var)){
@@ -46,7 +46,8 @@ abstract class Endpoint{
 			"q" => $query->get_query(),
 			"action" => $query->get_action(),
 			"columns" => !empty($endpoint['params']['columns']) ? $endpoint['params']['columns'] : "",
-			"filters" => !empty($endpoint['params']['filters']) ? $endpoint['params']['filters'] : ""
+			"filters" => !empty($endpoint['params']['filters']) ? $endpoint['params']['filters'] : "",
+			"limiter" => !empty($endpoint['params']['limit']) ? $endpoint['params']['limit'] : ""
 			);
 		Dictionary::register($endpoint);
 	}

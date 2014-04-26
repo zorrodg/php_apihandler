@@ -10,12 +10,14 @@ class Query{
 
 	private $supported_drivers = array("mysql");
 
+	static private $reserved_args = array('token', 'limit');
+
 	private $action;
 
 	public function __construct($method, $endpoint, $verb = NULL, $params = array()){
 
 		if(array_search(DB_ENGINE, $this->supported_drivers) === false)
-			throw new APIexception("DB driver not supported", 8);
+			throw new APIexception("DB driver not supported", 8, 400);
 		require_once("db_drivers/".ucfirst(DB_ENGINE).".driver.php");
 		$dbclass = ucfirst(DB_ENGINE)."_driver";
 		self::$db = new $dbclass();
@@ -27,12 +29,13 @@ class Query{
 		if(isset($params['modify_existing_table']))
 			self::$db->modify_existing_table($endpoint, $params['columns']);
 
-		$this->method = $method;
-		$this->action = self::$db->get_action();
 		if($verb)
 			$this->query = self::$db->construct_query($verb, $endpoint, $params);
 		else
 			$this->query = self::$db->construct_query($method, $endpoint, $params);
+
+		$this->method = $method;
+		$this->action = strtolower(self::$db->get_action());
 	}
 
 	public function get_query(){
@@ -74,7 +77,8 @@ class Query{
 	static private function parse_arguments($query, $data, $filters){
 		$query_string = $query['q'];
 		$query_params = array();
-		$query_filters = is_array($query['filters']) ? $query['filters'] : array();
+		$special_params = array();
+		$query_filters = isset($query['filters']) ? $query['filters'] : array();
 		if(!empty($query['columns'])){
 			foreach($query['columns'] as $param){
 				$col = explode("|", $param);
@@ -82,44 +86,45 @@ class Query{
 			}
 		}
 
-		if(isset($data['token'])) unset($data['token']);
-
 		if(!empty($data)){
 			foreach($data as $k => $v){
+				if(!empty($query['limiter']) && $k === $query['limiter'])
+					$k = "limit";
+
+				$w = array_search($k, self::$reserved_args);
+
+				if($w !== FALSE){
+					$special_params[$k] = $v;
+					continue;
+				}
+
 				$w = array_search($k, $query_params);
 				if($w === false){
-					throw new APIexception("Parameter not found : ". $k, 9);
+					throw new APIexception("Parameter not found : ". $k, 9, 404);
 				} elseif($query_params[$w] !== $k){
-					throw new APIexception("Parameter not in order : ". $k, 9);
+					throw new APIexception("Parameter not in order : ". $k, 9, 400);
 				}
 			}
 		}
 
 		if(!empty($filters) && empty($query_filters)){
-			throw new APIexception("Filter not registered. ", 10);
+			throw new APIexception("Filter not registered. ", 10, 404);
 		}
 
 		if(empty($filters) && !empty($query_filters)){
-			throw new APIexception("Filter not found. ", 10);
+			throw new APIexception("Filter not found. ", 10, 404);
 		}
 
-		//var_dump($filters);
-		$all_params = array_merge($data, $filters);
+		$all_params = array_merge($data, $filters, $special_params);
 
 		if(!empty($all_params)){
 			$query_string = kvsprintf($query_string, $all_params);
 			if(empty($query_string))
-				throw new APIexception("Argument mismatch", 14);
+				throw new APIexception("Argument mismatch", 14, 400);
 				
 		}
 
-		if($params['limit']){
-			$query.= " LIMIT ". $params['limit'];
-		}
-		if($params['order']){
-			
-		}
-
+		//print_r($query_string);
 		return $query_string;
 	}
 }

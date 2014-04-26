@@ -26,7 +26,7 @@ abstract class Database{
 				return $class;
 			}	
 		}
-		throw New APIexception("Couldn't guess verb", 4);
+		throw New APIexception("Couldn't guess database verb", 4, 400);
 	}
 
 	public function get_action(){

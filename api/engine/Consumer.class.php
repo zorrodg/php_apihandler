@@ -18,7 +18,7 @@ class Consumer{
 				$cr = explode("=", $c);
 				$consumer[$cr[0]] = $cr[1];
 			}
-			if($options['update']){
+			if(isset($options['update'])){
 				$consumer["requester_name"] = $name;
 				$consumer["requester_email"] = $email;
 				$consumer["application_uri"] = $appuri;

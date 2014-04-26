@@ -12,7 +12,7 @@ final class Dictionary{
 					break;
 				} else {
 					//print_r(self::$registry);
-					throw new APIexception('Duplicated endpoint on dictionary', 3);
+					throw new APIexception('Duplicated endpoint on dictionary', 3, 406);
 				}	
 			}
 		} else {
@@ -67,6 +67,6 @@ final class Dictionary{
 			if($epsearch === $epvalue)
 				return $value['endpoint'];
 		}
-		throw new APIexception('Endpoint not found', 6);
+		throw new APIexception('Endpoint not found', 6, 404);
 	}
 }

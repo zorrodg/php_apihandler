@@ -5,7 +5,5 @@ $andres = new Consumer(1,
 	"zorrodg@gmail.com", 
 	"http://localhost/apihandler/api", 
 	"http://localhost/apihandler/api/callback.php", 
-	array("update" => TRUE)
+	array("new" => TRUE)
 	);
-
-//print_r($andres->get_consumer());

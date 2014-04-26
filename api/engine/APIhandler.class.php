@@ -41,9 +41,9 @@ class APIhandler{
 			try{
 				$query = Dictionary::get_query($og_exists);
 				if(!$query)
-					throw new APIexception('Endpoint not found', 6);
+					throw new APIexception('Endpoint not found', 6, 404);
 				elseif($query['method'] !== $this->server->method)
-					throw new APIexception('Method mismatch. You should use '.$query['method'], 11);
+					throw new APIexception('Method mismatch. You should use '.$query['method'], 11, 400);
 
 				$data = $this->server->data;
 				$filters = $this->server->args;

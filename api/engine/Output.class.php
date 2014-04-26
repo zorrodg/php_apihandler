@@ -50,7 +50,7 @@ class Output{
                 $output.= '</response>';
 				return $output;
             default:
-                throw new APIexception("Output not supported", 7);
+                throw new APIexception("Output not supported", 7, 400);
 		}
 	}
 

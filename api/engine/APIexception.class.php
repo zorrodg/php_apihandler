@@ -9,12 +9,12 @@
  */
 
 class APIexception extends Exception{
-	public function __construct($message = null, $code = 0){
+	public function __construct($message = null, $code = 0, $http = 200){
+		http_response_code($http);
 		parent::__construct($message, $code);
 	}
 
 	public function output(){
-		http_response_code(404);
 		$msg = array(
 			"message" => $this->message,
 			"code" => $this->code
