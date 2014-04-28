@@ -50,12 +50,19 @@ class APIhandler{
 						try{
 							$req = new OAuthRequestVerifier();
 							if(!$req->verify())
-								throw new OAuthException2('This query must be signed');
+								throw new APIexception('Unauthorized request. ', 15, 401);
 						} catch(OAuthException2 $e){
-							throw new APIexception('No signed request. '. $e->getMessage(), 15, 401);
+							throw new APIexception('OAuth error: '. $e->getMessage(), 15, 401);
 						}
 					} else {
-						throw new APIexception('Unauthorized request. ', 15, 401);
+						try{
+							var_dump($GLOBALS['consumer_key']);
+							var_dump($GLOBALS['user_id']);
+							$token = OAuthRequester::requestRequestToken($GLOBALS['consumer_key'], $GLOBALS['user_id']);
+						} catch(OAuthException2 $e){
+							throw new APIexception('OAuth error: '. $e->getMessage(), 15, 401);
+						}
+						
 					}
 				}
 

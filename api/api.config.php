@@ -23,3 +23,6 @@ define('ENDPOINTS', serialize(array("Getters", "Posters", "Deleters")));
 define('SECURE_TYPE', "oauth");
 define('OAUTH_SERVICE', "self");
 define('OAUTH_CONSUMERS', serialize(array("test")));
+
+//define('OAUTH_CONSUMER', '8c34b9ba43543384cc6bd05e8e91a8950535ea6da');
+//define('OAUTH_SECRET', '8260d0af7959a0d2e5b13351d4ee64d3');

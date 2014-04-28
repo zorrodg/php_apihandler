@@ -9,6 +9,7 @@ header('X-XRDS-Location: http://' . $_SERVER['SERVER_NAME'] .
 
 require_once "lib/oauth/OAuthServer.php";
 require_once "lib/oauth/OAuthStore.php";
+require_once "lib/oauth/OAuthRequester.php";
 
 if(!defined('DB_ENGINE')) die("No database engine set.");
 
