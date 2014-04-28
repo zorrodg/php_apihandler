@@ -127,9 +127,9 @@ class Query{
 		$all_params = array_merge($data, $filters, $special_params);
 
 		if(!empty($all_params)){
-			$query_string = kvsprintf($v, $all_params);
+			$query_string = kvsprintf($query_string, $all_params);
 			if(empty($query_string))
-				throw new APIexception("Argument mismatch", 14, 400);		
+				throw new APIexception("Missing or mismatch arguments. ", 14, 400);		
 		} else {
 			// Optional Parameters, again
 			if(!empty($query['limiter'])){

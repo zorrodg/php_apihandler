@@ -13,4 +13,4 @@ ERROR CODES:
 11.	Method mismatch 
 12.	No data to display (Table is empty)
 13.	Table doesn't exists 
-14.	Argument mismatch 
+14.	Missing or mismatch arguments. 

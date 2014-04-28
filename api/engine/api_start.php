@@ -101,6 +101,7 @@ if(!function_exists('kvsprintf')) {
             }
         }
 
+
         $string = @vsprintf($string, $arr);
 
         return $string;
