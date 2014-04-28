@@ -1,6 +1,6 @@
 <?php
 
-$andres = new Consumer(1, 
+$andres = new OAuth_Consumer(1, 
 	"Andres Zorro", 
 	"zorrodg@gmail.com", 
 	"http://localhost/apihandler/api", 

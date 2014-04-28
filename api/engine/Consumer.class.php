@@ -1,6 +1,6 @@
 <?php
 
-class Consumer{
+class OAuth_Consumer{
 
 	private $consumer = array();
 
