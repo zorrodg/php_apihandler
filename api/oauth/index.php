@@ -21,6 +21,8 @@ if(OAUTH_SERVICE === "self"){
 			$server->authorizeFinish(TRUE, 1);
 			$server->accessToken();
 			exit();
+		default:
+			header("Location: ../index.php");
 	}
 }
 

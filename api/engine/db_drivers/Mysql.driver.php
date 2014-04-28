@@ -18,7 +18,7 @@ class Mysql_driver extends Database{
 	public function query($query, $response = TRUE){
 		$q = $this->conn->query($query);
 		if(!$q){
-			throw new APIexception("Query failed: " . $this->conn->error . " Query:". $query, $this->conn->errno);
+			throw new APIexception("Query failed: " . $this->conn->error . " Query: ". $query, $this->conn->errno, 400);
 		} else {
 			if($response){
 				if(is_object($q)){

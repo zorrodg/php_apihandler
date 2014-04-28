@@ -46,7 +46,8 @@ final class Dictionary{
 				if($search === $value['endpoint']) 
 					return array(
 						"q" => $value['query'],
-						"method" => $value['method']
+						"method" => $value['method'],
+						"signed" => $value['signed']
 					);
 			}
 		}

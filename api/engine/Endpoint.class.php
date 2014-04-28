@@ -38,7 +38,6 @@ abstract class Endpoint{
 			}
 		}
 
-
 		$ep = $ep[0];
 
 		$query = new Query($endpoint['method'], $ep, $verb, $endpoint['params']);

@@ -45,6 +45,20 @@ class APIhandler{
 				elseif($query['method'] !== $this->server->method)
 					throw new APIexception('Method mismatch. You should use '.$query['method'], 11, 400);
 
+				if($query['signed']){
+					if(OAuthRequestVerifier::requestIsSigned()){
+						try{
+							$req = new OAuthRequestVerifier();
+							if(!$req->verify())
+								throw new OAuthException2('This query must be signed');
+						} catch(OAuthException2 $e){
+							throw new APIexception('No signed request. '. $e->getMessage(), 15, 401);
+						}
+					} else {
+						throw new APIexception('Unauthorized request. ', 15, 401);
+					}
+				}
+
 				$data = $this->server->data;
 				$filters = $this->server->args;
 				$res = Query::execute($query["q"], true, $data, $filters);

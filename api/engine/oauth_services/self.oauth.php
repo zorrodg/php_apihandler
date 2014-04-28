@@ -22,18 +22,5 @@ $consumers = unserialize(OAUTH_CONSUMERS);
 foreach($consumers as $c){
 	include_once "auth_consumers/$c.consumers.php";
 }
-//$server->requestToken();
-//$server->authorizeVerify();
-//$server->authorizeFinish(TRUE, 1);
-//$server->accessToken();
-if(OAuthRequestVerifier::requestIsSigned()){
-	try{
-		$req = new OAuthRequestVerifier();
-		if(!$req->verify())
-			throw new OAuthException2('This query must be signed');
-	} catch(OAuthException2 $e){
-		throw new APIexception('No signed request. '. $e->getMessage(), 15);
-	}
-	
-}
+
 	

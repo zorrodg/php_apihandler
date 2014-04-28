@@ -86,10 +86,16 @@ class Query{
 			}
 		}
 
-		if(!empty($data)){
+		if(empty($data)){
+			// Optional Parameters
+			if(!empty($query['limiter'])){
+				$query_string = preg_replace('/LIMIT \%\w+\$v/', "", $query_string);
+			}
+		}else{
 			foreach($data as $k => $v){
-				if(!empty($query['limiter']) && $k === $query['limiter'])
+				if(!empty($query['limiter']) && $k === $query['limiter']){
 					$k = "limit";
+				}
 
 				$w = array_search($k, self::$reserved_args);
 
@@ -123,7 +129,7 @@ class Query{
 				throw new APIexception("Argument mismatch", 14, 400);
 				
 		}
-
+		//print_r($special_params);
 		//print_r($query_string);
 		return $query_string;
 	}

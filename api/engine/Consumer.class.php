@@ -6,6 +6,9 @@ class Consumer{
 
 	public function __construct($id, $name, $email, $appuri = "", $callbackuri = "", array $options = array()){
 		global $GLOBALS;
+		if (!file_exists(getcwd().'/engine/oauth_services/credentials/')) {
+		    mkdir(getcwd().'/engine/oauth_services/credentials/', 0777, true);
+		}
 		chown(getcwd()."/engine/oauth_services/credentials/", get_current_user());
 		$filename = getcwd()."/engine/oauth_services/credentials/". $email .".txt";
 		$store = $GLOBALS['oauth_store'];
