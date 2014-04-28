@@ -10,7 +10,7 @@ class Query{
 
 	private $supported_drivers = array("mysql");
 
-	static private $reserved_args = array('token', 'limit');
+	static private $reserved_args = array('limit');
 
 	private $action;
 
@@ -97,16 +97,19 @@ class Query{
 					$k = "limit";
 				}
 
-				$w = array_search($k, self::$reserved_args);
-
-				if($w !== FALSE){
+				if(array_search($k, self::$reserved_args) !== FALSE){
 					$special_params[$k] = $v;
 					continue;
 				}
 
 				$w = array_search($k, $query_params);
 				if($w === false){
-					throw new APIexception("Parameter not found : ". $k, 9, 404);
+					if(preg_match('/oauth_[a-zA-Z_]+/', $k, $match)){
+						unset($data[$match[0]]);
+						continue;
+					} else {
+						throw new APIexception("Parameter not found : ". $k, 9, 404);
+					}
 				} elseif($query_params[$w] !== $k){
 					throw new APIexception("Parameter not in order : ". $k, 9, 400);
 				}
@@ -124,13 +127,15 @@ class Query{
 		$all_params = array_merge($data, $filters, $special_params);
 
 		if(!empty($all_params)){
-			$query_string = kvsprintf($query_string, $all_params);
+			$query_string = kvsprintf($v, $all_params);
 			if(empty($query_string))
-				throw new APIexception("Argument mismatch", 14, 400);
-				
+				throw new APIexception("Argument mismatch", 14, 400);		
+		} else {
+			// Optional Parameters, again
+			if(!empty($query['limiter'])){
+				$query_string = preg_replace('/LIMIT \%\w+\$v/', "", $query_string);
+			}
 		}
-		//print_r($special_params);
-		//print_r($query_string);
 		return $query_string;
 	}
 }
