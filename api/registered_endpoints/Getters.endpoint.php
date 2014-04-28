@@ -7,7 +7,7 @@ new Getter("teams", array(
 	"columns" => array("name|string|100|unique", "group|char", "matches|string|200"),
 	"limit" => "count",
 	"sort" => "group|asc"
-	));
+	), TRUE);
 
 new Getter("groups", array(
 	"description" => "Get all groups",

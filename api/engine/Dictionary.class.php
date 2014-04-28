@@ -6,15 +6,12 @@ final class Dictionary{
 
 	static public function register($endpoint){
 		if (count(self::$registry) > 0){
-			foreach(self::$registry as $registry){
-				if(!in_array($endpoint['endpoint'], $registry)){
-					self::$registry[] = $endpoint;
-					break;
-				} else {
-					//print_r(self::$registry);
-					throw new APIexception('Duplicated endpoint on dictionary', 3, 406);
-				}	
-			}
+			if(!in_array($endpoint['endpoint'], self::$registry)){
+				self::$registry[] = $endpoint;
+			} else {
+				print_r(self::$registry);
+				throw new APIexception('Duplicated endpoint on dictionary', 3, 406);
+			}	
 		} else {
 			self::$registry[] = $endpoint;
 		}
