@@ -46,23 +46,18 @@ class APIhandler{
 					throw new APIexception('Method mismatch. You should use '.$query['method'], 11, 400);
 
 				if($query['signed']){
-					if(OAuthRequestVerifier::requestIsSigned()){
-						try{
-							$req = new OAuthRequestVerifier();
-							if(!$req->verify())
-								throw new APIexception('Unauthorized request. ', 15, 401);
-						} catch(OAuthException2 $e){
-							throw new APIexception('OAuth error: '. $e->getMessage(), 15, 401);
+					if(SECURE_TYPE === "oauth"){
+						if(OAuthRequestVerifier::requestIsSigned()){
+							try{
+								$req = new OAuthRequestVerifier();
+								if(!$req->verify())
+									throw new APIexception('Unauthorized request.', 15, 401);
+							} catch(OAuthException2 $e){
+								throw new APIexception('OAuth error: '. $e->getMessage(), 15, 401);
+							}
+						} else {
+							throw new APIexception('Unauthorized request. ', 15, 401);
 						}
-					} else {
-						try{
-							var_dump($GLOBALS['consumer_key']);
-							var_dump($GLOBALS['user_id']);
-							$token = OAuthRequester::requestRequestToken($GLOBALS['consumer_key'], $GLOBALS['user_id']);
-						} catch(OAuthException2 $e){
-							throw new APIexception('OAuth error: '. $e->getMessage(), 15, 401);
-						}
-						
 					}
 				}
 

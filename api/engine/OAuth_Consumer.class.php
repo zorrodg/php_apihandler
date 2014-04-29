@@ -6,14 +6,14 @@ class OAuth_Consumer{
 
 	public function __construct($id, $name, $email, $appuri = "", $callbackuri = "", array $options = array()){
 		global $GLOBALS;
-		if (!file_exists(getcwd().'/engine/oauth_services/credentials/')) {
-		    mkdir(getcwd().'/engine/oauth_services/credentials/', 0777, true);
+		if (!file_exists(dirname(__FILE__).'/oauth_services/credentials/')) {
+		    mkdir(dirname(__FILE__).'/oauth_services/credentials/', 0777, true);
 		}
-		$filename = getcwd()."/engine/oauth_services/credentials/". $email .".txt";
+		$filename = dirname(__FILE__)."/oauth_services/credentials/". $email .".txt";
 		$store = $GLOBALS['oauth_store'];
 
 		$credentials = @file_get_contents($filename);
-		if($credentials){
+		if(!empty($credentials)){
 			$credentials = explode(";", $credentials);
 			$consumer = array();
 			foreach($credentials as $c){
@@ -40,6 +40,8 @@ class OAuth_Consumer{
 
 			$key = $store->updateConsumer($consumer, $id, true);
 			$this->consumer = $store->getConsumer($key, $id);
+		} else {
+			throw new APIexception("OAuth Consumer does not exists", 15, 404);
 		}
 
 		foreach($this->consumer as $k => $v){

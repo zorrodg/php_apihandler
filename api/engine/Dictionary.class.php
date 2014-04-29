@@ -9,7 +9,6 @@ final class Dictionary{
 			if(!in_array($endpoint['endpoint'], self::$registry)){
 				self::$registry[] = $endpoint;
 			} else {
-				print_r(self::$registry);
 				throw new APIexception('Duplicated endpoint on dictionary', 3, 406);
 			}	
 		} else {

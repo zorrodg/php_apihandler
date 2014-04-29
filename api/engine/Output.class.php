@@ -7,6 +7,7 @@
  * @version 0.1
  * 
  */
+require_once "Stopwatch.class.php";
 
 class Output{
 	public static function set_headers($output = DEFAULT_OUTPUT){

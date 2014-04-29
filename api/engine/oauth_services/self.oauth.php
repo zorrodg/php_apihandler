@@ -5,11 +5,13 @@
 
 // Add a header indicating this is an OAuth server
 header('X-XRDS-Location: http://' . $_SERVER['SERVER_NAME'] .
-     '/services.xrds.php');
+     '/api/services.xrds.php');
 
-require_once "lib/oauth/OAuthServer.php";
-require_once "lib/oauth/OAuthStore.php";
-require_once "lib/oauth/OAuthRequester.php";
+require_once dirname(__FILE__)."/../../api.config.php";
+
+require_once dirname(__FILE__)."/../../lib/oauth/OAuthServer.php";
+require_once dirname(__FILE__)."/../../lib/oauth/OAuthStore.php";
+require_once dirname(__FILE__)."/../../lib/oauth/OAuthRequester.php";
 
 if(!defined('DB_ENGINE')) die("No database engine set.");
 
@@ -20,8 +22,10 @@ if(DB_ENGINE === "mysql"){
 }
 
 $consumers = unserialize(OAUTH_CONSUMERS);
+require_once dirname(__FILE__)."/../../engine/OAuth_Consumer.class.php";
+require_once dirname(__FILE__)."/../../engine/OAuth_Server.class.php";
 foreach($consumers as $c){
-	include_once "auth_consumers/$c.consumers.php";
+	include_once dirname(__FILE__)."/../../auth_consumers/$c.consumers.php";
 }
 
 	
