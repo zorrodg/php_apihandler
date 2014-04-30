@@ -57,6 +57,8 @@ class OAuth_Consumer{
 		$arr['user_id'] = $this->consumer['user_id'];
 		$arr['consumer_key'] = $this->consumer['consumer_key'];
 		$arr['consumer_secret'] = $this->consumer['consumer_secret'];
+		$arr['application_uri'] = $this->consumer['application_uri'];
+		$arr['callback_uri'] = $this->consumer['callback_uri'];
 
 		return $arr;
 	}

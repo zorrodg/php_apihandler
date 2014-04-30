@@ -12,3 +12,5 @@ $user_id = $_GET['usr_id'];
 OAuthRequester::requestAccessToken($consumer_key, $oauth_token, $user_id, 'POST', $_GET['oauth_verifier']);
 
 ?>
+Success!!
+<a href="<?php echo $user['application_uri']; ?>">Go to APP</a>

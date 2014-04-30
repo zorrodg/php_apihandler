@@ -5,7 +5,7 @@ require_once "../api/lib/oauth/OAuthRequester.php";
 
 $user = $andres->get_consumer();
 
-$callback_uri = 'http://localhost/apihandler/example/callback.php?consumer_key='.rawurlencode($user['consumer_key']).'&usr_id='.intval($user['user_id']);
+$callback_uri = $user['callback_uri'].'?consumer_key='.rawurlencode($user['consumer_key']).'&usr_id='.intval($user['user_id']);
 
 $token = OAuthRequester::requestRequestToken($user['consumer_key'], $user['user_id'], array('oauth_callback'=>$callback_uri));
 
