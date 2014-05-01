@@ -1,6 +1,6 @@
 <?php
 
-require_once "../api/engine/oauth_services/self.oauth.php";
+require_once "../api/oauth/oauth_services/self.oauth.php";
 require_once "../api/lib/oauth/OAuthRequester.php";
 require_once "../api/engine/Output.class.php";
 

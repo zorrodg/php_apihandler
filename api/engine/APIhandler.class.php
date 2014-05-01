@@ -19,16 +19,18 @@ class APIhandler{
 	 * Creates the handler with current query
 	 */
 	public function __construct(){
-		$endpoints = unserialize(ENDPOINTS);
+		//$endpoints = unserialize(ENDPOINTS);
+		$endpoints = scandir("registered_endpoints/");
 		foreach($endpoints as $e){
-			include_once "registered_endpoints/$e.endpoint.php";
+			if(preg_match("/endpoints\.php$/", $e))
+				include_once "registered_endpoints/$e";
 		}
 		if(defined('SECURE_TYPE')){
 			if(SECURE_TYPE === "oauth"){
 				if(OAUTH_SERVICE === "self")
 					require_once "lib/oauth/store/".DB_ENGINE."/apihandler.install.php";
 
-				require_once "engine/oauth_services/".OAUTH_SERVICE.".oauth.php";
+				require_once "oauth/oauth_services/".OAUTH_SERVICE.".oauth.php";
 			}
 		}
 		$this->server = new Server();
@@ -56,7 +58,7 @@ class APIhandler{
 								throw new APIexception('OAuth error: '. $e->getMessage(), 15, 401);
 							}
 						} else {
-							throw new APIexception('Unauthorized request. ', 15, 401);
+							throw new APIexception('Unauthorized request.', 15, 401);
 						}
 					}
 				}

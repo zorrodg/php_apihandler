@@ -110,7 +110,8 @@ if(!function_exists('kvsprintf')) {
 
 //Class autoloader
 function __autoload($class){
-	require_once "engine/" . $class .".class.php";
+    if(file_exists("engine/" . $class .".class.php"))
+	   require_once "engine/" . $class .".class.php";
 }
 
 //Init measure time

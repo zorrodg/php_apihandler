@@ -6,10 +6,10 @@ class OAuth_Consumer{
 
 	public function __construct($id, $name, $email, $appuri = "", $callbackuri = "", array $options = array()){
 		global $GLOBALS;
-		if (!file_exists(dirname(__FILE__).'/oauth_services/credentials/')) {
-		    mkdir(dirname(__FILE__).'/oauth_services/credentials/', 0777, true);
+		if (!file_exists(dirname(__FILE__).'/credentials/')) {
+		    mkdir(dirname(__FILE__).'/credentials/', 0777, true);
 		}
-		$filename = dirname(__FILE__)."/oauth_services/credentials/". $email .".txt";
+		$filename = dirname(__FILE__)."/credentials/". $email .".txt";
 		$store = $GLOBALS['oauth_store'];
 
 		$credentials = @file_get_contents($filename);

@@ -16,9 +16,6 @@ define('CACHE_TIMEOUT', 3600);
 //Default output 
 define('DEFAULT_OUTPUT',"json");
 
-//Set endpoint files
-define('ENDPOINTS', serialize(array("Getters", "Posters", "Deleters")));
-
 //Set security
 define('SECURE_TYPE', "oauth");
 define('OAUTH_SERVICE', "self");

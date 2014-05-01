@@ -6,10 +6,10 @@ class OAuth_Server{
 
 	public function __construct($consumer, $serveruri = NULL, array $options = array()){
 		global $GLOBALS;
-		if (!file_exists(dirname(__FILE__).'/oauth_services/credentials/')) {
-		    mkdir(dirname(__FILE__).'/oauth_services/credentials/', 0777, true);
+		if (!file_exists(dirname(__FILE__).'/credentials/')) {
+		    mkdir(dirname(__FILE__).'/credentials/', 0777, true);
 		}
-		$filename = dirname(__FILE__)."/oauth_services/credentials/". $consumer['consumer_key'] .".txt";
+		$filename = dirname(__FILE__)."/credentials/". $consumer['consumer_key'] .".txt";
 		$store = $GLOBALS['oauth_store'];
 
 		$server_location =  "http://".$_SERVER['HTTP_HOST'];
