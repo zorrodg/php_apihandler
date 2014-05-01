@@ -17,6 +17,9 @@ new Getter("groups", array(
 	"limit" => "number"
 	));
 
-new Getter("teams/:id");
+new Getter("teams/:id", array(
+	"query" => "SELECT * FROM `api_teams` WHERE `id` = %id\$v AND `group` = '%group\$v'",
+	"columns" => array("group")
+	));
 
 new Getter("groups/:id");

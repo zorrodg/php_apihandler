@@ -39,11 +39,19 @@ abstract class Endpoint{
 		}
 
 		$ep = $ep[0];
-
-		$query = new Query($endpoint['method'], $ep, $verb, $endpoint['params']);
+		if(isset($endpoint['params']['query'])){
+			$query = $endpoint['params']['query'];
+			$action = strtolower(preg_replace("/^(\w+) .*/", "$1", $query));
+		}
+		else{
+			$q = new Query($endpoint['method'], $ep, $verb, $endpoint['params']);
+			$query = $q->get_query();
+			$action = $q->get_action();
+		}
+			
 		$endpoint['query'] = array(
-			"q" => $query->get_query(),
-			"action" => $query->get_action(),
+			"q" => $query,
+			"action" => $action,
 			"columns" => !empty($endpoint['params']['columns']) ? $endpoint['params']['columns'] : "",
 			"filters" => !empty($endpoint['params']['filters']) ? $endpoint['params']['filters'] : "",
 			"limiter" => !empty($endpoint['params']['limit']) ? $endpoint['params']['limit'] : ""
