@@ -1,10 +1,10 @@
 <?php
 
 require_once "../api/oauth/oauth_services/self.oauth.php";
-require_once "../api/lib/oauth/OAuthRequester.php";
+// require_once "../api/lib/oauth/OAuthRequester.php";
 require_once "../api/engine/Output.class.php";
 
-$request = new OAuthRequester("http://localhost/apihandler/api/teams.json", "GET", array("count" => 5));
+$request = new OAuthRequester("http://localhost/apihandler/api/teams.json", "GET", array("count" => 3));
 $result = $request->doRequest($GLOBALS['user_id']);
 
 // Kind of redundant but serves as an example

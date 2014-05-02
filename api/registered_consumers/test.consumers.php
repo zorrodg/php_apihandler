@@ -5,7 +5,7 @@ $andres = new OAuth_Consumer(1,
 	"zorrodg@gmail.com", 
 	"http://localhost/apihandler/example/", 
 	"http://localhost/apihandler/example/callback.php"
-	//array('update'=>TRUE)
 );
 
-$server = new OAuth_Server($andres->get_consumer(), "http://localhost/apihandler/api");
+if(OAUTH_SERVICE === "self")
+	$server = new OAuth_Server($andres->get_consumer(), "http://localhost/apihandler/api");
