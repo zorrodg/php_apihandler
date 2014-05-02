@@ -22,7 +22,7 @@ class APIhandler{
 		//$endpoints = unserialize(ENDPOINTS);
 		$endpoints = scandir("registered_endpoints/");
 		foreach($endpoints as $e){
-			if(preg_match("/endpoints\.php$/", $e))
+			if(preg_match("/\.endpoints\.php$/", $e))
 				include_once "registered_endpoints/$e";
 		}
 		if(defined('SECURE_TYPE')){

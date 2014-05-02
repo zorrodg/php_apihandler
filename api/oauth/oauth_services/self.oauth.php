@@ -7,11 +7,13 @@
 header('X-XRDS-Location: http://' . $_SERVER['SERVER_NAME'] .
      '/api/services.xrds.php');
 
-require_once dirname(dirname(dirname(__FILE__)))."/api.config.php";
+$filedir = dirname(dirname(dirname(__FILE__)));
 
-require_once dirname(dirname(dirname(__FILE__)))."/lib/oauth/OAuthServer.php";
-require_once dirname(dirname(dirname(__FILE__)))."/lib/oauth/OAuthStore.php";
-require_once dirname(dirname(dirname(__FILE__)))."/lib/oauth/OAuthRequester.php";
+require_once $filedir."/api.config.php";
+
+require_once $filedir."/lib/oauth/OAuthServer.php";
+require_once $filedir."/lib/oauth/OAuthStore.php";
+require_once $filedir."/lib/oauth/OAuthRequester.php";
 
 if(!defined('DB_ENGINE')) die("No database engine set.");
 
@@ -21,11 +23,13 @@ if(DB_ENGINE === "mysql"){
 	$server = new OAuthServer();
 }
 
-$consumers = unserialize(OAUTH_CONSUMERS);
-require_once dirname(dirname(dirname(__FILE__)))."/engine/OAuth_Consumer.class.php";
-require_once dirname(dirname(dirname(__FILE__)))."/engine/OAuth_Server.class.php";
+require_once $filedir."/engine/OAuth_Consumer.class.php";
+require_once $filedir."/engine/OAuth_Server.class.php";
+
+$consumers = scandir($filedir."/registered_consumers/");
 foreach($consumers as $c){
-	include_once dirname(dirname(dirname(__FILE__)))."/registered_consumers/$c.consumers.php";
+	if(preg_match("/\.consumers\.php$/", $e))
+		include_once $filedir."/registered_consumers/$c.consumers.php";
 }
 
 	
