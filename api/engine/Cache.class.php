@@ -16,6 +16,8 @@ class Cache{
 
 	protected $route;
 
+	static private $instance;
+
 	public function __construct($server){
 		if(!file_exists("cache/".CACHE_FOLDER)){
 			mkdir("cache/".CACHE_FOLDER, 0644) || die("Error creating directory.");
@@ -45,12 +47,27 @@ class Cache{
 	}
 
 	static public function search($server){
-		$cache = new Cache($server);
+		$cache = Cache::instance($server);
 		if(file_exists($cache->route)){
-			return file_get_contents($cache->route);
+			$data = file_get_contents($cache->route);
 		}
-
 		return FALSE;
+	}
+
+	static public function write($data){
+		$cache = Cache::instance();
+	}
+
+	static public function instance($server){
+		if(is_a(self::$instance, "Cache")){
+			return self::$instance;
+		}
+		if(!isset($server)){
+			throw new APIexception("No server defined on cache instance.", 16, 404);
+			die();
+		}
+		self::$instance = new Cache($server);
+		return self::$instance;
 	}
 
 
