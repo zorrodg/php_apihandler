@@ -38,9 +38,14 @@ class Mysql_driver extends Database{
 					}
 				} else {
 					if($this->conn->affected_rows > 0){
-						
+						preg_match("/`(\w+)`/", $query, $table);
+						$resq = $this->conn->query("SELECT * FROM ".$table[0]." ORDER BY `updated` DESC LIMIT ".$this->conn->affected_rows);
+						if(is_object($resq)){
+							return $resq->fetch_assoc();
+						}
+					} else {
+						return 'No affected rows.';
 					}
-					return array('Successful query. '.$this->conn->affected_rows);
 				}
 					
 			}
