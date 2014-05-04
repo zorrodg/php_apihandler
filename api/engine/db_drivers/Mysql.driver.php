@@ -36,8 +36,11 @@ class Mysql_driver extends Database{
 					if(is_object($q)){
 						return $q->fetch_assoc();
 					}
-				} else{ 
-					return array('Successful query');
+				} else {
+					if($this->conn->affected_rows > 0){
+						
+					}
+					return array('Successful query. '.$this->conn->affected_rows);
 				}
 					
 			}
