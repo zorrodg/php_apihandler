@@ -10,7 +10,7 @@
 require_once "Stopwatch.class.php";
 
 class Output{
-	public static function set_headers($output = DEFAULT_OUTPUT){
+	static public function set_headers($output = DEFAULT_OUTPUT){
 		header("Access-Control-Allow-Orgin: *");
         header("Access-Control-Allow-Methods: *");
         switch($output){
@@ -32,11 +32,12 @@ class Output{
 	 * @param  [string] $output Custom output to render. Defaults defined.
 	 * @return [string]         Encoded string
 	 */
-	static public function encode($data, $output = DEFAULT_OUTPUT){
+	static public function encode($data, $output = DEFAULT_OUTPUT, $cached = FALSE){
 		self::set_headers($output);
         
         $return["status"] = http_response_code();
         $return["elapsed_time"] = 0;
+        $return["cached"] = $cached;
         $return["data"] = $data;
 
         Stopwatch::stop();

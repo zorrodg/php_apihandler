@@ -6,15 +6,17 @@ new Getter("teams", array(
 	"modify_existing_table" =>true,
 	"columns" => array("name|string|100|unique", "group|char", "matches|string|200"),
 	"limit" => "count",
-	"sort" => "group|asc"
-	), TRUE);
+	"sort" => "group|asc",
+	"cacheable" => TRUE
+	));
 
 new Getter("groups", array(
 	"description" => "Get all groups",
 	"create_new_table"=>true,
 	"modify_existing_table" =>true,
 	"columns" => array("group|char", "matches|string|200", "date|date"),
-	"limit" => "number"
+	"limit" => "number",
+	"cacheable" => FALSE
 	));
 
 new Getter("teams/:id", array(

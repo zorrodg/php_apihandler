@@ -15,4 +15,5 @@ ERROR CODES:
 13.	Table doesn't exists 
 14.	Missing or mismatch arguments.
 15.	OAuth Server/Consumer does not exists.
-16.	No server defined on cache instance.
+16.	Cannot create cache folder.
+17.	No server defined on cache instance.

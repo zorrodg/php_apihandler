@@ -56,6 +56,9 @@ abstract class Endpoint{
 			"filters" => !empty($endpoint['params']['filters']) ? $endpoint['params']['filters'] : "",
 			"limiter" => !empty($endpoint['params']['limit']) ? $endpoint['params']['limit'] : ""
 			);
+
+		$endpoint['params']['cacheable'] = isset($endpoint['params']['cacheable']) ? $endpoint['params']['cacheable'] : FALSE;
+
 		Dictionary::register($endpoint);
 	}
 }

@@ -44,6 +44,7 @@ class APIhandler{
 		if($og_exists){
 			try{
 				$query = Dictionary::get_query($og_exists);
+				$cacheable = Dictionary::is_cacheable($og_exists);
 				if(!$query)
 					throw new APIexception('Endpoint not found', 6, 404);
 				elseif($query['method'] !== $this->server->method)
@@ -64,16 +65,25 @@ class APIhandler{
 						}
 					}
 				}
-
-				if(CACHE){
-					Cache::search($this->server);
+				if(CACHE && $cacheable){
+					$cached_content = Cache::search($this->server);
+					if($cached_content){
+						return Output::encode(json_decode($cached_content), $this->server->output, TRUE);
+					}
 				}
 
-				$data = $this->server->data;
-				$filters = $this->server->args;
-				$res = Query::execute($query["q"], true, $data, $filters);
+				if(empty($cached_content)){
+					$data = $this->server->data;
+					$filters = $this->server->args;
+					$res = Query::execute($query["q"], true, $data, $filters);
 
-				return Output::encode($res, $this->server->output);
+					if(CACHE && $cacheable){
+						$res = Cache::write($res);
+					}
+
+					return Output::encode($res, $this->server->output);
+				}
+
 			} catch(APIexception $e){
 				die($e->output());
 			}

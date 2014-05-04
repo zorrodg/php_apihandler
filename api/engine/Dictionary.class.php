@@ -36,18 +36,34 @@ final class Dictionary{
 		return $arr;
 	}
 
-	static public function get_query($search){
+	static public function is_cacheable($endpoint){
+		$ep = self::search($endpoint);
+		if($ep){
+			if(isset($ep['params']['cacheable']) && $ep['params']['cacheable'] === TRUE)
+				return TRUE;
+		}
+		return FALSE;
+	}
+
+	static public function get_query($endpoint){
+		$ep = self::search($endpoint);
+		if($ep){
+			return array(
+				"q" => $ep['query'],
+				"method" => $ep['method'],
+				"signed" => $ep['signed']
+			);
+		}
+		return FALSE;
+	}
+
+	static public function search($endpoint){
 		foreach(self::$registry as $key => $value){
-			if($search){
-				if($search === $value['endpoint']) 
-					return array(
-						"q" => $value['query'],
-						"method" => $value['method'],
-						"signed" => $value['signed']
-					);
+			if($endpoint && $endpoint === $value['endpoint']){
+				return $value;
 			}
 		}
-		return false;
+		return FALSE;
 	}
 
 	static public function exists($search){
