@@ -158,9 +158,7 @@ Stopwatch::start();
 //Load API
 try{
 	$API = new APIhandler();
-	//echo $API->endpoint_request();
     echo $API->endpoint_process();
-	//echo $API->endpoint_info();
 }
 catch(APIexception $e){
 	echo $e->output();

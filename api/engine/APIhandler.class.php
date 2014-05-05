@@ -3,25 +3,45 @@
 /**
  * API handler class
  *
- * @package APIhandler
  * @author Andrés Zorro <zorrodg@gmail.com>
+ * @github https://github.com/zorrodg/php_apihandler
  * @version 0.1
+ *
+ * The MIT License
+ * 
+ * Copyright (c) 2014 zorrodg
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 
 class APIhandler{
+
 	/**
-	 * Holds server data
+	 * Holds current endpoint data
 	 * @var Server Class
 	 */
 	private $server;
-
-	private $cache;
 
 	/**
 	 * Creates the handler with current query
 	 */
 	public function __construct(){
-		//$endpoints = unserialize(ENDPOINTS);
 		$endpoints = scandir("registered_endpoints/");
 		foreach($endpoints as $e){
 			if(preg_match("/\.endpoints\.php$/", $e))
@@ -38,6 +58,10 @@ class APIhandler{
 		$this->server = new Server();
 	}
 
+	/**
+	 * Process request endpoint 
+	 * @return mixed 	Endpoint result 
+	 */
 	public function endpoint_process(){
 		$og_endpoint = $this->server->original_endpoint;
 		$og_exists = Dictionary::exists($og_endpoint);
@@ -90,6 +114,10 @@ class APIhandler{
 		}
 	}
 
+	/**
+	 * Retrieves endpoint information.
+	 * @return mixed 	Information about endpoint
+	 */
 	public function endpoint_info(){
 		$og_endpoint = $this->server->original_endpoint;
 		$og_exists = Dictionary::exists($og_endpoint);
@@ -97,7 +125,10 @@ class APIhandler{
 			$endpoint = Dictionary::get($og_exists);
 			return Output::encode($endpoint, $this->server->output);
 	}
-
+	/**
+	 * Retrieves information about given endpoint request
+	 * @return mixed 	Endpoint information
+	 */	
 	public function endpoint_request(){
 		return Output::encode($this->server->get(), $this->server->output);
 	}
