@@ -1,7 +1,19 @@
 <?php
 
+/**
+ * Example OAuth consumer registry
+ *
+ * You can instantiate any number of consumers, and any number of 
+ * servers associated with those consumers. 
+ * 
+ * This is harcoded. A better method would be a form registry for 
+ * your consumers to obtain consumer key and secret.
+ * 
+ * TODO: Improve security regarding consumer authorization.
+ */
+
 $andres = new OAuth_Consumer(
-	1, // The consumer id. Replace with session user
+	1, // The consumer id. Replace with current logged user
 	"Andres Zorro", // User name
 	"zorrodg@gmail.com", // User Email
 	"http://localhost/apihandler/example/", // Application URL
