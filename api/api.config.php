@@ -31,7 +31,7 @@
  */
 
 //Database configuration
-define('DATABASE',"apihandlertest");
+define('DATABASE',"myAPIhandler");
 define('DB_PREFIX',"api_");
 define('DB_USER',"root");
 define('DB_PASSWORD',"root");

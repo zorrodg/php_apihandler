@@ -57,13 +57,14 @@ if(OAUTH_SERVICE === "self"){
 			case "access":
 				$GLOBALS['oauth_server']->accessToken();
 				exit();
-			// Avoid access if not found
-			default:
-				header("Location: ../index.php");
+				
 		}
 	} catch(OAuthException2 $e){
 		echo Output::encode($e->getMessage(), $e->getCode(), 400);
 	}
 }
+
+// Avoid access if not found
+header("Location: ../index.php");
 
 ?>

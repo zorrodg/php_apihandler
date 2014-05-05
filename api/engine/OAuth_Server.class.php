@@ -28,7 +28,7 @@ class OAuth_Server{
 			$key = $consumer['consumer_key'];
 			$this->server = $store->getServer($key, $consumer['user_id']);
 
-			if(isset($options['update'])){
+			if(isset($options['update']) && $options['update'] === TRUE){
 				$store->deleteServer($key, $consumer['user_id']);
 				$server = array(
 				    'consumer_key' => $consumer['consumer_key'],
@@ -42,7 +42,7 @@ class OAuth_Server{
 				$key = $store->updateServer($server, $consumer['user_id']);
 				$this->server = $store->getServer($key, $consumer['user_id']);
 			}
-		} elseif(isset($options['new'])){
+		} elseif(isset($options['new']) && $options['new'] === TRUE){
 			$arr = array();
 			$server = array(
 			    'consumer_key' => $consumer['consumer_key'],

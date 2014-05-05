@@ -20,7 +20,7 @@ class OAuth_Consumer{
 				$cr = explode("=", $c);
 				$consumer[$cr[0]] = $cr[1];
 			}
-			if(isset($options['update'])){
+			if(isset($options['update']) && $options['update'] === TRUE){
 				$consumer["requester_name"] = $name;
 				$consumer["requester_email"] = $email;
 				$consumer["application_uri"] = $appuri;
@@ -29,9 +29,13 @@ class OAuth_Consumer{
 			} else {
 				$key = $consumer['consumer_key'];
 			}
-			$this->consumer = $store->getConsumer($key, $id);
+			try{
+				$this->consumer = $store->getConsumer($key, $id);
+			} catch (OAuthException2 $e){
+				throw new APIexception("OAuth Consumer '$key' is not registered", 15, 404);
+			}
 
-		} elseif($options['new']){
+		} elseif(isset($options['new']) && $options['new'] === TRUE){
 			$arr = array();
 			$consumer["requester_name"] = $name;
 			$consumer["requester_email"] = $email;

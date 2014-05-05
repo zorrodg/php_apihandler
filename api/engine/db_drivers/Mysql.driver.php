@@ -4,9 +4,9 @@ class Mysql_driver extends Database{
 
 	public function __construct(){
 		parent::__construct();
-		$this->conn = new mysqli(HOSTNAME, DB_USER, DB_PASSWORD, DATABASE);
+		$this->conn = @new mysqli(HOSTNAME, DB_USER, DB_PASSWORD, DATABASE);
 		if($this->conn->connect_errno)
-			die("Failed to connect to Database: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error);
+			throw new APIexception("Database issue: (" . $this->conn->connect_error . ") ", $this->conn->connect_errno, 500);	
 	}
 
 	public function __destruct(){

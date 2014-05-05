@@ -7,9 +7,11 @@ abstract class Database{
 	protected $action;
 
 	protected $glossary = array(
-		"select" => array("get", "select", "show", "search", "login", "set"),
+		
+		//TODO: Increase verb list in order to support more common verbs
+		"select" => array("get", "select", "show", "search", "login", "find"),
 		"update" => array("update", "edit"),
-		"insert" => array("put","insert", "create", "new"),
+		"insert" => array("put","insert", "create", "new", "add", "set"),
 		"delete" => array("delete", "remove", "clear", "destroy")
 		);
 
