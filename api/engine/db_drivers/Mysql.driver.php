@@ -1,7 +1,41 @@
 <?php
 
+/** 
+ * MySQL database driver. Uses by default MySQLi, because MySQL is being depreciated on PHP
+ * 
+ * @author Andrés Zorro <zorrodg@gmail.com>
+ * @github https://github.com/zorrodg/php_apihandler
+ * @version 0.1
+ *
+ * The MIT License
+ * 
+ * Copyright (c) 2014 zorrodg
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+
 class Mysql_driver extends Database{
 
+	/**
+	 * Class constructor. Creates the connection.
+	 */
 	public function __construct(){
 		parent::__construct();
 		$this->conn = @new mysqli(HOSTNAME, DB_USER, DB_PASSWORD, DATABASE);
@@ -9,12 +43,21 @@ class Mysql_driver extends Database{
 			throw new APIexception("Database issue: (" . $this->conn->connect_error . ") ", $this->conn->connect_errno, 500);	
 	}
 
+	/**
+	 * Class destructor. Closes current connection.
+	 */
 	public function __destruct(){
 		if(isset($this->conn)){
 			$this->conn->close();
 		}
 	}
 
+	/**
+	 * Executes a query to the database
+	 * @param  string  $query    The query to execute
+	 * @param  boolean $response If set to true, returns a response. If set to false, does not return response.
+	 * @return mixed             Response depends on query. Most common is the query result.
+	 */
 	public function query($query, $response = TRUE){
 		$q = $this->conn->query($query);
 		if(!$q){
@@ -52,9 +95,20 @@ class Mysql_driver extends Database{
 		}
 	}
 
+	/**
+	 * Creates a MySQL query based on given endpoint information
+	 * @param  string $q      Endpoint verb.
+	 * @param  string $table  Endpoint name. APIHandler associates the endpoint name with the database name.
+	 * @param  array  $params Endpoint custom params.
+	 * @return string         Formatted database query.
+	 */
 	public function construct_query($q, $table, $params){
 		$table = DB_PREFIX.$table;
+
+		// Guess database verb. Please refer to Database Class.
 		$query = strtoupper($this->guess_action($q, $this->glossary));
+
+		// Selects given database verb and construct query around it.
 		switch($query){
 			case 'SELECT':
 				if(isset($params['show'])){
@@ -101,11 +155,14 @@ class Mysql_driver extends Database{
 				break;
 		}
 
+		// Adds table name.
 		$query.=" `$table`";
 
+		// Order query on given conditions.
 		if(isset($set))
 			$query.=$set;
 
+		// Add filters to given queries.
 		if(isset($params['filters'])){
 			$query .= " WHERE ";
 			$f=array();
@@ -128,17 +185,27 @@ class Mysql_driver extends Database{
 		return $query;
 	}
 
+	/**
+	 * Creates a new table if not exists.
+	 * @param  string $table   Table name.
+	 * @param  string $columns Columns to create.
+	 */
 	public function create_new_table($table, $columns){
 		$table = DB_PREFIX.$table;
 		$columns = $this->set_columns($columns);
 
 		$query = "CREATE TABLE IF NOT EXISTS `$table` (";
+
+		// Sets automatic id and timestamp tables for tracking changes
 		$query.= "`id` INT NOT NULL AUTO_INCREMENT, ";
 		$query.= "`updated` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, ";
+
+		// Add columns
 		foreach($columns as $c){
 			$query.= "`".$c['name']."` ". $c['type'].$c['length'] .", ";
 		}
 		
+		// Creates keys for columns marked as unique
 		foreach($columns as $c){
 			if(isset($c['key'])){
 				if($c['key'] === "unique")
@@ -146,17 +213,19 @@ class Mysql_driver extends Database{
 			}
 		}
 		$query.= "PRIMARY KEY(id))";
-		$q = array(
-			'q' => $query,
-			'columns' => array(),
-			'filters' => array()
-			);
-		$this->query($query, false);
+
+		$this->conn->query($query);
 	}
 
+	/**
+	 * Modifies existing table if exists.
+	 * @param  string $table   Table name.
+	 * @param  string $columns Columns to create.
+	 */
 	public function modify_existing_table($table, $columns){
 		$table = DB_PREFIX.$table;
 
+		// Retrieve existing table
 		$firstQuery = "SHOW COLUMNS FROM `$table`";
 		$current_columns = array();
 		$current = array();
@@ -172,11 +241,12 @@ class Mysql_driver extends Database{
 
 		$columns = $this->set_columns($columns);
 
+		// Alter table on given set of columns. Compare tables if changes.
 		if($this->compare_tables($current, $columns)){
 			$query = "ALTER TABLE `$table` ";
 			$arr = array();
 			foreach($columns as $c){
-				if(array_search($c['name'], $current_columns) !== false){
+				if(array_search($c['name'], $current_columns) !== FALSE){
 					$arr[] = "MODIFY `".$c['name']."` ". $c['type'].$c['length'];
 				} else {
 					$arr[] = "ADD `".$c['name']."` ". $c['type'].$c['length'];
@@ -195,16 +265,20 @@ class Mysql_driver extends Database{
 				}
 			}
 			$query.=implode(", ",$arr);
-			//print_r($query);
+
 			$q = array(
 				'q' => $query,
 				'columns' => array(),
 				'filters' => array()
 				);
-			$this->query($query, false);
+			$this->query($query, FALSE);
 		}
 	}
 
+	/**
+	 * Format special column notation and replace it for database string query
+	 * @param array $columns Special notated column array
+	 */
 	private function set_columns($columns){
 		$cdata = array();
 		foreach($columns as $c){
@@ -255,9 +329,9 @@ class Mysql_driver extends Database{
 
 	/**
 	 * Checks if there are changes to current table. If they are the same, do nothing.
-	 * @param  [array] $existing existing columns
-	 * @param  [array] $new      new columns
-	 * @return [boolean]         
+	 * @param  array $existing existing columns
+	 * @param  array $new      new columns
+	 * @return boolean         True if table changed or false if remains the same.
 	 */
 	private function compare_tables($existing, $new){
 		$count = 0;
@@ -271,10 +345,10 @@ class Mysql_driver extends Database{
 			}
 		}
 		if(count($existing)-2 == $count && count($new) == $count){
-			return false;
+			return FALSE;
 		}
 
-		return true;
+		return TRUE;
 	}
 
 
