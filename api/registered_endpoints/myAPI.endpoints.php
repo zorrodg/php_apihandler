@@ -1,9 +1,57 @@
 <?php
 
+/**
+ * Example API endpoint registry
+ *
+ * You can instantiate any number of endpoints with classnames 
+ * Getter, Poster, Putter and Deleter. Each one will execute corresponding
+ * http method and will accept no other.
+ *
+ * PARAMS ----------------------------------------------------------------------------------------
+ * => [required] Endpoint name (string): {name}/{verb}/:{arg_name}
+ * 
+ * 		- name: 	[required] 	The endpoint name. It's used to name the database table too.
+ * 		- verb: 	[optional] 	The action that will be performed to the database. Please refer to 
+ * 								Database.class.php to see currently supported verbs.
+ * 		- arg_name:	[optional]	Can be one or several arguments separated by slashes "/",
+ * 								If preceded by a colon ":", indicates that the argument 
+ * 								is a variable
+ *
+ * => [optional] Endpoint options (array):
+ * 
+ * 		- description:				(string) Endpoint description.
+ * 		- create_new_table:			(bool) Creates a new table in database with endpoint name, if not exists.
+ * 		- modify_existing_table:	(bool) Modifies an existing table, if exists and if it's params change.
+ * 		- columns:					(array) Define table columns in which endpoint operates. 
+ * 									Special notation: {column_name}|{var_type}|{var_length}|{unique}
+ * 										column_name:	[required] The name of the column.
+ * 										var_type:		[optional: default "string"] Database column data type. 
+ * 														Currently supported int (INT), char (CHAR), 
+ * 														string (VARCHAR), text (TEXT), bigint (BIGINT), 
+ * 														date, (DATETIME)
+ * 										var_length:		[optional: default "200"] The length of the data 
+ * 														accepted. (Only for int, char, bigint and string)
+ * 										unique:			[optional] Set column key to unique.
+ * 		- limit:					(string) Set a word to use as a parameter on query to limit results number.
+ * 		- sort:						(string) Sets the column to order the results.
+ * 									Special notation: {column_name}|{order_type}
+ * 										column_name:	[required] The name of the column.
+ * 										order_type:		[optional default "desc"] The order to display, 
+ * 														Supported asc (ASC), desc (DESC)
+ * 		- query:					(string) Set a custom query to the database
+ * 		- cacheable:				(bool) Whether the endpoind results will be cached or not. Default FALSE.
+ *
+ * => [Optional] Secured (bool): Defines if endpoint is secured with defined security.
+ * 
+ * 		- All Getter are default unsecured (FALSE).
+ * 		- All other classes (Poster, Putter, Deleter) are default secured (TRUE).
+ * 											
+ */
+
 new Getter("users", array(
 	"description" => "Get all users",
-	"create_new_table"=>true,
-	"modify_existing_table" =>true,
+	"create_new_table"=>TRUE,
+	"modify_existing_table" =>TRUE,
 	"columns" => array("first_name|string|200", "last_name|string|200", "group_id|int"),
 	"limit" => "count",
 	"sort" => "group_id|asc",
@@ -12,8 +60,8 @@ new Getter("users", array(
 
 new Getter("groups", array(
 	"description" => "Get all groups",
-	"create_new_table"=>true,
-	"modify_existing_table" =>true,
+	"create_new_table"=>TRUE,
+	"modify_existing_table" =>TRUE,
 	"columns" => array("group_name|string|100|unique", "group_desc|text", "group_meeting|date"),
 	"limit" => "number",
 	"cacheable" => FALSE
@@ -28,7 +76,7 @@ new Getter("groups/:id");
 
 new Putter("users/add",array(
 		"columns" => array("first_name|string", "last_name|char", "group_id|int")
-	));
+	), FALSE);
 
 new Poster("users/edit/:id",array(
 		"columns" => array("first_name", "last_name")
