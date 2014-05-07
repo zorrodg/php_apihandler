@@ -1,2 +1,3 @@
 api/engine/credentials/*
 api/cache/*
+api/vendor/*

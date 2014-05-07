@@ -50,7 +50,7 @@ class APIhandler{
 		if(defined('SECURE_TYPE')){
 			if(SECURE_TYPE === "oauth"){
 				if(OAUTH_SERVICE === "self")
-					require_once "lib/oauth/store/".DB_ENGINE."/apihandler.install.php";
+					require_once dirname(__FILE__)."/db_drivers/".DB_ENGINE.".install.php";
 
 				require_once "oauth/oauth_services/".OAUTH_SERVICE.".oauth.php";
 			}

@@ -147,10 +147,15 @@ if(!function_exists('kvsprintf')) {
 }
 
 //Class autoloader
-function __autoload($class){
+function engineAutoload($class){
     if(file_exists("engine/" . $class .".class.php"))
-	   require_once "engine/" . $class .".class.php";
+       require_once "engine/" . $class .".class.php";
 }
+// Register Class Autoloader
+spl_autoload_register('engineAutoload');
+
+// Composer autoloader
+require 'vendor/autoload.php';
 
 //Init measure time
 Stopwatch::start();

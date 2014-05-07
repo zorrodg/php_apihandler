@@ -1,7 +1,6 @@
 <?php
 
 require_once "../api/oauth/oauth_services/self.oauth.php";
-// require_once "../api/lib/oauth/OAuthRequester.php";
 require_once "../api/engine/Output.class.php";
 
 $request = new OAuthRequester("http://localhost/apihandler/api/teams.json", "GET", array("count" => 3));

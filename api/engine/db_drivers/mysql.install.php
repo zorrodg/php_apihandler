@@ -14,19 +14,15 @@ if (mysql_errno())
 }
 mysql_select_db('test');
 */
-
-$sql = file_get_contents(dirname(__FILE__) . '/mysql.sql');
+require_once dirname(dirname(__FILE__))."/Query.class.php";
+$sql = file_get_contents('vendor/zorrodg/oauth-php/src/OAuth1/store/mysql/mysql.sql');
 $ps  = explode('#--SPLIT--', $sql);
 
 foreach ($ps as $p)
 {
 	$p = preg_replace('/^\s*#.*$/m', '', $p);
 	
-	mysql_query($p);
-	if (mysql_errno())
-	{
-		die(' Error '.mysql_errno().': '.mysql_error());
-	}
+	Query::execute(array("q"=>$p), FALSE);
 }
 
 ?>

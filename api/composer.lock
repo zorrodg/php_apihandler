@@ -1,0 +1,112 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "ab4da81266fee94b8e371d93f790ba05",
+    "packages": [
+        {
+            "name": "bshaffer/oauth2-server-php",
+            "version": "v1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bshaffer/oauth2-server-php.git",
+                "reference": "95e731e0855b8156a161b93dc3f1909a8dd98abe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bshaffer/oauth2-server-php/zipball/95e731e0855b8156a161b93dc3f1909a8dd98abe",
+                "reference": "95e731e0855b8156a161b93dc3f1909a8dd98abe",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "suggest": {
+                "predis/predis": "Required to use the Redis storage engine",
+                "thobbs/phpcassa": "Required to use the Cassandra storage engine"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "OAuth2": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brent Shaffer",
+                    "email": "bshafs@gmail.com",
+                    "homepage": "http://brentertainment.com"
+                }
+            ],
+            "description": "OAuth2 Server for PHP",
+            "homepage": "http://github.com/bshaffer/oauth2-server-php",
+            "keywords": [
+                "auth",
+                "oauth",
+                "oauth2"
+            ],
+            "time": "2014-02-27 13:40:40"
+        },
+        {
+            "name": "zorrodg/oauth-php",
+            "version": "0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zorrodg/mworell-oauth-php.git",
+                "reference": "47d35b231f1fb307d3395fc4ed113a51c7c362ab"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zorrodg/mworell-oauth-php/zipball/47d35b231f1fb307d3395fc4ed113a51c7c362ab",
+                "reference": "47d35b231f1fb307d3395fc4ed113a51c7c362ab",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "OAuth1": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marc Worrell",
+                    "email": "marcw@pobox.com"
+                },
+                {
+                    "name": "Andres Zorro",
+                    "email": "zorrodg@gmail.com"
+                }
+            ],
+            "description": "OAuth composer implementation from oauth-php library from Marc Worrell",
+            "time": "2014-05-07 22:46:43"
+        }
+    ],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "dev",
+    "stability-flags": [
+
+    ],
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
+}

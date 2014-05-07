@@ -1,4 +1,6 @@
 <?php
+
+
 /**
  * OAuth Self Database Service
  * 
@@ -39,17 +41,20 @@ $filedir = dirname(dirname(dirname(__FILE__)));
 // Call main configurations
 require_once $filedir."/api.config.php";
 
+// Composer autoloader
+require $filedir."/vendor/autoload.php";
+
 // Call OAuth Library
-require_once $filedir."/lib/oauth/OAuthServer.php";
-require_once $filedir."/lib/oauth/OAuthStore.php";
-require_once $filedir."/lib/oauth/OAuthRequester.php";
+// require_once $filedir."/vendor/zorrodg/oauth-php/src/OAuth1/OAuthServer.php";
+// require_once $filedir."/vendor/zorrodg/oauth-php/src/OAuth1/OAuthStore.php";
+// require_once $filedir."/vendor/zorrodg/oauth-php/src/OAuth1/OAuthRequester.php";
 
 if(!defined('DB_ENGINE')) die("No database engine set.");
 
 if(DB_ENGINE === "mysql"){
 	$GLOBALS['oauth_connection'] = new mysqli(HOSTNAME, DB_USER, DB_PASSWORD, DATABASE);
-	$GLOBALS['oauth_store'] = OAuthStore::instance("MySQLi", array('conn' => $GLOBALS['oauth_connection']));
-	$GLOBALS['oauth_server'] = new OAuthServer();
+	$GLOBALS['oauth_store'] = OAuth1\OAuthStore::instance("MySQLi", array('conn' => $GLOBALS['oauth_connection']));
+	$GLOBALS['oauth_server'] = new OAuth1\OAuthServer();
 }
 
 require_once $filedir."/engine/OAuth_Consumer.class.php";
