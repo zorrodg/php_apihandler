@@ -3,12 +3,20 @@
 /**
  * Extends Exceptions to output errors to selected output config.
  * 
- * @package APIhandler
  * @author Andrés Zorro <zorrodg@gmail.com>
+ * @github https://github.com/zorrodg/php_apihandler
  * @version 0.1
+ * @licence MIT
+ *
  */
 
 class APIexception extends Exception{
+	/**
+	 * Constructor
+	 * @param string  $message The error message
+	 * @param integer $code    The error code
+	 * @param integer $http    Http response code
+	 */
 	public function __construct($message = NULL, $code = 0, $http = 200){
 		switch(ENVIRONMENT){
             case "dev":
@@ -28,7 +36,10 @@ class APIexception extends Exception{
         http_response_code($http);
 		parent::__construct($message, $code);
 	}
-
+	/**
+	 * Encodes given exception to corresponding output
+	 * @return Output Encoded output
+	 */
 	public function output(){
 		$msg = array(
 			"message" => $this->message

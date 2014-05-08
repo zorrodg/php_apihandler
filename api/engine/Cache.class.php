@@ -1,24 +1,70 @@
 <?php 
 
+/**
+ * Handles file cache
+ *
+ * @author Andrés Zorro <zorrodg@gmail.com>
+ * @github https://github.com/zorrodg/php_apihandler
+ * @version 0.1
+ * @licence MIT
+ *
+ */
+
 class Cache{
 
+	/**
+	 * Holds endpoint name
+	 * @var string
+	 */
 	protected $endpoint;
 
+	/**
+	 * Holds endpoint verb
+	 * @var string
+	 */
 	protected $verb;
 
+	/**
+	 * Holds endpoint args
+	 * @var array
+	 */
 	protected $args;
 
+	/**
+	 * Holds endpoint data
+	 * @var array
+	 */
 	protected $data;
 
-	protected $folder;
+	/**
+	 * Cache folder location
+	 * @var string
+	 */
+	protected $folder = "cache/".CACHE_FOLDER;
 
-	protected $timeout;
+	/**
+	 * Cache file expiration time
+	 * @var integrer
+	 */
+	protected $timeout = CACHE_TIMEOUT;
 
+	/**
+	 * Route to cached file
+	 * @var string
+	 */
 	protected $route;
 
+	/**
+	 * Holds instance of Cache class
+	 * @var Cache
+	 */
 	static private $instance;
 
-	public function __construct($server){
+	/**
+	 * Constructor
+	 * @param Server $server Server request
+	 */
+	public function __construct(Server $server){
 		if(!file_exists("cache/".CACHE_FOLDER)){
 			if(!mkdir("cache/".CACHE_FOLDER, 0755)){
 				throw new APIexception("Cannot create cache folder.", 16, 400);
@@ -28,8 +74,6 @@ class Cache{
 		$this->endpoint = $server->endpoint ?: FALSE;
 		$this->verb = $server->verb;
 		$this->args = $server->args;
-		$this->folder = "cache/".CACHE_FOLDER;
-		$this->timeout = CACHE_TIMEOUT;
 
 		$all_args = (!empty($this->verb) ? $this->verb . "/" : "" ). implode("/", $this->args);
 
@@ -45,10 +89,16 @@ class Cache{
 
 		$data = implode(".", $data);
 
+		//Constructs route to file
 		$this->route = $this->folder . "/" . implode("/", $route).".". (!empty($data) ? $data ."." : "") ."json";
 	}
 
-	static public function search($server){
+	/**
+	 * Search in cache for given file and retrieves it if it has not expired
+	 * @param  Server $server 	Server request
+	 * @return json         	Contents of json file
+	 */
+	static public function search(Server $server){
 		$cache = Cache::instance($server);
 		if(file_exists($cache->route)){
 			$file_time = filemtime($cache->route);
@@ -61,6 +111,11 @@ class Cache{
 		return FALSE;
 	}
 
+	/**
+	 * Writes data to a file in cache folder
+	 * @param  mixed $data 	Data to write
+	 * @return json       	Data as json
+	 */
 	static public function write($data){
 		$cache = Cache::instance();
 		$cache_route = str_replace($cache->folder."/", "", $cache->route);
@@ -82,7 +137,12 @@ class Cache{
 		return $data;
 	}
 
-	static private function instance($server = NULL){
+	/**
+	 * Checks for cache instance on current server
+	 * @param  Server $server 	Server request
+	 * @return Cache         	Cache instance
+	 */
+	static private function instance(Server $server = NULL){
 		if(is_a(self::$instance, "Cache")){
 			return self::$instance;
 		}
