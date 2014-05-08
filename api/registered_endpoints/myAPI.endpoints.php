@@ -32,7 +32,9 @@
  * 										var_length:		[optional: default "200"] The length of the data 
  * 														accepted. (Only for int, char, bigint and string)
  * 										unique:			[optional] Set column key to unique.
+ * 		- col_prefix:				(string) Add a column prefix to the column. 
  * 		- limit:					(string) Set a word to use as a parameter on query to limit results number.
+ * 		- show:						(array) Set the columns that will be displayed.
  * 		- sort:						(string) Sets the column to order the results.
  * 									Special notation: {column_name}|{order_type}
  * 										column_name:	[required] The name of the column.
@@ -53,8 +55,10 @@ new Getter("users", array(
 	"create_new_table"=>TRUE,
 	"modify_existing_table" =>TRUE,
 	"columns" => array("first_name|string|200", "last_name|string|200", "group_id|int"),
+	"show" => array("first_name", "last_name"),
 	"limit" => "count",
 	"sort" => "group_id|asc",
+	"col_prefix" => "aph_",
 	"cacheable" => TRUE
 	));
 
@@ -64,7 +68,8 @@ new Getter("groups", array(
 	"modify_existing_table" =>TRUE,
 	"columns" => array("group_name|string|100|unique", "group_desc|text", "group_meeting|date"),
 	"limit" => "number",
-	"cacheable" => FALSE
+	"cacheable" => FALSE,
+	"col_prefix" => "aph_"
 	));
 
 new Getter("users/:id", array(
@@ -74,8 +79,8 @@ new Getter("users/:id", array(
 
 new Getter("groups/:id");
 
-new Putter("users/add",array(
-		"columns" => array("first_name|string", "last_name|char", "group_id|int")
+new Poster("users/add",array(
+		"columns" => array("first_name|string", "last_name|string", "group_id|int")
 	), FALSE);
 
 new Poster("users/edit/:id",array(

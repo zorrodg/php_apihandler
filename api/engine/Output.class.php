@@ -37,7 +37,9 @@ class Output{
         
         $return["status"] = http_response_code();
         $return["elapsed_time"] = 0;
-        $return["cached"] = $cached;
+        if(ENVIRONMENT !== "prod"){
+            $return["cached"] = $cached;
+        }
         $return["data"] = $data;
 
         Stopwatch::stop();

@@ -6,28 +6,8 @@
  * @author Andrés Zorro <zorrodg@gmail.com>
  * @github https://github.com/zorrodg/php_apihandler
  * @version 0.1
+ * @licence MIT
  *
- * The MIT License
- * 
- * Copyright (c) 2014 zorrodg
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
  */
 
 
@@ -104,6 +84,7 @@ class Mysql_driver extends Database{
 	 */
 	public function construct_query($q, $table, $params){
 		$table = DB_PREFIX.$table;
+		$col_prefix = isset($params['col_prefix']) ? $params['col_prefix'] : "";
 
 		// Guess database verb. Please refer to Database Class.
 		$query = strtoupper($this->guess_action($q, $this->glossary));
@@ -114,7 +95,7 @@ class Mysql_driver extends Database{
 				if(isset($params['show'])){
 					$cols = array();
 					foreach($params['show'] as $col){
-						$cols[] = "`".$col."`";
+						$cols[] = "`".$col_prefix.$col."`";
 					}
 					$columns = implode(',', $cols);
 					$query .= " ".$columns." FROM";
@@ -129,7 +110,7 @@ class Mysql_driver extends Database{
 					$vals = array();
 					foreach($params['columns'] as $col){
 						$col = explode("|", $col);
-						$cols[] = "`%".$col[0]."\$k`";
+						$cols[] = "`".$col_prefix."%".$col[0]."\$k`";
 						$vals[] = "'%".$col[0]."\$v'";
 					}
 					$set = " (".implode(',',$cols).") VALUES (".implode(',',$vals).")";
@@ -143,7 +124,7 @@ class Mysql_driver extends Database{
 					$cols = array();
 					foreach($params['columns'] as $col){
 						$col = explode("|", $col);
-						$cols[] = "`%$col[0]\$k`='%$col[0]\$v'";
+						$cols[] = "`".$col_prefix."%$col[0]\$k`='%$col[0]\$v'";
 					}
 					$set = " SET ".implode(',',$cols);
 				} else {
@@ -175,7 +156,7 @@ class Mysql_driver extends Database{
 
 		if(isset($params['sort'])){
 			$order = explode("|", $params['sort']);
-			$query.= " ORDER BY `". $order[0] . "` " . (isset($order[1]) ? strtoupper($order[1]) : "DESC");
+			$query.= " ORDER BY `". $col_prefix.$order[0] . "` " . (isset($order[1]) ? strtoupper($order[1]) : "DESC");
 		}
 
 		if(isset($params['limit'])){
@@ -187,12 +168,13 @@ class Mysql_driver extends Database{
 
 	/**
 	 * Creates a new table if not exists.
-	 * @param  string $table   Table name.
-	 * @param  string $columns Columns to create.
+	 * @param  string $table   		Table name.
+	 * @param  string $columns 		Columns to create.
+	 * @param  string $col_prefix 	Include column prefix.
 	 */
-	public function create_new_table($table, $columns){
+	public function create_new_table($table, $columns, $col_prefix = ""){
 		$table = DB_PREFIX.$table;
-		$columns = $this->set_columns($columns);
+		$columns = $this->set_columns($columns, $col_prefix);
 
 		$query = "CREATE TABLE IF NOT EXISTS `$table` (";
 
@@ -219,10 +201,11 @@ class Mysql_driver extends Database{
 
 	/**
 	 * Modifies existing table if exists.
-	 * @param  string $table   Table name.
-	 * @param  string $columns Columns to create.
+	 * @param  string $table   		Table name.
+	 * @param  string $columns 		Columns to create.
+	 * @param  string $col_prefix 	Include column prefix.
 	 */
-	public function modify_existing_table($table, $columns){
+	public function modify_existing_table($table, $columns, $col_prefix = ""){
 		$table = DB_PREFIX.$table;
 
 		// Retrieve existing table
@@ -239,7 +222,7 @@ class Mysql_driver extends Database{
 			throw new APIexception("Table '".$table."' doesnt exists", 13);
 		}
 
-		$columns = $this->set_columns($columns);
+		$columns = $this->set_columns($columns, $col_prefix);
 
 		// Alter table on given set of columns. Compare tables if changes.
 		if($this->compare_tables($current, $columns)){
@@ -249,7 +232,25 @@ class Mysql_driver extends Database{
 				if(array_search($c['name'], $current_columns) !== FALSE){
 					$arr[] = "MODIFY `".$c['name']."` ". $c['type'].$c['length'];
 				} else {
-					$arr[] = "ADD `".$c['name']."` ". $c['type'].$c['length'];
+					//$arr[] = "ADD `".$c['name']."` ". $c['type'].$c['length'];
+					foreach($current_columns as $cc){
+						$no_prefix = str_replace($col_prefix, "", $c['name']);
+						preg_match("/^([a-zA-Z]+\_)".$no_prefix."/", $cc, $current_prefix);
+						$c_prefix = isset($current_prefix[1]) ? $current_prefix[1] : "";
+						if($c_prefix !== $col_prefix){
+							if(array_search($c_prefix.$no_prefix, $current_columns) !== FALSE){
+								$old_column = $c_prefix.$no_prefix;
+							}
+						}
+					}
+
+					if(isset($old_column)){
+						$arr[] = "CHANGE `".$old_column."` `".$c['name']."` ". $c['type'].$c['length'];
+						unset($current_columns[array_search($old_column, $current_columns)]);
+						unset($old_column);
+					} else {
+						$arr[] = "ADD `".$c['name']."` ". $c['type'].$c['length'];
+					}
 				}
 				if($current[array_search($c['name'], $current_columns)]['Key'] === "UNI")
 					$arr[] = "DROP INDEX `".$c['name']."`";
@@ -265,7 +266,6 @@ class Mysql_driver extends Database{
 				}
 			}
 			$query.=implode(", ",$arr);
-
 			$q = array(
 				'q' => $query,
 				'columns' => array(),
@@ -277,14 +277,15 @@ class Mysql_driver extends Database{
 
 	/**
 	 * Format special column notation and replace it for database string query
-	 * @param array $columns Special notated column array
+	 * @param array $columns 		Special notated column array
+	 * @param string $col_prefix 	Include column prefix.
 	 */
-	private function set_columns($columns){
+	private function set_columns($columns, $col_prefix = ""){
 		$cdata = array();
 		foreach($columns as $c){
 			$coldata = array();
 			$c = explode("|", $c);
-			$coldata["name"] = $c[0];
+			$coldata["name"] = $col_prefix.$c[0];
 			if(isset($c[1])){
 				switch($c[1]){
 					case "char":

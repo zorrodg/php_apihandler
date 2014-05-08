@@ -22,12 +22,14 @@ class Query{
 		$dbclass = ucfirst(DB_ENGINE)."_driver";
 		self::$db = new $dbclass();
 
+		$col_prefix = isset($params['col_prefix']) ? $params['col_prefix'] : "";
+
 		if(isset($params['create_new_table']) && isset($params['columns'])){
-			self::$db->create_new_table($endpoint, $params['columns']);
+			self::$db->create_new_table($endpoint, $params['columns'], $col_prefix);
 		}
 
 		if(isset($params['modify_existing_table']))
-			self::$db->modify_existing_table($endpoint, $params['columns']);
+			self::$db->modify_existing_table($endpoint, $params['columns'], $col_prefix);
 
 		if($verb)
 			$this->query = self::$db->construct_query($verb, $endpoint, $params);
