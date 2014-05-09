@@ -24,7 +24,7 @@ define('DB_ENGINE',"mysql");
 //Set cache
 define('CACHE', TRUE);
 define('CACHE_FOLDER', "myAPIcache");
-define('CACHE_TIMEOUT', 3600);
+define('CACHE_TIMEOUT', 60);
 
 //Default output
 //TODO: Need to add support for other outputs

@@ -9,6 +9,7 @@ class Putter extends Endpoint{
 			"params" => $params,
 			"signed" => $signed
 			);
-		parent::__construct($ep);
+		//parent::__construct($ep);
+		throw new APIexception("File Upload Support yet to come :)", 99, 404);
 	}
 }

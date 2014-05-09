@@ -1,9 +1,28 @@
 <?php
 
+/** 
+ * Holds and handles info from all registered endpoints.
+ * 
+ * @author Andrés Zorro <zorrodg@gmail.com>
+ * @github https://github.com/zorrodg/php_apihandler
+ * @version 0.1
+ * @licence MIT
+ *
+ */
+
 final class Dictionary{
 
+	/**
+	 * Holds all registered endpoints
+	 * @var array
+	 */
 	static private $registry = array();
 
+	/**
+	 * Register a new endpoint information
+	 * @param  array 	$endpoint 	Endpoint params and info
+	 * @return string           	Endpoint name
+	 */
 	static public function register($endpoint){
 		if (count(self::$registry) > 0){
 			if(!in_array($endpoint['endpoint'], self::$registry)){
@@ -20,7 +39,7 @@ final class Dictionary{
 
 	/**
 	 * Used for debugging purpouses.
-	 * @param  [String] $search
+	 * @param  string $search The endpoint to search
 	 * @return [Array]
 	 */
 	static public function get($search = NULL){
@@ -37,6 +56,11 @@ final class Dictionary{
 		return $arr;
 	}
 
+	/**
+	 * Test if searched endpoint has cacheable property set to true.
+	 * @param  string  $endpoint Endpoint to search
+	 * @return boolean           Cacheable response
+	 */
 	static public function is_cacheable($endpoint){
 		$ep = self::search($endpoint);
 		if($ep){
@@ -46,6 +70,11 @@ final class Dictionary{
 		return FALSE;
 	}
 
+	/**
+	 * Gets database query from given endpoint search.
+	 * @param  string  $endpoint 	Endpoint to search
+	 * @return array           		Query array or FALSE if none
+	 */
 	static public function get_query($endpoint){
 		$ep = self::search($endpoint);
 		if($ep){
@@ -58,6 +87,11 @@ final class Dictionary{
 		return FALSE;
 	}
 
+	/**
+	 * Test if searched endpoint has col_prefix.
+	 * @param  string  $endpoint Endpoint to search
+	 * @return boolean           Column prefix or FALSE if none
+	 */
 	static public function get_col_prefix($endpoint){
 		$ep = self::search($endpoint);
 		if($ep){
@@ -68,6 +102,11 @@ final class Dictionary{
 		return FALSE;
 	}
 
+	/**
+	 * Search for an endpoint
+	 * @param  string  $endpoint Endpoint to search
+	 * @return array           	 Endpoint or empty if none
+	 */
 	static public function search($endpoint){
 		foreach(self::$registry as $key => $value){
 			if($endpoint && $endpoint === $value['endpoint']){
@@ -77,6 +116,11 @@ final class Dictionary{
 		return "";
 	}
 
+	/**
+	 * Test if searched endpoint is already registered.
+	 * @param  string  $endpoint 	Endpoint to search
+	 * @return string           	Endpoint name
+	 */
 	static public function exists($search){
 		$epsearch = explode('/', $search);
 		if(isset($epsearch[1]) && is_numeric($epsearch[1])) $epsearch[1] = ":var";
