@@ -40,7 +40,7 @@ class Cache{
 	 * Cache folder location
 	 * @var string
 	 */
-	protected $folder = "cache/".CACHE_FOLDER;
+	protected $folder = "cache/";
 
 	/**
 	 * Cache file expiration time
@@ -65,8 +65,8 @@ class Cache{
 	 * @param Server $server Server request
 	 */
 	public function __construct(Server $server){
-		if(!file_exists("cache/".CACHE_FOLDER)){
-			if(!mkdir("cache/".CACHE_FOLDER, 0755)){
+		if(!file_exists($this->folder.CACHE_FOLDER)){
+			if(!mkdir($this->folder.CACHE_FOLDER, 0755)){
 				throw new APIexception("Cannot create cache folder.", 16, 400);
 			}
 		}
@@ -90,7 +90,7 @@ class Cache{
 		$data = implode(".", $data);
 
 		//Constructs route to file
-		$this->route = $this->folder . "/" . implode("/", $route).".". (!empty($data) ? $data ."." : "") ."json";
+		$this->route = $this->folder.CACHE_FOLDER . "/" . implode("/", $route).".". (!empty($data) ? $data ."." : "") ."json";
 	}
 
 	/**
@@ -118,15 +118,15 @@ class Cache{
 	 */
 	static public function write($data){
 		$cache = Cache::instance();
-		$cache_route = str_replace($cache->folder."/", "", $cache->route);
+		$cache_route = str_replace($cache->folder.CACHE_FOLDER."/", "", $cache->route);
 		$cache_route = explode('/', $cache_route);
 		$file_name = array_pop($cache_route);
 
 		$path = "";
 		foreach($cache_route as $folder){
 			$path .= "/".$folder;
-			if(!file_exists($cache->folder.$path)){
-				if(!mkdir($cache->folder.$path, 0755)) {
+			if(!file_exists($cache->folder.CACHE_FOLDER.$path)){
+				if(!mkdir($cache->folder.CACHE_FOLDER.$path, 0755)) {
 					throw new APIexception("Cannot create cache inner folder.", 16, 400);
 				}
 			}

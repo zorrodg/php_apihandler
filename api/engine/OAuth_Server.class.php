@@ -16,6 +16,7 @@ class OAuth_Server{
 		$serveruri = $serveruri ?: $server_location."/api";
 
 		$credentials = @file_get_contents($filename);
+		$arr = array();
 		if(!empty($credentials)){
 
 			$credentials = explode(";", $credentials);
@@ -43,7 +44,6 @@ class OAuth_Server{
 				$this->server = $store->getServer($key, $consumer['user_id']);
 			}
 		} elseif(isset($options['new']) && $options['new'] === TRUE){
-			$arr = array();
 			$server = array(
 			    'consumer_key' => $consumer['consumer_key'],
 			    'consumer_secret' => $consumer['consumer_secret'],
@@ -60,7 +60,10 @@ class OAuth_Server{
 		}
 
 		foreach($this->server as $k => $v){
-			$arr[]= "$k=$v";
+			if(is_array($v)){
+				$v = implode(",", $v);
+			}
+			$arr[] = "$k=$v";
 		}
 
 		$GLOBALS['server_key'] = $key;

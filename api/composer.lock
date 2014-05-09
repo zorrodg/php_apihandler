@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "ab4da81266fee94b8e371d93f790ba05",
+    "hash": "b62ec1221a8f515fbf15d2a2bdf421d5",
     "packages": [
         {
             "name": "bshaffer/oauth2-server-php",
@@ -54,16 +54,16 @@
         },
         {
             "name": "zorrodg/oauth-php",
-            "version": "0.0.2",
+            "version": "0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zorrodg/mworell-oauth-php.git",
-                "reference": "47d35b231f1fb307d3395fc4ed113a51c7c362ab"
+                "reference": "d6d42ad5e8dca0cf79a66401b3f301ac76212301"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zorrodg/mworell-oauth-php/zipball/47d35b231f1fb307d3395fc4ed113a51c7c362ab",
-                "reference": "47d35b231f1fb307d3395fc4ed113a51c7c362ab",
+                "url": "https://api.github.com/repos/zorrodg/mworell-oauth-php/zipball/d6d42ad5e8dca0cf79a66401b3f301ac76212301",
+                "reference": "d6d42ad5e8dca0cf79a66401b3f301ac76212301",
                 "shasum": ""
             },
             "require": {
@@ -90,7 +90,7 @@
                 }
             ],
             "description": "OAuth composer implementation from oauth-php library from Marc Worrell",
-            "time": "2014-05-07 22:46:43"
+            "time": "2014-05-09 01:25:34"
         }
     ],
     "packages-dev": [

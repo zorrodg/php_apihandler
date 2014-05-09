@@ -19,11 +19,12 @@ final class Dictionary{
 	}
 
 	/**
-	 * Used for debugging purpouses. Remove when done
+	 * Used for debugging purpouses.
 	 * @param  [String] $search
 	 * @return [Array]
 	 */
 	static public function get($search = NULL){
+		if(ENVIRONMENT !== "dev") return NULL;
 		$arr = array();
 		foreach(self::$registry as $key => $value){
 			$arr[$key] = $value;
@@ -57,13 +58,23 @@ final class Dictionary{
 		return FALSE;
 	}
 
+	static public function get_col_prefix($endpoint){
+		$ep = self::search($endpoint);
+		if($ep){
+			if(isset($ep['params']['col_prefix'])){
+				return $ep['params']['col_prefix'];
+			}
+		}
+		return FALSE;
+	}
+
 	static public function search($endpoint){
 		foreach(self::$registry as $key => $value){
 			if($endpoint && $endpoint === $value['endpoint']){
 				return $value;
 			}
 		}
-		return FALSE;
+		return "";
 	}
 
 	static public function exists($search){

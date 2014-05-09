@@ -232,7 +232,6 @@ class Mysql_driver extends Database{
 				if(array_search($c['name'], $current_columns) !== FALSE){
 					$arr[] = "MODIFY `".$c['name']."` ". $c['type'].$c['length'];
 				} else {
-					//$arr[] = "ADD `".$c['name']."` ". $c['type'].$c['length'];
 					foreach($current_columns as $cc){
 						$no_prefix = str_replace($col_prefix, "", $c['name']);
 						preg_match("/^([a-zA-Z]+\_)".$no_prefix."/", $cc, $current_prefix);

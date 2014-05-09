@@ -44,6 +44,8 @@ abstract class Endpoint{
 			$action = strtolower(preg_replace("/^(\w+) .*/", "$1", $query));
 		}
 		else{
+			$endpoint['params']['col_prefix'] = isset($endpoint['params']['col_prefix']) ? $endpoint['params']['col_prefix'] : Dictionary::get_col_prefix($ep);
+			
 			$q = new Query($endpoint['method'], $ep, $verb, $endpoint['params']);
 			$query = $q->get_query();
 			$action = $q->get_action();
@@ -61,4 +63,5 @@ abstract class Endpoint{
 
 		Dictionary::register($endpoint);
 	}
+
 }

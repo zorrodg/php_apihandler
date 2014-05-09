@@ -99,6 +99,7 @@ class APIhandler{
 	 * @return mixed 	Information about endpoint
 	 */
 	public function endpoint_info(){
+		if(ENVIRONMENT !== "dev") return NULL;
 		$og_endpoint = $this->server->original_endpoint;
 		$og_exists = Dictionary::exists($og_endpoint);
 		if($og_exists)
@@ -110,6 +111,7 @@ class APIhandler{
 	 * @return mixed 	Endpoint information
 	 */	
 	public function endpoint_request(){
+		if(ENVIRONMENT !== "dev") return NULL;
 		return Output::encode($this->server->get(), $this->server->output);
 	}
 }

@@ -22,7 +22,7 @@ define('HOSTNAME',"127.0.0.1");
 define('DB_ENGINE',"mysql");
 
 //Set cache
-define('CACHE', FALSE);
+define('CACHE', TRUE);
 define('CACHE_FOLDER', "myAPIcache");
 define('CACHE_TIMEOUT', 3600);
 
