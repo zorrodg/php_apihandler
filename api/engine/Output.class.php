@@ -5,9 +5,10 @@
  * @package APIhandler
  * @author Andrés Zorro <zorrodg@gmail.com>
  * @version 0.1
- * 
+ * @licence MIT
+ *
  */
-require_once "Stopwatch.class.php";
+//require_once "Stopwatch.class.php";
 
 class Output{
 	static public function set_headers($output = DEFAULT_OUTPUT){
@@ -28,9 +29,9 @@ class Output{
 
 	/**
 	 * Encodes data
-	 * @param  [any] 	$data   Data to output
-	 * @param  [string] $output Custom output to render. Defaults defined.
-	 * @return [string]         Encoded string
+	 * @param  any 	$data      Data to output
+	 * @param  string $output  Custom output to render. Defaults defined.
+	 * @return string          Encoded string
 	 */
 	static public function encode($data, $output = DEFAULT_OUTPUT, $cached = FALSE){
 		self::set_headers($output);
@@ -58,6 +59,12 @@ class Output{
 		}
 	}
 
+    /**
+     * Encodes data specific as XML
+     * @param  any  $data      Data to output
+     * @param  string $output  Custom output to render. Defaults defined.
+     * @return string          Encoded string
+     */
     static private function XML_encode($items){
     	$output = '';
     	if(!is_object($items) && !is_array($items))

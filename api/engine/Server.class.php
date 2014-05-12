@@ -6,20 +6,34 @@
  * @package APIhandler
  * @author Andres Zorro <zorrodg@gmail.com>
  * @version 0.1
+ * @licence MIT
+ *
  */
 
 final class Server{
 
+	/**
+	 * Holds server data
+	 * @var array
+	 */
 	private $_server = array();
 
+	/**
+	 * Holds default output
+	 * @var string
+	 */
 	static private $_output = DEFAULT_OUTPUT; 
 
+	/**
+	 * Constructor. Fills request information on given endpoint.
+	 */
 	public function __construct(){
 		// Requests from the same server don't have a HTTP_ORIGIN header
 		if (!array_key_exists('HTTP_ORIGIN', $_SERVER)) {
 			$protocol = preg_replace("/^(.*)\/(.*)/", "$1", $_SERVER['SERVER_PROTOCOL']);
 		    $_SERVER['HTTP_ORIGIN'] = strtolower($protocol)."://".$_SERVER['SERVER_NAME'];
 		}
+		// Test request endpoint
 		if(empty($_REQUEST['request_endpoint']))
 			throw new APIexception("No endpoint", 1);
 		$this->_server['original_endpoint'] = $_REQUEST['request_endpoint'];
@@ -41,23 +55,40 @@ final class Server{
         $this->parseQueryString();
 	}
 
+	/**
+	 * Auto getter. Available through all app
+	 * @param  string $key Value to find
+	 * @return string      Server key
+	 */
 	public function __get($key){
 		if(array_key_exists($key, $this->_server))
 			return $this->_server[$key];
 	}
 
+	/**
+	 * Gets all server request data. Used for debugging purpouses.
+	 * @return string      Server array
+	 */
 	public function get(){
 		$arr;
 		foreach($this->_server as $key => $value){
 			$arr[$key]=$value;
 		}
-		return $arr;
+		if(ENVIRONMENT === "dev") return $arr;
 	}
 
+	/**
+	 * Returns messages in requested output
+	 * @return string Output
+	 */
 	static public function output(){
 		return self::$_output;
 	}
 
+	/**
+	 * Fils request arguments from server request
+	 * @param  array $request  Server request
+	 */
 	private function parseRequest($request){
 		$this->_server['args'] = explode('/', rtrim($request, '/'));
         $this->_server['endpoint'] = array_shift($this->_server['args']);
@@ -65,6 +96,9 @@ final class Server{
             $this->_server['verb'] = array_shift($this->_server['args']);
 	}
 
+	/**
+	 * Parses query string arguments if any.
+	 */
 	private function parseQueryString(){
 		$qs = explode('&', $_SERVER['QUERY_STRING']);
 		foreach($qs as $params){
@@ -75,15 +109,27 @@ final class Server{
 		}
 	}
 
+	/**
+	 * Parse POST request data variables.
+	 * @param  string $request Post query string
+	 * @return array           Post data as an array
+	 */
 	private function parsePostRequest($request){
 		$arr = array();
-		$request = explode('&', $request);
-		foreach($request as $param){
-			if(!empty($param)){
-				$param = explode('=', $param);
-				$arr[$param[0]] = urldecode(str_replace("+", " ", $param[1]));
+		if($_POST){
+			foreach($_POST as $key => $param){
+				$arr[$key] = $param;
+			}
+		} elseif($request){
+			$request = explode('&', $request);
+			foreach($request as $param){
+				if(!empty($param)){
+					$param = explode('=', $param);
+					$arr[$param[0]] = urldecode(str_replace("+", " ", $param[1]));
+				}
 			}
 		}
+		
 		return $arr;
 	}
 	

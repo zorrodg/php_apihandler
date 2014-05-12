@@ -39,29 +39,35 @@ class APIhandler{
 	}
 
 	/**
-	 * Process request endpoint 
+	 * Process requested endpoint 
 	 * @return mixed 	Endpoint result 
 	 */
 	public function endpoint_process(){
 		$og_endpoint = $this->server->original_endpoint;
+
+		// Check if endpoint exists in dictionary
 		$og_exists = Dictionary::exists($og_endpoint);
 		if($og_exists){
 			try{
+				// Get endpoint query
 				$query = Dictionary::get_query($og_exists);
+				// Check is endpoint is cacheable
 				$cacheable = Dictionary::is_cacheable($og_exists);
 				if(!$query)
 					throw new APIexception('Endpoint not found', 6, 404);
+				// Test if method is correct
 				elseif($query['method'] !== $this->server->method)
 					throw new APIexception('Method mismatch. You should use '.$query['method'], 11, 400);
 
+				// Request security for endpoints with security enabled
 				if($query['signed']){
 					if(SECURE_TYPE === "oauth"){
-						if(OAuthRequestVerifier::requestIsSigned()){
+						if(OAuth1\OAuthRequestVerifier::requestIsSigned()){
 							try{
-								$req = new OAuthRequestVerifier();
+								$req = new OAuth1\OAuthRequestVerifier();
 								if(!$req->verify())
 									throw new APIexception('Unauthorized request.', 15, 401);
-							} catch(OAuthException2 $e){
+							} catch(OAuth1\OAuthException2 $e){
 								throw new APIexception('OAuth error: '. $e->getMessage(), 15, 401);
 							}
 						} else {
@@ -69,6 +75,8 @@ class APIhandler{
 						}
 					}
 				}
+
+				// Retrieves endpoint cache if cache enabled
 				if(CACHE && $cacheable){
 					$cached_content = Cache::search($this->server);
 					if($cached_content){
@@ -76,6 +84,7 @@ class APIhandler{
 					}
 				}
 
+				// If no cached content, create file if cache enabled
 				if(empty($cached_content)){
 					$data = $this->server->data;
 					$filters = $this->server->args;
