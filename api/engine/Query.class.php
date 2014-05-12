@@ -125,7 +125,8 @@ class Query{
 			$query = self::parse_arguments($query, $data, $filters);
 			$result = self::$db->query($query);
 			if($response){
-				return $result;
+				
+				return html_encode_recursive($result);
 			}
 		} catch(APIexception $e){
 			die($e->output());
@@ -193,12 +194,11 @@ class Query{
 					} else {
 						throw new APIexception("Parameter not found : ". $k, 9, 404);
 					}
-				} elseif($query_params[$w] !== $k){
-					//throw new APIexception("Parameter not in order : ". $k, 9, 400);
 				}
 			}
 		}
 
+		// Test if filters
 		if(!empty($filters) && empty($query_filters)){
 			throw new APIexception("Filter not registered. ", 10, 404);
 		}
@@ -207,9 +207,11 @@ class Query{
 			throw new APIexception("Filter not found. ", 10, 404);
 		}
 
+		// Merge all params in one single array
 		$all_params = array_merge($data, $filters, $special_params);
 
 		if(!empty($all_params)){
+			// Parse string to return Database Statement
 			$query_string = kvsprintf($query_string, $all_params);
 			if(empty($query_string))
 				throw new APIexception("Missing or mismatch arguments. ", 14, 400);		

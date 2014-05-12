@@ -118,14 +118,14 @@ final class Server{
 		$arr = array();
 		if($_POST){
 			foreach($_POST as $key => $param){
-				$arr[$key] = $param;
+				$arr[$key] = stripslashes($param);
 			}
 		} elseif($request){
 			$request = explode('&', $request);
 			foreach($request as $param){
 				if(!empty($param)){
 					$param = explode('=', $param);
-					$arr[$param[0]] = urldecode(str_replace("+", " ", $param[1]));
+					$arr[$param[0]] = stripslashes(urldecode(str_replace("+", " ", $param[1])));
 				}
 			}
 		}

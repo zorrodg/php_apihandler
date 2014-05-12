@@ -59,7 +59,7 @@ new Getter("users", array(
 	"limit" => "count",
 	"sort" => "group_id|asc",
 	"col_prefix" => "aph_",
-	"cacheable" => TRUE
+	"cacheable" => FALSE
 	));
 
 new Getter("groups", array(
