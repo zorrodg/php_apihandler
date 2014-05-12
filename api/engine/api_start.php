@@ -125,6 +125,11 @@ if(!function_exists('kvsprintf')) {
     }
 }
 
+/**
+ * Decodes html entities recursively
+ * @param  mixed $data  Data to be decoded
+ * @return mixed        Decoded data
+ */
 if(!function_exists('html_decode_recursive')) {
     function html_decode_recursive($data){
         foreach($data as $rk => $rv){
@@ -138,6 +143,11 @@ if(!function_exists('html_decode_recursive')) {
     }
 }
 
+/**
+ * Encodes html entities recursively
+ * @param  mixed $data  Data to be encoded
+ * @return mixed        Encoded data
+ */
 if(!function_exists('html_encode_recursive')) {
     function html_encode_recursive($data){
         foreach($data as $rk => $rv){
