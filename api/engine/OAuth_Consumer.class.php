@@ -1,11 +1,34 @@
 <?php
 
-class OAuth_Consumer{
+/**
+ * Configures OAuth1.0a consumer auth.
+ * 
+ * @author Andrés Zorro <zorrodg@gmail.com>
+ * @github https://github.com/zorrodg/php_apihandler
+ * @version 0.1
+ * @licence MIT
+ *
+ */
 
+class OAuth_Consumer{
+	/**
+	 * Holds registered consumer
+	 * @var array
+	 */
 	private $consumer = array();
 
+	/**
+	 * Constructor. Returns existing user, updates existing user or creates new.
+	 * @param int $id          		Current logged user ID
+	 * @param string $name       	User Name
+	 * @param string $email       	User Email
+	 * @param string $appuri      	URI where app is hosted
+	 * @param string $callbackuri 	URI to return user after auth
+	 * @param array  $options     	Custom options
+	 */
 	public function __construct($id, $name, $email, $appuri = "", $callbackuri = "", array $options = array()){
 		global $GLOBALS;
+		// Holds cache file with data from consumer
 		if (!file_exists(dirname(__FILE__).'/credentials/')) {
 		    mkdir(dirname(__FILE__).'/credentials/', 0777, true);
 		}
