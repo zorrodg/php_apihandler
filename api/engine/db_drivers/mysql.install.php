@@ -2,9 +2,8 @@
 
 /**
  * Installs all tables in the mysql.sql file, using the default mysql connection
+ * Change and uncomment this when you need to:
  */
-
-/* Change and uncomment this when you need to: */
 
 /*
 mysql_connect('localhost', 'root');
