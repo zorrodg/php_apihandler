@@ -1,4 +1,4 @@
-!api/cache
 api/cache/*
-!api/vendor
+!api/cache/.htaccess
 api/vendor/*
+!api/vendor/autoload.php
