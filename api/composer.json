@@ -3,5 +3,5 @@
 		"bshaffer/oauth2-server-php": "v1.3",
 		"zorrodg/oauth-php": "0.1"
 	},
-	"minimum-stability": "dev"
+	"minimum-stability": "stable"
 }
