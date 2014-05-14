@@ -42,9 +42,10 @@ class Output{
             $return["cached"] = $cached;
         }
         $return["data"] = $data;
-
-        Stopwatch::stop();
-        $return["elapsed_time"] = Stopwatch::get_elapse();
+        if(class_exists("Stopwatch")) {
+            Stopwatch::stop();
+            $return["elapsed_time"] = Stopwatch::get_elapse();
+        }
 
 		switch ($output){
 			case "json":

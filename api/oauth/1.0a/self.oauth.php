@@ -24,6 +24,8 @@ require $filedir."/vendor/autoload.php";
 
 require_once $filedir."/engine/OAuth_Consumer.class.php";
 require_once $filedir."/engine/OAuth_Server.class.php";
+require_once $filedir."/engine/APIexception.class.php";
+require_once $filedir."/engine/Output.class.php";
 
 
 if(!defined('DB_ENGINE')) die("No database engine set.");
