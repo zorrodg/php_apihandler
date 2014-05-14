@@ -28,11 +28,19 @@ class OAuth_Consumer{
 	 */
 	public function __construct($id, $name, $email, $appuri = "", $callbackuri = "", array $options = array()){
 		global $GLOBALS;
-		// Holds cache file with data from consumer
-		if (!file_exists(dirname(__FILE__).'/credentials/')) {
-		    mkdir(dirname(__FILE__).'/credentials/', 0777, true);
+
+		if(!file_exists('cache/'.CACHE_FOLDER)){
+			if(!mkdir('cache/'.CACHE_FOLDER, 0755)){
+				throw new APIexception("Cannot create cache folder.", 16, 400);
+			}
 		}
-		$filename = dirname(__FILE__)."/credentials/". $email .".txt";
+		// Holds cache file with data from consumer
+		if (!file_exists('cache/'.CACHE_FOLDER.'/credentials')) {
+		    if(!mkdir('cache/'.CACHE_FOLDER.'/credentials/', 0755)){
+				throw new APIexception("Cannot create cache folder.", 16, 400);
+			}
+		}
+		$filename = 'cache/'.CACHE_FOLDER."/credentials/". $email .".txt";
 		$store = $GLOBALS['oauth_store'];
 
 		$credentials = @file_get_contents($filename);

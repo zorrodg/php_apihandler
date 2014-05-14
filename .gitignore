@@ -1,3 +1,4 @@
-api/engine/credentials/*
+!api/cache
 api/cache/*
+!api/vendor
 api/vendor/*

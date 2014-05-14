@@ -126,7 +126,7 @@ class Cache{
 		foreach($cache_route as $folder){
 			$path .= "/".$folder;
 			if(!file_exists($cache->folder.CACHE_FOLDER.$path)){
-				if(!mkdir($cache->folder.CACHE_FOLDER.$path, 0755)) {
+				if(!mkdir($cache->folder.CACHE_FOLDER.$path, 0744)) {
 					throw new APIexception("Cannot create cache inner folder.", 16, 400);
 				}
 			}

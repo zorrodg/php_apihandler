@@ -6,10 +6,19 @@ class OAuth_Server{
 
 	public function __construct($consumer, $serveruri = NULL, array $options = array()){
 		global $GLOBALS;
-		if (!file_exists(dirname(__FILE__).'/credentials/')) {
-		    mkdir(dirname(__FILE__).'/credentials/', 0777, true);
+
+		if(!file_exists('cache/'.CACHE_FOLDER)){
+			if(!mkdir('cache/'.CACHE_FOLDER, 0755)){
+				throw new APIexception("Cannot create cache folder.", 16, 400);
+			}
 		}
-		$filename = dirname(__FILE__)."/credentials/". $consumer['consumer_key'] .".txt";
+		// Holds cache file with data from consumer
+		if (!file_exists('cache/'.CACHE_FOLDER.'/credentials')) {
+		    if(!mkdir('cache/'.CACHE_FOLDER.'/credentials', 0755)){
+				throw new APIexception("Cannot create cache folder.", 16, 400);
+			}
+		}
+		$filename = 'cache/'.CACHE_FOLDER."/credentials/". $consumer['consumer_key'] .".txt";
 		$store = $GLOBALS['oauth_store'];
 
 		$server_location =  "http://".$_SERVER['HTTP_HOST'];
