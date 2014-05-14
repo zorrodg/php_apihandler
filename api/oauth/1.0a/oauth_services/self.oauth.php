@@ -1,6 +1,4 @@
 <?php
-
-
 /**
  * OAuth Self Database Service
  * 
@@ -16,7 +14,7 @@ header('X-XRDS-Location: http://' . $_SERVER['SERVER_NAME'] .
      '/api/services.xrds.php');
 
 // API Directory
-$filedir = dirname(dirname(dirname(__FILE__)));
+$filedir = dirname(dirname(dirname(dirname(__FILE__))));
 
 // Call main configurations
 require_once $filedir."/api.config.php";

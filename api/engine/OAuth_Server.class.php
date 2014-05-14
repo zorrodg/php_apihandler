@@ -1,12 +1,30 @@
 <?php
 
+/**
+ * Configures OAuth1.0a server auth.
+ * 
+ * @author Andrés Zorro <zorrodg@gmail.com>
+ * @github https://github.com/zorrodg/php_apihandler
+ * @version 0.1
+ * @licence MIT
+ *
+ */
+
 class OAuth_Server{
-
+	/**
+	 * Holds registered consumer
+	 * @var array
+	 */
 	private $server = array();
-
-	public function __construct($consumer, $serveruri = NULL, array $options = array()){
+	/**
+	 * Constructor. Sets up new server or edits existing one.
+	 * @param array  $consumer  Consumer Data array
+	 * @param string $serveruri API URI (From where the resources will be fetched)
+	 * @param array  $options   Options array
+	 */
+	public function __construct(array $consumer, $serveruri = NULL, array $options = array()){
 		global $GLOBALS;
-
+		// Creates cache folder if not exists
 		if(!file_exists('cache/'.CACHE_FOLDER)){
 			if(!mkdir('cache/'.CACHE_FOLDER, 0755)){
 				throw new APIexception("Cannot create cache folder.", 16, 400);
@@ -21,9 +39,11 @@ class OAuth_Server{
 		$filename = 'cache/'.CACHE_FOLDER."/credentials/". $consumer['consumer_key'] .".txt";
 		$store = $GLOBALS['oauth_store'];
 
+		// Gets API uri or creates one by default
 		$server_location =  "http://".$_SERVER['HTTP_HOST'];
 		$serveruri = $serveruri ?: $server_location."/api";
 
+		// Gets server data from cache file
 		$credentials = @file_get_contents($filename);
 		$arr = array();
 		if(!empty($credentials)){
@@ -35,9 +55,11 @@ class OAuth_Server{
 				$server[$cr[0]] = $cr[1];
 			}
 
+			// Retrieve consumer key
 			$key = $consumer['consumer_key'];
 			$this->server = $store->getServer($key, $consumer['user_id']);
 
+			// Updates server info on flag
 			if(isset($options['update']) && $options['update'] === TRUE){
 				$store->deleteServer($key, $consumer['user_id']);
 				$server = array(
@@ -53,6 +75,7 @@ class OAuth_Server{
 				$this->server = $store->getServer($key, $consumer['user_id']);
 			}
 		} elseif(isset($options['new']) && $options['new'] === TRUE){
+			// Creates new server
 			$server = array(
 			    'consumer_key' => $consumer['consumer_key'],
 			    'consumer_secret' => $consumer['consumer_secret'],
@@ -75,13 +98,18 @@ class OAuth_Server{
 			$arr[] = "$k=$v";
 		}
 
+		// Define global server key and consumer id
+		// TODO: Change user id for stored session
 		$GLOBALS['server_key'] = $key;
 		$GLOBALS['user_id'] = $consumer['user_id'];
 
 		$string = implode(";", $arr);
 		file_put_contents($filename,$string);
 	}
-
+	/**
+	 * Retrieves server information
+	 * @return array Consumer data
+	 */
 	public function get_server(){
 		$arr = array();
 		foreach($this->server as $k => $v){

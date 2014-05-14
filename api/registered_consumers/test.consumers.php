@@ -10,6 +10,7 @@
  * your consumers to obtain consumer key and secret.
  * 
  * TODO: Improve security regarding consumer authorization.
+ * TODO: CHANGE THIS REGISTRY FOR A POST BASED CONSUMER RESPONSE ON OAUTH FOLDER
  */
 
 $andres = new OAuth_Consumer(
@@ -19,7 +20,7 @@ $andres = new OAuth_Consumer(
 	"http://localhost/apihandler/example/", // Application URL
 	"http://localhost/apihandler/example/callback.php", // Application callback URL
 	array(
-		'new' => FALSE, // Creates a new consumer. If the consumer already exists retrieves existing consumer.
+		'new' => TRUE, // Creates a new consumer. If the consumer already exists retrieves existing consumer.
 		'update' => FALSE // Set to true when updating current registered consumer.
 		)
 );
@@ -29,7 +30,7 @@ if(OAUTH_SERVICE === "self")
 		$andres->get_consumer(), // Consumer information
 		"http://localhost/apihandler/api", // API server URI
 		array(
-			'new' => FALSE, // Creates a new server. If the server already exists retrieves existing server.
+			'new' => TRUE, // Creates a new server. If the server already exists retrieves existing server.
 			'update' => FALSE // Set to true when updating current registered server.
 		)
 	);

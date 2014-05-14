@@ -28,7 +28,7 @@ class OAuth_Consumer{
 	 */
 	public function __construct($id, $name, $email, $appuri = "", $callbackuri = "", array $options = array()){
 		global $GLOBALS;
-
+		// Creates cache folder if not exists
 		if(!file_exists('cache/'.CACHE_FOLDER)){
 			if(!mkdir('cache/'.CACHE_FOLDER, 0755)){
 				throw new APIexception("Cannot create cache folder.", 16, 400);
@@ -43,6 +43,7 @@ class OAuth_Consumer{
 		$filename = 'cache/'.CACHE_FOLDER."/credentials/". $email .".txt";
 		$store = $GLOBALS['oauth_store'];
 
+		// Get credentials stored from cache file
 		$credentials = @file_get_contents($filename);
 		if(!empty($credentials)){
 			$credentials = explode(";", $credentials);
@@ -51,6 +52,8 @@ class OAuth_Consumer{
 				$cr = explode("=", $c);
 				$consumer[$cr[0]] = $cr[1];
 			}
+
+			// Updates credentials if flag
 			if(isset($options['update']) && $options['update'] === TRUE){
 				$consumer["requester_name"] = $name;
 				$consumer["requester_email"] = $email;
@@ -61,18 +64,21 @@ class OAuth_Consumer{
 				$key = $consumer['consumer_key'];
 			}
 			try{
+				// Retrieves consumer and stores it in private var
 				$this->consumer = $store->getConsumer($key, $id);
 			} catch (OAuthException2 $e){
 				throw new APIexception("OAuth Consumer '$key' is not registered", 15, 404);
 			}
 
 		} elseif(isset($options['new']) && $options['new'] === TRUE){
+			// Creates new user
 			$arr = array();
 			$consumer["requester_name"] = $name;
 			$consumer["requester_email"] = $email;
 			$consumer["application_uri"] = $appuri;
 			$consumer["callback_uri"] = $callbackuri;
 
+			// Retrieves new user information
 			$key = $store->updateConsumer($consumer, $id, true);
 			$this->consumer = $store->getConsumer($key, $id);
 		} else {
@@ -83,10 +89,14 @@ class OAuth_Consumer{
 			$arr[]= "$k=$v";
 		}
 
+		// Stores registered consumer information in cache file
 		$string = implode(";", $arr);
 		file_put_contents($filename,$string);
 	}
-
+	/**
+	 * Retrieves consumer information
+	 * @return array Consumer data
+	 */
 	public function get_consumer(){
 		$arr = array();
 		$arr['user_id'] = $this->consumer['user_id'];
