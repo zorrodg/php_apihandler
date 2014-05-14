@@ -24,19 +24,21 @@ class OAuth_Server{
 	 */
 	public function __construct(array $consumer, $serveruri = NULL, array $options = array()){
 		global $GLOBALS;
+		$cache_path = dirname(dirname(__FILE__)).'/cache/'.CACHE_FOLDER;
+
 		// Creates cache folder if not exists
-		if(!file_exists('cache/'.CACHE_FOLDER)){
-			if(!mkdir('cache/'.CACHE_FOLDER, 0755)){
+		if(!file_exists($cache_path)){
+			if(!mkdir($cache_path, 0755)){
 				throw new APIexception("Cannot create cache folder.", 16, 400);
 			}
 		}
 		// Holds cache file with data from consumer
-		if (!file_exists('cache/'.CACHE_FOLDER.'/credentials')) {
-		    if(!mkdir('cache/'.CACHE_FOLDER.'/credentials', 0755)){
+		if (!file_exists($cache_path.'/credentials')) {
+		    if(!mkdir($cache_path.'/credentials', 0755)){
 				throw new APIexception("Cannot create cache folder.", 16, 400);
 			}
 		}
-		$filename = 'cache/'.CACHE_FOLDER."/credentials/". $consumer['consumer_key'] .".txt";
+		$filename = $cache_path."/credentials/". $consumer['consumer_key'] .".txt";
 		$store = $GLOBALS['oauth_store'];
 
 		// Gets API uri or creates one by default
@@ -98,11 +100,6 @@ class OAuth_Server{
 			$arr[] = "$k=$v";
 		}
 
-		// Define global server key and consumer id
-		// TODO: Change user id for stored session
-		$GLOBALS['server_key'] = $key;
-		$GLOBALS['user_id'] = $consumer['user_id'];
-
 		$string = implode(";", $arr);
 		file_put_contents($filename,$string);
 	}
@@ -110,7 +107,7 @@ class OAuth_Server{
 	 * Retrieves server information
 	 * @return array Consumer data
 	 */
-	public function get_server(){
+	public function get(){
 		$arr = array();
 		foreach($this->server as $k => $v){
 			$arr[]= "$k=$v";

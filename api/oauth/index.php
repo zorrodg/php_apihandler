@@ -8,7 +8,7 @@
  * @licence MIT
  *
  */
-try{
+/*try{
 	// Fill if there's no HTTP_ORIGIN support
 	if (!array_key_exists('HTTP_ORIGIN', $_SERVER)) {
 		$protocol = preg_replace("/^(.*)\/(.*)/", "$1", $_SERVER['SERVER_PROTOCOL']);
@@ -45,5 +45,5 @@ try{
 	header("Location: ../index.php");
 } catch(OAuthException2 $e){
 	echo Output::encode($e->getMessage(), $e->getCode(), 400);
-}
+}*/
 ?>

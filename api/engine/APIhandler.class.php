@@ -32,7 +32,7 @@ class APIhandler{
 				if(OAUTH_SERVICE === "self")
 					require_once dirname(__FILE__)."/db_drivers/".DB_ENGINE.".install.php";
 
-				require_once "oauth/oauth_services/".OAUTH_SERVICE.".oauth.php";
+				require_once "oauth/1.0a/".OAUTH_SERVICE.".oauth.php";
 			}
 		}
 		$this->server = new Server();

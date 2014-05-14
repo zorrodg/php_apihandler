@@ -28,19 +28,20 @@ class OAuth_Consumer{
 	 */
 	public function __construct($id, $name, $email, $appuri = "", $callbackuri = "", array $options = array()){
 		global $GLOBALS;
+		$cache_path = dirname(dirname(__FILE__)).'/cache/'.CACHE_FOLDER;
 		// Creates cache folder if not exists
-		if(!file_exists('cache/'.CACHE_FOLDER)){
-			if(!mkdir('cache/'.CACHE_FOLDER, 0755)){
+		if(!file_exists($cache_path)){
+			if(!mkdir($cache_path, 0755)){
 				throw new APIexception("Cannot create cache folder.", 16, 400);
 			}
 		}
 		// Holds cache file with data from consumer
-		if (!file_exists('cache/'.CACHE_FOLDER.'/credentials')) {
-		    if(!mkdir('cache/'.CACHE_FOLDER.'/credentials/', 0755)){
+		if (!file_exists($cache_path.'/credentials')) {
+		    if(!mkdir($cache_path.'/credentials/', 0755)){
 				throw new APIexception("Cannot create cache folder.", 16, 400);
 			}
 		}
-		$filename = 'cache/'.CACHE_FOLDER."/credentials/". $email .".txt";
+		$filename = $cache_path."/credentials/". $email .".txt";
 		$store = $GLOBALS['oauth_store'];
 
 		// Get credentials stored from cache file
@@ -97,7 +98,7 @@ class OAuth_Consumer{
 	 * Retrieves consumer information
 	 * @return array Consumer data
 	 */
-	public function get_consumer(){
+	public function get(){
 		$arr = array();
 		$arr['user_id'] = $this->consumer['user_id'];
 		$arr['consumer_key'] = $this->consumer['consumer_key'];

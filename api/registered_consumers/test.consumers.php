@@ -13,7 +13,7 @@
  * TODO: CHANGE THIS REGISTRY FOR A POST BASED CONSUMER RESPONSE ON OAUTH FOLDER
  */
 
-$andres = new OAuth_Consumer(
+/*$andres = new OAuth_Consumer(
 	1, // The consumer id. Replace with current logged user
 	"Andres Zorro", // User name
 	"zorrodg@gmail.com", // User Email
@@ -33,4 +33,4 @@ if(OAUTH_SERVICE === "self")
 			'new' => TRUE, // Creates a new server. If the server already exists retrieves existing server.
 			'update' => FALSE // Set to true when updating current registered server.
 		)
-	);
+	);*/

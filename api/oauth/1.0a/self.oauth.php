@@ -14,7 +14,7 @@ header('X-XRDS-Location: http://' . $_SERVER['SERVER_NAME'] .
      '/api/services.xrds.php');
 
 // API Directory
-$filedir = dirname(dirname(dirname(dirname(__FILE__))));
+$filedir = dirname(dirname(dirname(__FILE__)));
 
 // Call main configurations
 require_once $filedir."/api.config.php";
@@ -34,12 +34,12 @@ if(DB_ENGINE === "mysql"){
 	$GLOBALS['oauth_server'] = new OAuth1\OAuthServer();
 }
 
-$consumers = scandir($filedir."/registered_consumers/");
+/*$consumers = scandir($filedir."/registered_consumers/");
 
 // Load all consumer registered on files with name *.consumers.php on /registered_consumers/ folder
 foreach($consumers as $c){
 	if(preg_match("/\.consumers\.php$/", $c))
 		require_once $filedir."/registered_consumers/$c";
-}
+}*/
 
 	
