@@ -36,12 +36,4 @@ if(DB_ENGINE === "mysql"){
 	$GLOBALS['oauth_server'] = new OAuth1\OAuthServer();
 }
 
-/*$consumers = scandir($filedir."/registered_consumers/");
-
-// Load all consumer registered on files with name *.consumers.php on /registered_consumers/ folder
-foreach($consumers as $c){
-	if(preg_match("/\.consumers\.php$/", $c))
-		require_once $filedir."/registered_consumers/$c";
-}*/
-
 	

@@ -61,8 +61,8 @@ try{
 							$consumer = new OAuth_Consumer($user_id, $user_name, $user_email, $app_uri, $app_callback, $options);
 							$server = new OAuth_Server($consumer->get(), $api_uri, $server_options);
 
-							echo "Consumer key: <strong>".$consumer->get()['consumer_key']."</strong><br>";
-							echo "Consumer secret: <strong>".$consumer->get()['consumer_secret']."</strong><br>";
+							echo "oauth_consumer_key=".$consumer->get()['consumer_key']."&";
+							echo "oauth_consumer_secret=".$consumer->get()['consumer_secret'];
 							exit();
 
 						//}

@@ -1,0 +1,5 @@
+{
+	"require": {
+		"sraka1/oauth1": "dev-master"
+	}
+}

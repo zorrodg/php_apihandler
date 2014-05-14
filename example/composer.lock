@@ -1,0 +1,66 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "a1b6a73801d0a6443f3ff286695163b8",
+    "packages": [
+        {
+            "name": "sraka1/oauth1",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sraka1/oauth1.git",
+                "reference": "addb0a2a8f0eb6d047a1e56d09e946f8ceac2b46"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sraka1/oauth1/zipball/addb0a2a8f0eb6d047a1e56d09e946f8ceac2b46",
+                "reference": "addb0a2a8f0eb6d047a1e56d09e946f8ceac2b46",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "../"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Abraham Williams",
+                    "email": "abraham@abrah.am",
+                    "homepage": "http://abrah.am",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Jakob Murko",
+                    "email": "jakob@zepppelin.com"
+                }
+            ],
+            "description": "Light PHP wrapper for the OAuth 1.0/1.0a protocol.",
+            "homepage": "http://github.com/sraka1/oauth1",
+            "keywords": [
+                "oauth",
+                "oauth1"
+            ],
+            "time": "2013-07-09 12:51:35"
+        }
+    ],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "sraka1/oauth1": 20
+    },
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
+}
