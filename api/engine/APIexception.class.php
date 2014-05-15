@@ -11,6 +11,13 @@
  */
 
 class APIexception extends Exception{
+
+	/**
+	 * Holds HTTP status code
+	 * @var int
+	 */
+	private $http;
+
 	/**
 	 * Constructor
 	 * @param string  $message The error message
@@ -33,9 +40,18 @@ class APIexception extends Exception{
 	            $code = NULL;
 	            break;
         }
-        http_response_code($http);
+        $this->http = http_response_code($http);
 		parent::__construct($message, $code);
 	}
+	
+	/**
+	 * Retrurns current HTTP status code
+	 * @return int HTTP status
+	 */
+	public function getHttpResponse(){
+		return $this->http;
+	}
+
 	/**
 	 * Encodes given exception to corresponding output
 	 * @return Output Encoded output

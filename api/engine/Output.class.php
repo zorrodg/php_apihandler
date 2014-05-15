@@ -31,6 +31,7 @@ class Output{
 	 * Encodes data
 	 * @param  any 	$data      Data to output
 	 * @param  string $output  Custom output to render. Defaults defined.
+     * @param  bool   $cached  Returns cached status.
 	 * @return string          Encoded string
 	 */
 	static public function encode($data, $output = DEFAULT_OUTPUT, $cached = FALSE){

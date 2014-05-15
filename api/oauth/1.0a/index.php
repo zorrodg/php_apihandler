@@ -30,50 +30,55 @@ try{
 					// Authorize a request. Return access tokens
 					case "authorize":
 						$GLOBALS['oauth_server']->authorizeVerify();
-						// In here should be your login info. 
-						$user_id = 1; //Hardcoded user id must be replaced for currently logged user.
-						$GLOBALS['oauth_server']->authorizeFinish(TRUE, $user_id);
-						$GLOBALS['oauth_server']->accessToken();
-						exit();
+
+						// Exits if no data provided
+						if(!$_POST) exit("Sorry, no post data. :(");
+						// TODO: IMPROVE SECURITY ON THESE FIELDS!!!
+						extract($_POST);
+						if($user_authorized === TRUE){
+							$GLOBALS['oauth_server']->authorizeFinish(TRUE, $user_id);
+							$GLOBALS['oauth_server']->accessToken();
+						}
+						exit("Unauthorized");
 					// Return access tokens
 					case "access":
 						$GLOBALS['oauth_server']->accessToken();
 						exit();
 					case "register":
-						//if($_SESSION['logged']){
-							// Hardcoded. Replace for current session user data
-							$user_id = 1;
-							$user_name = "Andres Zorro";
-							$user_email = "zorrodg@gmail.com";
-							// Replace with POST data from form
-							$app_uri = "http://localhost/apihandler/example";
-							$app_callback = "http://localhost/apihandler/example/callback.php";
-							$api_uri = "http://localhost/apihandler/api";
 
-							$options = array();
-							$server_options = array();
+						// Exits if no data provided
+						if(!$_POST) exit("Sorry, no post data. :(");
 
-							if(isset($_GET['new'])) $options['new'] = TRUE;
-							if(isset($_GET['update'])) $options['update'] = TRUE;
-							if(isset($_GET['server_new'])) $server_options['new'] = TRUE;
-							if(isset($_GET['server_update'])) $server_options['update'] = TRUE;
+						// TODO: IMPROVE SECURITY ON THESE FIELDS!!!
+						extract($_POST);
+						// $user_id = $_POST['user_id'];
+						// $user_name = $_POST['user_name'];
+						// $user_email = $_POST['user_email'];
+						// $app_uri = $_POST['app_uri'];
+						// $app_callback = $_POST['app_callback'];
+						// $api_uri = $_POST['api_uri'];
 
-							$consumer = new OAuth_Consumer($user_id, $user_name, $user_email, $app_uri, $app_callback, $options);
-							$server = new OAuth_Server($consumer->get(), $api_uri, $server_options);
+						$options = array();
+						$server_options = array();
 
-							echo "oauth_consumer_key=".$consumer->get()['consumer_key']."&";
-							echo "oauth_consumer_secret=".$consumer->get()['consumer_secret'];
-							exit();
+						if(isset($_GET['new'])) $options['new'] = TRUE;
+						if(isset($_GET['update'])) $options['update'] = TRUE;
+						if(isset($_GET['server_new'])) $server_options['new'] = TRUE;
+						if(isset($_GET['server_update'])) $server_options['update'] = TRUE;
 
-						//}
-						
+						$consumer = new OAuth_Consumer($user_id, $user_name, $user_email, $app_uri, $app_callback, $options);
+						$server = new OAuth_Server($consumer->get(), $api_uri, $server_options);
+
+						echo "oauth_consumer_key=".$consumer->get()['consumer_key']."&";
+						echo "oauth_consumer_secret=".$consumer->get()['consumer_secret'];
+						exit();
 				}
 			
 		}
 
 		// Avoid access if not found
 		header("Location: ../index.php");
-	} catch(OAuthException2 $e){
+	} catch(OAuth1\OAuthException2 $e){
 		throw new APIexception($e->getMessage(), $e->getCode(), 400);
 	}
 } catch (APIexception $e){
@@ -81,6 +86,7 @@ try{
 		"error" => $e->getMessage(),
 		"code" => $e->getCode()
 		);
-	echo Output::encode($error, "json");
+	die(Output::encode($error, "json"));
+
 }
 ?>
