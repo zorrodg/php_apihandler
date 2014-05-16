@@ -35,6 +35,9 @@
 		.row label{
 			text-align: right;
 		}
+		.form-control-static{
+			word-wrap: break-word;
+		}
 		footer{
 			border-top: 1px solid #CCC;
 			padding: 2em 0;
@@ -44,12 +47,12 @@
  <body>
 
  	<div class="container">
- 		<header class="row">
- 			<h1>PHP API Handler </h1>
+ 		<header class="row page-header">
+ 			<h1>PHP API Handler Test Page <small>Create your REST API in minutes. :)</small> </h1>
  			<div class="alert alert-danger">Do not use any of this example login code on Production environments, as it is vulnerable to hackers.</div>
  		</header>
  		<div class="content row">
-	 		<section id="user-data"class="col-sm-4">
+	 		<section id="user-data"class="col-sm-3">
 	 			<?php if(!isset($_SESSION['loggedin'])): ?>
  				<h3>Create a fictional session:</h3>
  				<div>
@@ -69,7 +72,7 @@
  									<input type="number" class="form-control" name="user_id" placeholder="Fictional user ID (Leave it blank to generate a random number)">
  								</li>
  								<li class="form-group">
- 									<input type="submit" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="Fictionally, of course." value="Log in!">
+ 									<input type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="right" title="Fictionally, of course." value="Log in!">
  								</li>
  							</ul>
  						</fieldset>
@@ -95,7 +98,7 @@
  								</li>
  								<li class="form-group">
  									<input type="hidden" name="logout" value="logout">
-									<input type="submit" class="btn btn-default" value="Log out!">
+									<input type="submit" class="btn btn-danger" value="Log out!">
  								</li>
  							</ul>
  						</fieldset>
@@ -120,14 +123,14 @@
 	 			<?php endif ?>
 	 		</section>
 	 		
-	 		<section class="col-sm-8">
+	 		<section class="col-sm-9">
 				<h2>What do you want to test?</h2>
 				<nav>
 					<ul class="nav nav-tabs">
 					  <li class="active"><a href="#endpoint" data-toggle="tab">Test API endpoint</a></li>
-					  <li><a href="#oauth1-register" data-toggle="tab"><span class="label label-default">OAuth 1.0a</span> Register</a></li>
-					  <li><a href="#oauth1-request" data-toggle="tab"><span class="label label-default">OAuth 1.0a</span>Request</a></li>
-					  <li><a href="#oauth1-auth" data-toggle="tab"><span class="label label-default">OAuth 1.0a</span>Authorize</a></li>
+					  <li><a href="#oauth1-register" data-toggle="tab"><span class="label label-default">1.0a</span> Register</a></li>
+					  <li><a href="#oauth1-request" data-toggle="tab"><span class="label label-default">1.0a</span> Request</a></li>
+					  <li><a href="#oauth1-auth" data-toggle="tab"><span class="label label-default">1.0a</span> Authorize</a></li>
 					</ul>
 				</nav>
 				<div class="tab-content">
@@ -158,21 +161,21 @@
 										<input type="url" class="form-control" name="api_uri" required placeholder="i.e. http://localhost/apihandler/api">
 									</li>
 									<li class="form-group row">
-										<label for="new" class="col-sm-2" data-toggle="tooltip" data-placement="top" title="Generate brand new consumer Key and Secret">New Consumer</label>
+										<label for="new" class="col-sm-2">New Consumer</label>
 										<div class="col-sm-1">
-											<input type="checkbox" name="new" id="new" class="form-control">
+											<input type="checkbox" name="new" id="new" class="form-control" data-toggle="tooltip" data-placement="top" title="Generate brand new consumer Key and Secret">
 										</div>
-										<label for="update" class="col-sm-2" data-toggle="tooltip" data-placement="top" title="Update a consumer API information (not the Consumer Key or Secret)">Update existing consumer</label>
+										<label for="update" class="col-sm-2">Update existing consumer</label>
 										<div class="col-sm-1">
-											<input type="checkbox" name="update" id="update" class="form-control">
+											<input type="checkbox" name="update" id="update" class="form-control" data-toggle="tooltip" data-placement="top" title="Update a consumer API information (not the Consumer Key or Secret)">
 										</div>
-										<label for="server_new" class="col-sm-2" data-toggle="tooltip" data-placement="top" title="Register a new server for the consumer to the database">New Server</label>
+										<label for="server_new" class="col-sm-2">New Server</label>
 										<div class="col-sm-1">
-											<input type="checkbox" name="server_new" id="server_new" class="form-control">
+											<input type="checkbox" name="server_new" id="server_new" class="form-control" data-toggle="tooltip" data-placement="top" title="Register a new server for the consumer to the database">
 										</div>
-										<label for="server_update" class="col-sm-2" data-toggle="tooltip" data-placement="top" title="Update server API URL (in case you got it wrong)">Update existing server</label>
+										<label for="server_update" class="col-sm-2">Update existing server</label>
 										<div class="col-sm-1">
-											<input type="checkbox" name="server_update" id="server_update" class="form-control">
+											<input type="checkbox" name="server_update" id="server_update" class="form-control" data-toggle="tooltip" data-placement="top" title="Update server API URL (in case you got it wrong)">
 										</div>
 									</li>
 									<li class="form-group">
@@ -214,8 +217,7 @@
  }
 
  (function($){
- 	$('.btn').tooltip();
- 	$('label').tooltip();
+ 	$('input').tooltip();
  	$('fieldset form').submit(function(e){
  		var $btn = $(document.activeElement),
  			$form, action, flag, data;
