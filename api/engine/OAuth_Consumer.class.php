@@ -46,32 +46,7 @@ class OAuth_Consumer{
 
 		// Get credentials stored from cache file
 		$credentials = @file_get_contents($filename);
-		if(!empty($credentials)){
-			$credentials = explode(";", $credentials);
-			$consumer = array();
-			foreach($credentials as $c){
-				$cr = explode("=", $c);
-				$consumer[$cr[0]] = $cr[1];
-			}
-
-			// Updates credentials if flag
-			if(isset($options['update']) && $options['update'] === TRUE){
-				$consumer["requester_name"] = $name;
-				$consumer["requester_email"] = $email;
-				$consumer["application_uri"] = $appuri;
-				$consumer["callback_uri"] = $callbackuri;
-				$key = $store->updateConsumer($consumer, $id, true);
-			} else {
-				$key = $consumer['consumer_key'];
-			}
-			try{
-				// Retrieves consumer and stores it in private var
-				$this->consumer = $store->getConsumer($key, $id);
-			} catch (OAuthException2 $e){
-				throw new APIexception("OAuth Consumer '$key' is not registered", 15, 404);
-			}
-
-		} elseif(isset($options['new']) && $options['new'] === TRUE){
+		if($options['new'] == 1){
 			// Creates new user
 			$arr = array();
 			$consumer["requester_name"] = $name;
@@ -80,8 +55,33 @@ class OAuth_Consumer{
 			$consumer["callback_uri"] = $callbackuri;
 
 			// Retrieves new user information
-			$key = $store->updateConsumer($consumer, $id, true);
-			$this->consumer = $store->getConsumer($key, $id);
+			$key = $store->updateConsumer($consumer, $id, TRUE);
+			$this->consumer = $store->getConsumer($key, $id, TRUE);
+		} elseif(!empty($credentials)){
+			$credentials = explode(";", $credentials);
+			$consumer = array();
+			foreach($credentials as $c){
+				$cr = explode("=", $c);
+				$consumer[$cr[0]] = @$cr[1];
+			}
+
+			// Updates credentials if flag
+			if(isset($options['update']) && $options['update'] == 1){
+				$consumer["requester_name"] = $name;
+				$consumer["requester_email"] = $email;
+				$consumer["application_uri"] = $appuri;
+				$consumer["callback_uri"] = $callbackuri;
+				$key = $store->updateConsumer($consumer, $id, TRUE);
+			} else {
+				$key = $consumer['consumer_key'];
+			}
+			try{
+				// Retrieves consumer and stores it in private var
+				$this->consumer = $store->getConsumer($key, $id, TRUE);
+			} catch (OAuthException2 $e){
+				throw new APIexception("OAuth Consumer '$key' is not registered", 15, 404);
+			}
+
 		} else {
 			throw new APIexception("OAuth Consumer does not exists", 15, 404);
 		}

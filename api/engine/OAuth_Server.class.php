@@ -48,13 +48,26 @@ class OAuth_Server{
 		// Gets server data from cache file
 		$credentials = @file_get_contents($filename);
 		$arr = array();
-		if(!empty($credentials)){
+		if($options['new'] == 1){
+			// Creates new server
+			$server = array(
+			    'consumer_key' => $consumer['consumer_key'],
+			    'consumer_secret' => $consumer['consumer_secret'],
+			    'server_uri' => $serveruri,
+			    'signature_methods' => array('HMAC-SHA1', 'PLAINTEXT'),
+			    'request_token_uri' => isset($options['request_token_uri']) ? $options['request_token_uri'] : $serveruri."/oauth/request",
+			    'authorize_uri' => isset($options['authorize_uri']) ? $options['authorize_uri'] : $serveruri."/oauth/authorize",
+			    'access_token_uri' => isset($options['access_token']) ? $options['access_token'] : $serveruri."/oauth/access",
+			);
+			$key = $store->updateServer($server, $consumer['user_id']);
+			$this->server = $store->getServer($key, $consumer['user_id']);
+		} elseif(!empty($credentials)){
 
 			$credentials = explode(";", $credentials);
 			$server = array();
 			foreach($credentials as $c){
 				$cr = explode("=", $c);
-				$server[$cr[0]] = $cr[1];
+				$server[$cr[0]] = @$cr[1];
 			}
 
 			// Retrieve consumer key
@@ -62,7 +75,7 @@ class OAuth_Server{
 			$this->server = $store->getServer($key, $consumer['user_id']);
 
 			// Updates server info on flag
-			if(isset($options['update']) && $options['update'] === TRUE){
+			if(isset($options['update']) && $options['update'] == 1){
 				$store->deleteServer($key, $consumer['user_id']);
 				$server = array(
 				    'consumer_key' => $consumer['consumer_key'],
@@ -76,19 +89,6 @@ class OAuth_Server{
 				$key = $store->updateServer($server, $consumer['user_id']);
 				$this->server = $store->getServer($key, $consumer['user_id']);
 			}
-		} elseif(isset($options['new']) && $options['new'] === TRUE){
-			// Creates new server
-			$server = array(
-			    'consumer_key' => $consumer['consumer_key'],
-			    'consumer_secret' => $consumer['consumer_secret'],
-			    'server_uri' => $serveruri,
-			    'signature_methods' => array('HMAC-SHA1', 'PLAINTEXT'),
-			    'request_token_uri' => isset($options['request_token_uri']) ? $options['request_token_uri'] : $serveruri."/oauth/request",
-			    'authorize_uri' => isset($options['authorize_uri']) ? $options['authorize_uri'] : $serveruri."/oauth/authorize",
-			    'access_token_uri' => isset($options['access_token']) ? $options['access_token'] : $serveruri."/oauth/access",
-			);
-			$key = $store->updateServer($server, $consumer['user_id']);
-			$this->server = $store->getServer($key, $consumer['user_id']);
 		} else {
 			throw new APIexception('OAuth Server does not exists', 15, 404);
 		}
