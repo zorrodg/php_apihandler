@@ -2,26 +2,31 @@
 
 session_start();
 
-//extract data from the post
-extract($_POST);
+$query_string = "?";
+$q = array();
+if($_POST['new'] === "on") $q[]="new=true";
+if($_POST['update'] === "on") $q[]="update=true";
+if($_POST['server_new'] === "on") $q[]="server_new=true";
+if($_POST['server_update'] === "on") $q[]="server_update=true";
+$query_string.= implode("&", $q);
 
 //set POST variables
-$url = 'http://localhost/apihandler/api/oauth/1.0a/register'.(isset($flag) ? "?{$flag}=true" : "");
+$url = 'http://localhost/apihandler/api/oauth/1.0a/register'.$query_string;
 
 $fields = array(
 	'user_name' => urlencode($_SESSION['user_name']),
 	'user_email' => urlencode($_SESSION['user_email']),
 	'user_id' => urlencode($_SESSION['user_id']),
-	'app_uri' => urlencode($app_uri),
-	'app_callback' => urlencode($app_callback),
-	'api_uri' => urlencode($api_uri)
+	'app_uri' => urlencode($_POST['app_uri']),
+	'app_callback' => urlencode($_POST['app_callback']),
+	'api_uri' => urlencode($_POST['api_uri'])
 );
 
 //url-ify the data for the POST
 foreach($fields as $key=>$value) { 
 	$fields_string[] = $key.'='.$value; 
 }
-$fields_string = implode($fields_string, '&');
+$fields_string = implode('&', $fields_string);
 
 //open connection
 $ch = curl_init();

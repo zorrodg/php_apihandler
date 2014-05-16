@@ -1,13 +1,13 @@
 <?php 
 	session_start();
 	if($_POST){
-		if($_POST['logout']){
-			if($_SESSION['loggedin'])
+		if(isset($_POST['logout'])){
+			if(isset($_SESSION['loggedin']))
 				session_destroy();
 				header('Location: '.$_SERVER['PHP_SELF']);
 				exit(); //optional
 		} else {
-			if(!$_SESSION['loggedin']){
+			if(!isset($_SESSION['loggedin'])){
 				$_SESSION['user_name'] = htmlentities($_POST['user_name']);
 				$_SESSION['user_email'] = htmlentities($_POST['user_email']);
 				$_SESSION['user_id'] = !empty($_POST['user_id']) ? htmlentities($_POST['user_id']) : rand(1000,9999);
@@ -42,7 +42,7 @@
  		</header>
  		
  		<section class="col-sm-4">
- 			<?php if(!$_SESSION['loggedin']): ?>
+ 			<?php if(!isset($_SESSION['loggedin'])): ?>
  				<div>
  					<h3>Create a fictional session:</h3>
  				</div>
@@ -105,7 +105,7 @@
 			<article>
 				<h3>1. Register an API Consumer</h3>
 				<hr>
-				<?php if(!$_SESSION['loggedin']): ?>
+				<?php if(!isset($_SESSION['loggedin'])): ?>
 				<div class="alert alert-warning">You need to create a session to test this.</div>
 				<?php else: ?>
 				<fieldset id="register-app">
@@ -123,11 +123,26 @@
 								<label for="api_uri">* API URL</label>
 								<input type="url" class="form-control" name="api_uri" required placeholder="i.e. http://localhost/apihandler/api/">
 							</li>
-							<li class="form-group">
-
+							<li class="form-group row">
+								<label for="new" class="col-sm-2">New Consumer</label>
+								<div class="col-sm-1">
+									<input type="checkbox" name="new" id="new" class="form-control">
+								</div>
+								<label for="update" class="col-sm-2">Update existing consumer</label>
+								<div class="col-sm-1">
+									<input type="checkbox" name="update" id="update" class="form-control">
+								</div>
+								<label for="server_new" class="col-sm-2">New Server</label>
+								<div class="col-sm-1">
+									<input type="checkbox" name="server_new" id="server_new" class="form-control">
+								</div>
+								<label for="server_update" class="col-sm-2">Update existing server</label>
+								<div class="col-sm-1">
+									<input type="checkbox" name="server_update" id="server_update" class="form-control">
+								</div>
 							</li>
 							<li class="form-group">
-								<input type="submit" class="btn btn-default" value="Register!" data-toggle="tooltip" data-placement="bottom" title="New consumer with given session information">
+								<input type="submit" class="btn btn-default" value="Register!">
 							</li>
 						</ul>
 						<br>
@@ -156,12 +171,9 @@
  		data = $form.serialize();
  		action = $form.attr('action');
 
- 		if($btn.is("[name]")) flag = $btn.attr('name');
-
  		$.ajax(action, {
  			data:{
- 				data:data,
- 				flag:flag
+ 				data:data
  			},
  			dataType:"json",
  			type:"POST",
