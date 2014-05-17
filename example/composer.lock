@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "a1b6a73801d0a6443f3ff286695163b8",
+    "hash": "ef21d0133ebc97ab64252ff680ebf5ff",
     "packages": [
         {
             "name": "sraka1/oauth1",

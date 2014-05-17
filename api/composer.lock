@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "6f16f6bd0575a9ff4b5813be7c248e5f",
+    "hash": "aea51a9092fa1f2d0ffc1685b204827a",
     "packages": [
         {
             "name": "bshaffer/oauth2-server-php",

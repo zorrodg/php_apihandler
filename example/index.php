@@ -17,12 +17,12 @@
 		}
 	}
  ?>
- <!doctype html>
- <html lang="en">
- <head>
+<!doctype html>
+<html lang="en">
+<head>
  	<meta charset="UTF-8">
  	<title>API Handler Testing</title>
- 	<link rel="stylesheet" href="bower_components/bootstrap-css/css/bootstrap.min.css">
+ 	<link rel="stylesheet" href="components/css/bootstrap.min.css">
  	<style>
  		ul{
  			margin: 0;
@@ -38,13 +38,16 @@
 		.form-control-static{
 			word-wrap: break-word;
 		}
+		.param-group{
+			padding:.3em 0;
+		}
 		footer{
 			border-top: 1px solid #CCC;
 			padding: 2em 0;
 		}
  	</style>
- </head>
- <body>
+</head>
+<body>
 
  	<div class="container">
  		<header class="row page-header">
@@ -136,6 +139,39 @@
 				<div class="tab-content">
 					<article id="endpoint" class="tab-pane active">
 						<h3>Test API endpoint</h3>
+						<hr>
+						<fieldset id="test-endpoint">
+							<form action="make_call.php" method="post" role="form">
+								<pre class="well response">Response goes here...</pre>
+								<br>
+								<ul>
+									<li class="form-group col-sm-2">
+										<label for="method">HTTP Method</label>
+										<select name="method" id="method" class="form-control">
+											<option>GET</option>
+											<option>POST</option>
+											<option>DELETE</option>
+										</select>
+									</li>
+									<li class="form-group col-sm-10">
+										<label for="url">API Endpoint URL</label>
+										<input type="text" name="url" id="url" placeholder="The API URL to test" class="form-control">
+									</li>
+									<li id="parameters" class="form-group col-sm-6">
+										<h4>Parameters</h4>
+										<div class="param-group row">
+											<div class="col-sm-5">
+												<input type="text" name="param[]" placeholder="key" class="form-control">
+											</div>
+											<div class="col-sm-6">
+												<input type="text" placeholder="value" class="form-control">
+											</div>
+											<button class="btn btn-link remove-param col-sm-1 hidden"><span class="glyphicon glyphicon-remove"></span></button>
+										</div>
+									</li>
+								</ul>
+							</form>
+						</fieldset>
 					</article>
 					<article id="oauth1-register" class="tab-pane">
 						<h3><span class="label label-default">OAuth 1.0a</span> Register an API Consumer</h3>
@@ -144,7 +180,7 @@
 						<div class="alert alert-warning">You need to create a session to test this.</div>
 						<?php else: ?>
 						<fieldset id="register-app">
-							<form action="register_app.php" method="post" role="form" class="form">
+							<form action="register_app.php" method="post" role="form">
 								<pre class="well response">Response goes here...</pre>
 								<br>
 								<ul>
@@ -199,12 +235,34 @@
 			<strong>&copy; <?php echo date('Y'); ?> <a href="http://github.com/zorrodg">zorrodg</a> / <a href="http://github.com/zorrodg/php_apihandler">API Handler Site</a></strong>
 		</footer>
  	</div>
- </body>
- <script src="bower_components/jquery/dist/jquery.min.js"></script>
- <script src="bower_components/bootstrap-css/js/bootstrap.min.js"></script>
- <script>
+</body>
+<script src="components/js/jquery.min.js"></script>
+<script src="components/js/bootstrap.min.js"></script>
+<script>
+var $paramGroup, $parameters = $('#parameters');
 
- function createDataFieldset(data, containerId){
+$paramGroup = $('.param-group').clone().wrap("<div />").parent().html();
+
+function paramGroupClick($currentParamGroup){
+	if($currentParamGroup.length > 0){
+		$currentParamGroup.off().click(function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			$this = $(this);
+			$this.find('.remove-param').removeClass('hidden').off().click(function(e){
+				var $target = $(e.target).parents('.param-group');
+				e.preventDefault();
+				e.stopPropagation();
+				$target.remove();
+			});
+			$this.off();
+			$parameters.append($paramGroup);
+			paramGroupClick($this.next('.param-group'));
+		});
+	}
+}
+
+function createDataFieldset(data, containerId){
  	var html = '<div id="'+containerId+'"><fieldset><ul>';
  	for(var i in data){
  		if(data.hasOwnProperty(i)){
@@ -214,51 +272,54 @@
  	}
 	html += '</ul></fieldset></div>';
 	return html;
- }
+}
 
- (function($){
- 	$('input').tooltip();
- 	$('fieldset form').submit(function(e){
- 		var $btn = $(document.activeElement),
- 			$form, action, flag, data;
 
- 		e.preventDefault();
- 		$form = $(e.currentTarget);
- 		data = $form.serialize();
- 		action = $form.attr('action');
 
- 		$.ajax(action, {
- 			data:data,
- 			dataType:"json",
- 			type:"POST",
- 			success:function(response){
- 				var dataToAppend;
- 				$form.find(".response").html(JSON.stringify(response,  null, "\t"));
+$('fieldset form').submit(function(e){
+	var $btn = $(document.activeElement),
+		$form, action, flag, data;
 
- 				if(response.oauth_consumer_key != null){
- 					dataToAppend = createDataFieldset({
- 						'Consumer Key': response.oauth_consumer_key,
- 						'Consumer Secret': response.oauth_consumer_secret
- 					}, 'oauthInfo');
+	e.preventDefault();
+	$form = $(e.currentTarget);
 
- 					if($('#oauthInfo').length > 0){
- 						$('#user-data').find('#oauthInfo').remove();
- 					}
- 					$('#user-data').append(dataToAppend);
- 					
- 				}
- 				//console.debug(response);
- 			},
- 			error:function(response){
- 				if(response.responseJSON != null){
- 					$form.find(".response").html(JSON.stringify(response.responseJSON,  null, "\t"));
- 					//console.debug(response);
- 				}
- 			}
- 		});
+	data = $form.serialize();
+	action = $form.attr('action');
 
- 	});
- 		
- })($);
- </script>
- </html>
+	$.ajax(action, {
+		data:data,
+		dataType:"json",
+		type:"POST",
+		success:function(response){
+			var dataToAppend;
+			$form.find(".response").html(JSON.stringify(response,  null, "\t"));
+
+			if(response.oauth_consumer_key != null){
+				dataToAppend = createDataFieldset({
+					'Consumer Key': response.oauth_consumer_key,
+					'Consumer Secret': response.oauth_consumer_secret
+				}, 'oauthInfo');
+
+				if($('#oauthInfo').length > 0){
+					$('#user-data').find('#oauthInfo').remove();
+				}
+				$('#user-data').append(dataToAppend);
+				
+			}
+			//console.debug(response);
+		},
+		error:function(response){
+			if(response.responseJSON != null){
+				$form.find(".response").html(JSON.stringify(response.responseJSON,  null, "\t"));
+				//console.debug(response);
+			}
+		}
+	});
+});
+
+(function($){
+	$('input').tooltip();
+	paramGroupClick($('.param-group'));
+})($);
+</script>
+</html>
