@@ -141,21 +141,44 @@
 						<h3>Test API endpoint</h3>
 						<hr>
 						<fieldset id="test-endpoint">
-							<form action="make_call.php" method="post" role="form">
+							<form action="make_query.php" method="post" role="form">
 								<pre class="well response">Response goes here...</pre>
 								<br>
 								<ul>
 									<li class="form-group col-sm-2">
-										<label for="method">HTTP Method</label>
 										<select name="method" id="method" class="form-control">
-											<option>GET</option>
-											<option>POST</option>
-											<option>DELETE</option>
+											<option value="get">GET</option>
+											<option value="post">POST</option>
+											<option value="delete">DELETE</option>
 										</select>
 									</li>
-									<li class="form-group col-sm-10">
-										<label for="url">API Endpoint URL</label>
+									<li class="form-group col-sm-8">
 										<input type="text" name="url" id="url" placeholder="The API URL to test" class="form-control">
+									</li>
+									<li class="form-group col-sm-2">
+										<input type="submit" value="Test Endpoint" class="btn btn-danger">
+									</li>
+									<li class="form-group col-sm-6">
+										<div class="row">
+											<div class="col-sm-8">
+												<h4>Signed Request?</h4>
+											</div>
+											<div class="col-sm-4">
+												<input type="checkbox" id="signedCheck" class="form-control">
+											</div>
+										</div>
+										<div id="signed" class="row">
+											<div class="form-group">
+												<label for="oauth_key">Consumer Key</label>
+												<input type="text" name="oauth_key" class="form-control" value="<?php if(isset($_SESSION['consumer_key'])) echo $_SESSION['consumer_key']; ?>" data-toggle="tooltip" data-placement="right" title="Register a new application to obtain this one" >
+												<label for="oauth_secret">Consumer Secret</label>
+												<input type="text" name="oauth_secret" class="form-control" value="<?php if(isset($_SESSION['consumer_secret'])) echo $_SESSION['consumer_secret']; ?>"  data-toggle="tooltip" data-placement="right" title="Register a new application to obtain this one" >
+												<label for="oauth_token">Access Token</label>
+												<input type="text" name="oauth_token" class="form-control" data-toggle="tooltip" data-placement="right" title="Exchange a request token to get an access token" >
+												<label for="oauth_token_secret">Token Secret</label>
+												<input type="text" name="oauth_token_secret" class="form-control" data-toggle="tooltip" data-placement="right" title="Exchange a request token to get an access token">
+											</div>
+										</div>
 									</li>
 									<li id="parameters" class="form-group col-sm-6">
 										<h4>Parameters</h4>
@@ -239,8 +262,14 @@
 <script src="components/js/jquery.min.js"></script>
 <script src="components/js/bootstrap.min.js"></script>
 <script>
-var $paramGroup, $parameters = $('#parameters');
+var $paramGroup, 
+	$parameters = $('#parameters'), 
+	$method = $('#method'),
+	$signed = $('#signed'),
+	$signedCheck = $('#signedCheck');
 
+$parameters.hide();
+$signed.hide();
 $paramGroup = $('.param-group').clone().wrap("<div />").parent().html();
 
 function paramGroupClick($currentParamGroup){
@@ -273,8 +302,6 @@ function createDataFieldset(data, containerId){
 	html += '</ul></fieldset></div>';
 	return html;
 }
-
-
 
 $('fieldset form').submit(function(e){
 	var $btn = $(document.activeElement),
@@ -320,6 +347,24 @@ $('fieldset form').submit(function(e){
 (function($){
 	$('input').tooltip();
 	paramGroupClick($('.param-group'));
+
+	$method.change(function(){
+		var $selected = $(this).find('option:selected');
+		if($selected.text() !== "GET"){
+			$parameters.show();
+		} else {
+			$parameters.hide();
+		}
+	});
+
+	$signedCheck.change(function(){
+		var $checked = $(this).is(':checked');
+		if($checked){
+			$signed.show();
+		} else {
+			$signed.hide();
+		}
+	});
 })($);
 </script>
 </html>

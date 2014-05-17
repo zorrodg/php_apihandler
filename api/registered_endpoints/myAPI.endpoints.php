@@ -81,7 +81,7 @@ new Getter("groups/:id");
 
 new Poster("users/add",array(
 		"columns" => array("first_name|string", "last_name|string", "group_id|int")
-	), FALSE);
+	));
 
 new Poster("users/edit/:id",array(
 		"columns" => array("first_name", "last_name")
