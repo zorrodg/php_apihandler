@@ -30,7 +30,7 @@ try{
 				// Authorize a request. Return access tokens
 				case "authorize":
 					// TODO: Create a session class
-					session_start();
+					if (session_status() == PHP_SESSION_NONE) session_start();
 					$GLOBALS['oauth_server']->authorizeVerify();
 					
 					$GLOBALS['oauth_server']->authorizeFinish(TRUE, $_SESSION['user_id']);

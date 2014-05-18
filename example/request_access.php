@@ -28,8 +28,8 @@ try{
 	//die();
 	//header('Location: authorize.php'.$redirect_uri);
 	//exit();
-
-	session_start();
+	if (session_status() == PHP_SESSION_NONE) session_start();
+	
 	$_SESSION['request_token'] = $tempCredentials['oauth_token'];
 	$_SESSION['request_token_secret'] = $tempCredentials['oauth_token_secret'];
 
