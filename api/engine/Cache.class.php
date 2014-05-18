@@ -84,12 +84,13 @@ class Cache{
 
 		$data = array();
 		foreach($server->data as $k => $v){
-			$data[] = $k."-".$v;
+			if(!preg_match("/^oauth_/", $k))
+				$data[] = $k."-".$v;
 		};
 
 		$data = implode(".", $data);
 
-		//Constructs route to file
+		// Constructs route to file
 		$this->route = $this->folder.CACHE_FOLDER . "/" . implode("/", $route).".". (!empty($data) ? $data ."." : "") ."json";
 	}
 

@@ -68,6 +68,11 @@ try{
 	if(isset($output['oauth_consumer_key'])) $_SESSION['consumer_key'] = $output['oauth_consumer_key'];
 	if(isset($output['oauth_consumer_secret'])) $_SESSION['consumer_secret'] = $output['oauth_consumer_secret'];
 
+	//Stores current API url to a session
+	$_SESSION['api_uri'] = $_POST['api_uri'];
+	$_SESSION['app_uri'] = $_POST['app_uri'];
+	$_SESSION['app_callback'] = $_POST['app_callback'];
+
 	// Return data
 	echo json_encode($output);
 	

@@ -73,8 +73,10 @@ new Getter("groups", array(
 	));
 
 new Getter("users/:id", array(
-	"query" => "SELECT * FROM `api_users` WHERE `id` = %id\$v AND `group_id` = '%group_id\$v'",
-	"columns" => array("group_id")
+	// When on custom queries, col_prefix must be added manually
+	"query" => "SELECT * FROM `api_users` WHERE `id` = %id\$v AND `aph_group_id` = '%group_id\$v'",
+	"columns" => array("group_id"),
+	"cacheable" => TRUE
 	));
 
 new Getter("groups/:id");

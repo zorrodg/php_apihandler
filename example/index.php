@@ -51,7 +51,7 @@
 
  	<div class="container">
  		<header class="row page-header">
- 			<h1>PHP API Handler Test Page <small>Create your REST API in minutes. :)</small> </h1>
+ 			<h1>PHP API Handler JSON Test Page <small>Create your REST API in minutes. :)</small> </h1>
  			<div class="alert alert-danger">Do not use any of this example login code on Production environments, as it is vulnerable to hackers.</div>
  		</header>
  		<div class="content row">
@@ -124,6 +124,22 @@
 	 				</fieldset>
 	 			</div>
 	 			<?php endif ?>
+	 			<?php if(isset($_SESSION['request_token'])): ?>
+	 			<div id="tokenInfo">
+	 				<fieldset>
+	 					<ul>
+	 						<li class="form-group">
+	 							<label for="request_token">Request Token</label>
+	 							<p class="form-control-static"><?php echo $_SESSION['request_token']; ?></p>
+	 						</li>
+	 						<li class="form-group">
+	 							<label for="request_token_secret">Request Token Secret</label>
+	 							<p class="form-control-static"><?php echo $_SESSION['request_token_secret']; ?></p>
+	 						</li>
+	 					</ul>
+	 				</fieldset>
+	 			</div>
+	 			<?php endif ?>
 	 		</section>
 	 		
 	 		<section class="col-sm-9">
@@ -169,10 +185,10 @@
 										</div>
 										<div id="signed" class="row">
 											<div class="form-group">
-												<label for="oauth_key">Consumer Key</label>
-												<input type="text" name="oauth_key" class="form-control" value="<?php if(isset($_SESSION['consumer_key'])) echo $_SESSION['consumer_key']; ?>" data-toggle="tooltip" data-placement="right" title="Register a new application to obtain this one" >
-												<label for="oauth_secret">Consumer Secret</label>
-												<input type="text" name="oauth_secret" class="form-control" value="<?php if(isset($_SESSION['consumer_secret'])) echo $_SESSION['consumer_secret']; ?>"  data-toggle="tooltip" data-placement="right" title="Register a new application to obtain this one" >
+												<label for="consumer_key">Consumer Key</label>
+												<input type="text" name="consumer_key" class="form-control" value="<?php if(isset($_SESSION['consumer_key'])) echo $_SESSION['consumer_key']; ?>" data-toggle="tooltip" data-placement="right" title="Register a new application to obtain this one" >
+												<label for="consumer_secret">Consumer Secret</label>
+												<input type="text" name="consumer_secret" class="form-control" value="<?php if(isset($_SESSION['consumer_secret'])) echo $_SESSION['consumer_secret']; ?>"  data-toggle="tooltip" data-placement="right" title="Register a new application to obtain this one" >
 												<label for="oauth_token">Access Token</label>
 												<input type="text" name="oauth_token" class="form-control" data-toggle="tooltip" data-placement="right" title="Exchange a request token to get an access token" >
 												<label for="oauth_token_secret">Token Secret</label>
@@ -209,15 +225,15 @@
 								<ul>
 									<li class="form-group">
 										<label for="app_uri" >* App URL</label>
-										<input type="url" class="form-control" name="app_uri" required placeholder="i.e. http://localhost/apihandler/example">
+										<input type="url" class="form-control" name="app_uri" required placeholder="i.e. http://localhost/apihandler/example" value="<?php if(isset($_SESSION['app_uri'])) echo $_SESSION['app_uri']; ?>">
 									</li>
 									<li class="form-group">
 										<label for="app_callback">* App Callback</label>
-										<input type="url" class="form-control" name="app_callback" required placeholder="i.e. http://localhost/apihandler/example/callback">
+										<input type="url" class="form-control" name="app_callback" required placeholder="i.e. http://localhost/apihandler/example/callback" value="<?php if(isset($_SESSION['app_callback'])) echo $_SESSION['app_callback']; ?>">
 									</li>
 									<li class="form-group">
 										<label for="api_uri">* API URL</label>
-										<input type="url" class="form-control" name="api_uri" required placeholder="i.e. http://localhost/apihandler/api">
+										<input type="url" class="form-control" name="api_uri" required placeholder="i.e. http://localhost/apihandler/api" value="<?php if(isset($_SESSION['api_uri'])) echo $_SESSION['api_uri']; ?>">
 									</li>
 									<li class="form-group row">
 										<label for="new" class="col-sm-2">New Consumer</label>
@@ -247,9 +263,61 @@
 					</article>
 					<article id="oauth1-request" class="tab-pane">
 						<h3><span class="label label-default">OAuth 1.0a</span> Test API Request Token</h3>
+						<br>
+						<fieldset id="request-access">
+							<form action="request_access.php" method="post" role="form">
+								<pre class="well response">Response goes here...</pre>
+								<br>
+								<ul>
+									<li class="form-group">
+										<label for="api_uri" >* API URL</label>
+										<input type="url" class="form-control" name="api_uri" required placeholder="i.e. http://localhost/apihandler/api" value="<?php if(isset($_SESSION['api_uri'])) echo $_SESSION['api_uri']; ?>">
+									</li>
+									<li class="form-group">
+										<label for="app_callback">* App Callback</label>
+										<input type="url" class="form-control" name="app_callback" required placeholder="i.e. http://localhost/apihandler/example/callback" value="<?php if(isset($_SESSION['app_callback'])) echo $_SESSION['app_callback']; ?>">
+									</li>
+									<li class="form-group">
+										<label for="consumer_key">* Consumer Key</label>
+										<input type="text" class="form-control" name="consumer_key" required placeholder="Your consumer key" value="<?php if(isset($_SESSION['consumer_key'])) echo $_SESSION['consumer_key']; ?>">
+									</li>
+									<li class="form-group">
+										<label for="consumer_secret">* Consumer Secret</label>
+										<input type="text" class="form-control" name="consumer_secret" required placeholder="Your consumer secret" value="<?php if(isset($_SESSION['consumer_secret'])) echo $_SESSION['consumer_secret']; ?>">
+									</li>
+									<li class="form-group">
+										<input type="submit" class="btn btn-danger btn-lg btn-block" value="Request Token!">
+									</li>
+								</ul>
+							</form>
+						</fieldset>
 					</article>
 					<article id="oauth1-auth" class="tab-pane">
-						<h3><span class="label label-default">OAuth 1.0a</span> Test API Authorize</h3>
+						<h3><span class="label label-default">OAuth 1.0a</span> API Authorize</h3>
+						<br>
+						<?php if(!isset($_SESSION['loggedin'])): ?>
+						<div class="alert alert-warning">You need to create a session to test this.</div>
+						<?php else: ?>
+						<fieldset id="authorize">
+							<form action="authorize.php" method="post" role="form">
+								<pre class="well response">Response goes here...</pre>
+								<br>
+								<ul>
+									<li class="form-group">
+										<label for="request_token">* Request Token</label>
+										<input type="text" class="form-control" name="request_token" required placeholder="Your consumer key" value="<?php if(isset($_SESSION['request_token'])) echo $_SESSION['request_token']; ?>">
+									</li>
+									<li class="form-group">
+										<label for="request_token_secret">* Request Token Secret</label>
+										<input type="text" class="form-control" name="request_token_secret" required placeholder="Your consumer secret" value="<?php if(isset($_SESSION['request_token_secret'])) echo $_SESSION['request_token_secret']; ?>">
+									</li>
+									<li class="form-group">
+										<input type="submit" class="btn btn-danger btn-lg btn-block" value="Authorize Token!">
+									</li>
+								</ul>
+							</form>
+						</fieldset>
+					<?php endif; ?>
 					</article>
 				</div>
 			</section>
@@ -331,7 +399,18 @@ $('fieldset form').submit(function(e){
 					$('#user-data').find('#oauthInfo').remove();
 				}
 				$('#user-data').append(dataToAppend);
-				
+			}
+
+			if(response.oauth_callback_confirmed != null){
+				dataToAppend = createDataFieldset({
+					'Request Token': response.oauth_token,
+					'Request Token Secret': response.oauth_token_secret
+				}, 'tokenInfo');
+
+				if($('#tokenInfo').length > 0){
+					$('#user-data').find('#tokenInfo').remove();
+				}
+				$('#user-data').append(dataToAppend);
 			}
 			//console.debug(response);
 		},

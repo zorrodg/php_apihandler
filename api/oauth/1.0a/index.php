@@ -29,22 +29,13 @@ try{
 					exit();
 				// Authorize a request. Return access tokens
 				case "authorize":
+					// TODO: Create a session class
+					session_start();
 					$GLOBALS['oauth_server']->authorizeVerify();
-
-					// Exits if no data provided
-					if(!$_POST['user_id']) throw new OAuth1\OAuthException2("Sorry, no post data. :(");
-
-					// TODO: IMPROVE SECURITY ON THESE FIELDS!!!
-					extract($_POST);
-
-					if($user_authorized === TRUE){
-						$GLOBALS['oauth_server']->authorizeFinish(TRUE, $user_id);
-						$GLOBALS['oauth_server']->accessToken();
-					}
-					exit("Unauthorized");
-				// Return access tokens
-				case "access":
+					
+					$GLOBALS['oauth_server']->authorizeFinish(TRUE, $_SESSION['user_id']);
 					$GLOBALS['oauth_server']->accessToken();
+
 					exit();
 				case "register":
 					// Exits if no data provided
