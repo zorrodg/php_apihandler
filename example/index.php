@@ -145,8 +145,8 @@
 	 		<section class="col-sm-9">
 				<h2>What do you want to test?</h2>
 				<nav>
-					<ul class="nav nav-tabs">
-					  <li class="active"><a href="#endpoint" data-toggle="tab">Test API endpoint</a></li>
+					<ul class="nav nav-tabs nav-justified">
+					  <li class="active"><a href="#endpoint" data-toggle="tab">Test endpoint</a></li>
 					  <li><a href="#oauth1-register" data-toggle="tab"><span class="label label-default">1.0a</span> Register</a></li>
 					  <li><a href="#oauth1-request" data-toggle="tab"><span class="label label-default">1.0a</span> Request</a></li>
 					  <li><a href="#oauth1-auth" data-toggle="tab"><span class="label label-default">1.0a</span> Authorize</a></li>
