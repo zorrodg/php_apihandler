@@ -54,7 +54,7 @@
 
  	<div class="container">
  		<header class="row page-header">
- 			<h1>PHP API Handler JSON Test Page <small>Create your REST API in minutes. :)</small> </h1>
+ 			<h1>PHP API Handler // JSON Test Page <small>Create your REST API in minutes. :)</small> </h1>
  			<div class="alert alert-danger">Do not use any of this example login code on Production environments, as it is vulnerable to hackers.</div>
  		</header>
  		<div class="content row">
@@ -138,6 +138,21 @@
 	 						<li class="form-group">
 	 							<label for="request_token_secret">Request Token Secret</label>
 	 							<p class="form-control-static"><?php echo $_SESSION['request_token_secret']; ?></p>
+	 						</li>
+	 					</ul>
+	 				</fieldset>
+	 			</div>
+	 			<?php elseif(isset($_SESSION['oauth_token'])): ?>
+	 			<div id="tokenInfo">
+	 				<fieldset>
+	 					<ul>
+	 						<li class="form-group">
+	 							<label for="oauth_token">Access Token</label>
+	 							<p class="form-control-static"><?php echo $_SESSION['oauth_token']; ?></p>
+	 						</li>
+	 						<li class="form-group">
+	 							<label for="oauth_token_secret">Access Token Secret</label>
+	 							<p class="form-control-static"><?php echo $_SESSION['oauth_token_secret']; ?></p>
 	 						</li>
 	 					</ul>
 	 				</fieldset>
