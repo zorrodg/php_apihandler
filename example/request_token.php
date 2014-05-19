@@ -4,7 +4,6 @@
 require "vendor/autoload.php";
 
 try{
-	session_start();
 	if(!isset($_SESSION['api_uri']) && !isset($_POST['api_uri'])) throw new Exception('No API url', 1);
 	if(!isset($_SESSION['app_callback']) && !isset($_POST['app_callback'])) throw new Exception('No callback url', 2);
 	if(!isset($_SESSION['consumer_key']) && !isset($_POST['consumer_key'])) throw new Exception('No consumer_key', 3);
@@ -24,16 +23,13 @@ try{
 	$tempCredentials = $connection->getRequestToken($callback);
 	$redirect_uri = $connection->getAuthorizeURL($tempCredentials);
 
-	//var_dump($redirect_uri);
-	//die();
-	//header('Location: authorize.php'.$redirect_uri);
-	//exit();
 	if (session_status() == PHP_SESSION_NONE) session_start();
 	
 	$_SESSION['request_token'] = $tempCredentials['oauth_token'];
 	$_SESSION['request_token_secret'] = $tempCredentials['oauth_token_secret'];
 
 	echo json_encode($tempCredentials);
+	exit();
 
 } catch(Exception $e){
 	http_response_code(404);

@@ -41,6 +41,9 @@
 		.param-group{
 			padding:.3em 0;
 		}
+		.nav-pills li{
+			margin: .6em;
+		}
 		footer{
 			border-top: 1px solid #CCC;
 			padding: 2em 0;
@@ -147,9 +150,8 @@
 				<nav>
 					<ul class="nav nav-tabs nav-justified">
 					  <li class="active"><a href="#endpoint" data-toggle="tab">Test endpoint</a></li>
-					  <li><a href="#oauth1-register" data-toggle="tab"><span class="label label-default">1.0a</span> Register</a></li>
-					  <li><a href="#oauth1-request" data-toggle="tab"><span class="label label-default">1.0a</span> Request</a></li>
-					  <li><a href="#oauth1-auth" data-toggle="tab"><span class="label label-default">1.0a</span> Authorize</a></li>
+					  <li><a href="#oauth1" data-toggle="tab"><span class="label label-default">1.0a</span> OAuth</a></li>
+					  <li><a href="#oauth2" data-toggle="tab"><span class="label label-info">2.0</span> OAuth</a></li>
 					</ul>
 				</nav>
 				<div class="tab-content">
@@ -212,112 +214,143 @@
 							</form>
 						</fieldset>
 					</article>
-					<article id="oauth1-register" class="tab-pane">
-						<h3><span class="label label-default">OAuth 1.0a</span> Register an API Consumer</h3>
-						<hr>
+					<article id="oauth1" class="tab-pane">
 						<?php if(!isset($_SESSION['loggedin'])): ?>
+						<h3><span class="label label-info">OAuth 2.0</span> OAuth 2.0 App security</h3>
+						<hr>
 						<div class="alert alert-warning">You need to create a session to test this.</div>
 						<?php else: ?>
-						<fieldset id="register-app">
-							<form action="register_app.php" method="post" role="form">
-								<pre class="well response">Response goes here...</pre>
-								<br>
-								<ul>
-									<li class="form-group">
-										<label for="app_uri" >* App URL</label>
-										<input type="url" class="form-control" name="app_uri" required placeholder="i.e. http://localhost/apihandler/example" value="<?php if(isset($_SESSION['app_uri'])) echo $_SESSION['app_uri']; ?>">
-									</li>
-									<li class="form-group">
-										<label for="app_callback">* App Callback</label>
-										<input type="url" class="form-control" name="app_callback" required placeholder="i.e. http://localhost/apihandler/example/callback" value="<?php if(isset($_SESSION['app_callback'])) echo $_SESSION['app_callback']; ?>">
-									</li>
-									<li class="form-group">
-										<label for="api_uri">* API URL</label>
-										<input type="url" class="form-control" name="api_uri" required placeholder="i.e. http://localhost/apihandler/api" value="<?php if(isset($_SESSION['api_uri'])) echo $_SESSION['api_uri']; ?>">
-									</li>
-									<li class="form-group row">
-										<label for="new" class="col-sm-2">New Consumer</label>
-										<div class="col-sm-1">
-											<input type="checkbox" name="new" id="new" class="form-control" data-toggle="tooltip" data-placement="top" title="Generate brand new consumer Key and Secret">
-										</div>
-										<label for="update" class="col-sm-2">Update existing consumer</label>
-										<div class="col-sm-1">
-											<input type="checkbox" name="update" id="update" class="form-control" data-toggle="tooltip" data-placement="top" title="Update a consumer API information (not the Consumer Key or Secret)">
-										</div>
-										<label for="server_new" class="col-sm-2">New Server</label>
-										<div class="col-sm-1">
-											<input type="checkbox" name="server_new" id="server_new" class="form-control" data-toggle="tooltip" data-placement="top" title="Register a new server for the consumer to the database">
-										</div>
-										<label for="server_update" class="col-sm-2">Update existing server</label>
-										<div class="col-sm-1">
-											<input type="checkbox" name="server_update" id="server_update" class="form-control" data-toggle="tooltip" data-placement="top" title="Update server API URL (in case you got it wrong)">
-										</div>
-									</li>
-									<li class="form-group">
-										<input type="submit" class="btn btn-danger btn-lg btn-block" value="Register!">
-									</li>
-								</ul>
-							</form>
-						</fieldset>
+						<ul class="nav nav-pills">
+							<li class="active"><a href="#oauth1-register" data-toggle="pill">1. Register Consumer</a></li>
+							<li><a href="#oauth1-request" data-toggle="pill">2. Request Token</a></li>
+							<li><a href="#oauth1-auth" data-toggle="pill">3. Authorize App</a></li>
+							<li><a href="#oauth1-access" data-toggle="pill">4. Access Token</a></li>
+						</ul>
+						<div class="tab-content">
+							<article id="oauth1-register" class="tab-pane active">	
+								<h3><span class="label label-default">OAuth 1.0a</span> Register an API Consumer</h3>
+								<hr>
+								
+								<fieldset id="register-app">
+									<form action="register_app.php" method="post" role="form">
+										<pre class="well response">Response goes here...</pre>
+										<br>
+										<ul>
+											<li class="form-group">
+												<label for="app_uri" >* App URL</label>
+												<input type="url" class="form-control" name="app_uri" required placeholder="i.e. http://localhost/apihandler/example" value="<?php if(isset($_SESSION['app_uri'])) echo $_SESSION['app_uri']; ?>">
+											</li>
+											<li class="form-group">
+												<label for="app_callback">* App Callback</label>
+												<input type="url" class="form-control" name="app_callback" required placeholder="i.e. http://localhost/apihandler/example/callback" value="<?php if(isset($_SESSION['app_callback'])) echo $_SESSION['app_callback']; ?>">
+											</li>
+											<li class="form-group">
+												<label for="api_uri">* API URL</label>
+												<input type="url" class="form-control" name="api_uri" required placeholder="i.e. http://localhost/apihandler/api" value="<?php if(isset($_SESSION['api_uri'])) echo $_SESSION['api_uri']; ?>">
+											</li>
+											<li class="form-group row">
+												<label for="new" class="col-sm-2">New Consumer</label>
+												<div class="col-sm-1">
+													<input type="checkbox" name="new" id="new" class="form-control" data-toggle="tooltip" data-placement="top" title="Generate brand new consumer Key and Secret">
+												</div>
+												<label for="update" class="col-sm-2">Update existing consumer</label>
+												<div class="col-sm-1">
+													<input type="checkbox" name="update" id="update" class="form-control" data-toggle="tooltip" data-placement="top" title="Update a consumer API information (not the Consumer Key or Secret)">
+												</div>
+												<label for="server_new" class="col-sm-2">New Server</label>
+												<div class="col-sm-1">
+													<input type="checkbox" name="server_new" id="server_new" class="form-control" data-toggle="tooltip" data-placement="top" title="Register a new server for the consumer to the database">
+												</div>
+												<label for="server_update" class="col-sm-2">Update existing server</label>
+												<div class="col-sm-1">
+													<input type="checkbox" name="server_update" id="server_update" class="form-control" data-toggle="tooltip" data-placement="top" title="Update server API URL (in case you got it wrong)">
+												</div>
+											</li>
+											<li class="form-group">
+												<input type="submit" class="btn btn-danger btn-lg btn-block" value="Register!">
+											</li>
+										</ul>
+									</form>
+								</fieldset>
+							</article>
+							<article id="oauth1-request" class="tab-pane">
+								<h3><span class="label label-default">OAuth 1.0a</span> API Request Token</h3>
+								<hr>
+								<fieldset id="request-token">
+									<form action="request_token.php" method="post" role="form">
+										<pre class="well response">Response goes here...</pre>
+										<br>
+										<ul>
+											<li class="form-group">
+												<label for="api_uri" >* API URL</label>
+												<input type="url" class="form-control" name="api_uri" required placeholder="i.e. http://localhost/apihandler/api" value="<?php if(isset($_SESSION['api_uri'])) echo $_SESSION['api_uri']; ?>">
+											</li>
+											<li class="form-group">
+												<label for="app_callback">* App Callback</label>
+												<input type="url" class="form-control" name="app_callback" required placeholder="i.e. http://localhost/apihandler/example/callback" value="<?php if(isset($_SESSION['app_callback'])) echo $_SESSION['app_callback']; ?>">
+											</li>
+											<li class="form-group">
+												<label for="consumer_key">* Consumer Key</label>
+												<input type="text" class="form-control" name="consumer_key" required placeholder="Your consumer key" value="<?php if(isset($_SESSION['consumer_key'])) echo $_SESSION['consumer_key']; ?>">
+											</li>
+											<li class="form-group">
+												<label for="consumer_secret">* Consumer Secret</label>
+												<input type="text" class="form-control" name="consumer_secret" required placeholder="Your consumer secret" value="<?php if(isset($_SESSION['consumer_secret'])) echo $_SESSION['consumer_secret']; ?>">
+											</li>
+											<li class="form-group">
+												<input type="submit" class="btn btn-danger btn-lg btn-block" value="Request Token!">
+											</li>
+										</ul>
+									</form>
+								</fieldset>
+							</article>
+							<article id="oauth1-auth" class="tab-pane">
+								<h3><span class="label label-default">OAuth 1.0a</span> App Authorize</h3>
+								<hr>
+								<fieldset id="authorize">
+									<form action="authorize.php" method="post" role="form">
+										<ul>
+											<li class="form-group">
+												<label for="request_token">* Request Token</label>
+												<input type="text" class="form-control" name="request_token" required placeholder="Your consumer key" value="<?php if(isset($_SESSION['request_token'])) echo $_SESSION['request_token']; ?>">
+											</li>
+											<li class="form-group">
+												<label for="request_token_secret">* Request Token Secret</label>
+												<input type="text" class="form-control" name="request_token_secret" required placeholder="Your consumer secret" value="<?php if(isset($_SESSION['request_token_secret'])) echo $_SESSION['request_token_secret']; ?>">
+											</li>
+											<li class="form-group">
+												<input type="submit" class="btn btn-danger btn-lg btn-block" value="Launch Auth Window!">
+											</li>
+										</ul>
+									</form>
+								</fieldset>
+							</article>
+							<article id="oauth1-access" class="tab-pane">
+								<h3><span class="label label-default">OAuth 1.0a</span> Exchange Access Token</h3>
+								<hr>
+								<fieldset id="access-token">
+									<form action="access_token.php" method="post" role="form">
+										<pre class="well response">Response goes here...</pre>
+										<br>
+										<ul>
+											<li class="form-group">
+												<label for="oauth_verifier">* OAuth Verifier</label>
+												<input type="text" class="form-control" name="oauth_verifier" required placeholder="Your consumer key" value="<?php if(isset($_SESSION['oauth_verifier'])) echo $_SESSION['oauth_verifier']; ?>">
+											</li>
+											<li class="form-group">
+												<input type="submit" class="btn btn-danger btn-lg btn-block" value="Get access token!">
+											</li>
+										</ul>
+									</form>
+								</fieldset>
+							</article>
+						</div>							
 						<?php endif; ?>
 					</article>
-					<article id="oauth1-request" class="tab-pane">
-						<h3><span class="label label-default">OAuth 1.0a</span> Test API Request Token</h3>
-						<br>
-						<fieldset id="request-access">
-							<form action="request_access.php" method="post" role="form">
-								<pre class="well response">Response goes here...</pre>
-								<br>
-								<ul>
-									<li class="form-group">
-										<label for="api_uri" >* API URL</label>
-										<input type="url" class="form-control" name="api_uri" required placeholder="i.e. http://localhost/apihandler/api" value="<?php if(isset($_SESSION['api_uri'])) echo $_SESSION['api_uri']; ?>">
-									</li>
-									<li class="form-group">
-										<label for="app_callback">* App Callback</label>
-										<input type="url" class="form-control" name="app_callback" required placeholder="i.e. http://localhost/apihandler/example/callback" value="<?php if(isset($_SESSION['app_callback'])) echo $_SESSION['app_callback']; ?>">
-									</li>
-									<li class="form-group">
-										<label for="consumer_key">* Consumer Key</label>
-										<input type="text" class="form-control" name="consumer_key" required placeholder="Your consumer key" value="<?php if(isset($_SESSION['consumer_key'])) echo $_SESSION['consumer_key']; ?>">
-									</li>
-									<li class="form-group">
-										<label for="consumer_secret">* Consumer Secret</label>
-										<input type="text" class="form-control" name="consumer_secret" required placeholder="Your consumer secret" value="<?php if(isset($_SESSION['consumer_secret'])) echo $_SESSION['consumer_secret']; ?>">
-									</li>
-									<li class="form-group">
-										<input type="submit" class="btn btn-danger btn-lg btn-block" value="Request Token!">
-									</li>
-								</ul>
-							</form>
-						</fieldset>
-					</article>
-					<article id="oauth1-auth" class="tab-pane">
-						<h3><span class="label label-default">OAuth 1.0a</span> API Authorize</h3>
-						<br>
-						<?php if(!isset($_SESSION['loggedin'])): ?>
-						<div class="alert alert-warning">You need to create a session to test this.</div>
-						<?php else: ?>
-						<fieldset id="authorize">
-							<form action="authorize.php" method="post" role="form">
-								<pre class="well response">Response goes here...</pre>
-								<br>
-								<ul>
-									<li class="form-group">
-										<label for="request_token">* Request Token</label>
-										<input type="text" class="form-control" name="request_token" required placeholder="Your consumer key" value="<?php if(isset($_SESSION['request_token'])) echo $_SESSION['request_token']; ?>">
-									</li>
-									<li class="form-group">
-										<label for="request_token_secret">* Request Token Secret</label>
-										<input type="text" class="form-control" name="request_token_secret" required placeholder="Your consumer secret" value="<?php if(isset($_SESSION['request_token_secret'])) echo $_SESSION['request_token_secret']; ?>">
-									</li>
-									<li class="form-group">
-										<input type="submit" class="btn btn-danger btn-lg btn-block" value="Authorize Token!">
-									</li>
-								</ul>
-							</form>
-						</fieldset>
-					<?php endif; ?>
+					<article id="oauth2" class="tab-pane">
+						<h3><span class="label label-info">OAuth 2.0</span> OAuth 2.0 App security</h3>
+						<hr>
+						<div class="alert alert-info">Coming soon...</div>
 					</article>
 				</div>
 			</section>
@@ -411,8 +444,20 @@ $('fieldset form').submit(function(e){
 					$('#user-data').find('#tokenInfo').remove();
 				}
 				$('#user-data').append(dataToAppend);
+			} else if(response.oauth_token){
+				dataToAppend = createDataFieldset({
+					'Access Token': response.oauth_token,
+					'Access Token Secret': response.oauth_token_secret
+				}, 'tokenInfo');
+				if($('#tokenInfo').length > 0){
+					$('#user-data').find('#tokenInfo').remove();
+				}
+				$('#user-data').append(dataToAppend);
 			}
-			//console.debug(response);
+
+			if(response.oauth_redirect_uri !=null){
+				window.open("auth_window.php?oauth_redirect="+encodeURI(response.oauth_redirect_uri),"auth", "width=500, height=360");
+			}
 		},
 		error:function(response){
 			if(response.responseJSON != null){

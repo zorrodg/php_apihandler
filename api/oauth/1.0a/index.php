@@ -29,14 +29,20 @@ try{
 					exit();
 				// Authorize a request. Return access tokens
 				case "authorize":
-					// TODO: Create a session class
-					if (session_status() == PHP_SESSION_NONE) session_start();
-					$GLOBALS['oauth_server']->authorizeVerify();
-					
-					$GLOBALS['oauth_server']->authorizeFinish(TRUE, $_SESSION['user_id']);
-					$GLOBALS['oauth_server']->accessToken();
+					$user_id = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : "";
+					$user_approve = isset($_REQUEST['user_approve']) ? $_REQUEST['user_approve'] : FALSE;
 
+					if(!$user_id) throw new OAuth1\OAuthException2('No user_id');
+
+					$GLOBALS['oauth_server']->authorizeVerify();
+					$GLOBALS['oauth_server']->authorizeFinish($user_approve, $user_id);
+					
 					exit();
+				// Exchanges a request token (and a verifier) for an access token
+				case "access":
+					$GLOBALS['oauth_server']->accessToken();
+					exit();
+				// Register a new application and gives consumer key and consumer secret
 				case "register":
 					// Exits if no data provided
 					if(!$_POST['user_id']) throw new OAuth1\OAuthException2("Sorry, no post data. :(");
