@@ -38,6 +38,9 @@
 		.form-control-static{
 			word-wrap: break-word;
 		}
+		.list-group-item{
+			cursor:pointer;
+		}
 		.param-group{
 			padding:.3em 0;
 		}
@@ -177,6 +180,7 @@
 							<form action="make_query.php" method="post" role="form">
 								<pre class="well response">Response goes here...</pre>
 								<br>
+								<div class="latest-endpoints list-group"></div>
 								<ul>
 									<li class="form-group col-sm-2">
 										<select name="method" id="method" class="form-control">
@@ -207,9 +211,9 @@
 												<label for="consumer_secret">Consumer Secret</label>
 												<input type="text" name="consumer_secret" class="form-control" value="<?php if(isset($_SESSION['consumer_secret'])) echo $_SESSION['consumer_secret']; ?>"  data-toggle="tooltip" data-placement="right" title="Register a new application to obtain this one" >
 												<label for="oauth_token">Access Token</label>
-												<input type="text" name="oauth_token" class="form-control" data-toggle="tooltip" data-placement="right" title="Exchange a request token to get an access token" >
+												<input type="text" name="oauth_token" class="form-control" data-toggle="tooltip" data-placement="right" title="Exchange a request token to get an access token" value="<?php if(isset($_SESSION['oauth_token'])) echo $_SESSION['oauth_token']; ?>">
 												<label for="oauth_token_secret">Token Secret</label>
-												<input type="text" name="oauth_token_secret" class="form-control" data-toggle="tooltip" data-placement="right" title="Exchange a request token to get an access token">
+												<input type="text" name="oauth_token_secret" class="form-control" data-toggle="tooltip" data-placement="right" title="Exchange a request token to get an access token" value="<?php if(isset($_SESSION['oauth_token_secret'])) echo $_SESSION['oauth_token_secret']; ?>">
 											</div>
 										</div>
 									</li>
@@ -217,10 +221,10 @@
 										<h4>Parameters</h4>
 										<div class="param-group row">
 											<div class="col-sm-5">
-												<input type="text" name="param[]" placeholder="key" class="form-control">
+												<input type="text" name="param_key[]" placeholder="key" class="form-control">
 											</div>
 											<div class="col-sm-6">
-												<input type="text" placeholder="value" class="form-control">
+												<input type="text" name="param_value[]" placeholder="value" class="form-control">
 											</div>
 											<button class="btn btn-link remove-param col-sm-1 hidden"><span class="glyphicon glyphicon-remove"></span></button>
 										</div>
@@ -327,11 +331,11 @@
 										<ul>
 											<li class="form-group">
 												<label for="request_token">* Request Token</label>
-												<input type="text" class="form-control" name="request_token" required placeholder="Your consumer key" value="<?php if(isset($_SESSION['request_token'])) echo $_SESSION['request_token']; ?>">
+												<input type="text" class="form-control" name="request_token" required placeholder="Obtained request token" value="<?php if(isset($_SESSION['request_token'])) echo $_SESSION['request_token']; ?>">
 											</li>
 											<li class="form-group">
 												<label for="request_token_secret">* Request Token Secret</label>
-												<input type="text" class="form-control" name="request_token_secret" required placeholder="Your consumer secret" value="<?php if(isset($_SESSION['request_token_secret'])) echo $_SESSION['request_token_secret']; ?>">
+												<input type="text" class="form-control" name="request_token_secret" required placeholder="Obtained request token secret" value="<?php if(isset($_SESSION['request_token_secret'])) echo $_SESSION['request_token_secret']; ?>">
 											</li>
 											<li class="form-group">
 												<input type="submit" class="btn btn-danger btn-lg btn-block" value="Launch Auth Window!">
@@ -350,7 +354,7 @@
 										<ul>
 											<li class="form-group">
 												<label for="oauth_verifier">* OAuth Verifier</label>
-												<input type="text" class="form-control" name="oauth_verifier" required placeholder="Your consumer key" value="<?php if(isset($_SESSION['oauth_verifier'])) echo $_SESSION['oauth_verifier']; ?>">
+												<input type="text" class="form-control" name="oauth_verifier" required placeholder="Obtained OAuth verifier" value="<?php if(isset($_SESSION['oauth_verifier'])) echo $_SESSION['oauth_verifier']; ?>">
 											</li>
 											<li class="form-group">
 												<input type="submit" class="btn btn-danger btn-lg btn-block" value="Get access token!">
@@ -407,6 +411,13 @@ function paramGroupClick($currentParamGroup){
 	}
 }
 
+function resetParamForm(){
+	var $save = $parameters.find('.param-group:last-child');
+	$save.find('input').val('');
+	$save.detach();
+	$parameters.empty().append($save);
+}
+
 function createDataFieldset(data, containerId){
  	var html = '<div id="'+containerId+'"><fieldset><ul>';
  	for(var i in data){
@@ -421,20 +432,21 @@ function createDataFieldset(data, containerId){
 
 $('fieldset form').submit(function(e){
 	var $btn = $(document.activeElement),
-		$form, action, flag, data;
+		$form, action, flag, data, method;
 
 	e.preventDefault();
 	$form = $(e.currentTarget);
 
 	data = $form.serialize();
 	action = $form.attr('action');
+	method = $method.find('option:selected').text();
 
 	$.ajax(action, {
 		data:data,
 		dataType:"json",
 		type:"POST",
 		success:function(response){
-			var dataToAppend;
+			var dataToAppend, methodColor, $latestEndpoints = $form.find('.latest-endpoints');
 			$form.find(".response").html(JSON.stringify(response,  null, "\t"));
 
 			if(response.oauth_consumer_key != null){
@@ -473,6 +485,33 @@ $('fieldset form').submit(function(e){
 			if(response.oauth_redirect_uri !=null){
 				window.open("auth_window.php?oauth_redirect="+encodeURI(response.oauth_redirect_uri),"auth", "width=500, height=360");
 			}
+
+			if(response.status === 200){
+				resetParamForm();
+				if($latestEndpoints.children().length == 3){
+					$latestEndpoints.find("a:last-child").remove();
+				}
+				switch(method){
+					case "POST":
+						methodColor = "warning";
+						break;
+					case "DELETE":
+						methodColor = "danger";
+						break;
+					case "GET":
+					default:
+						methodColor = "success";
+						break;
+				}
+				$latestEndpoints.prepend('<a class="list-group-item">'+
+					'<span class="label label-'+methodColor+'">'+method+'</span> '+
+					'<span class="endpoint">'+ $form.find('#url').val()+
+					'</span></a>');
+				$latestEndpoints.find('a').off().click(function(){
+					var $this = $(this).find('.endpoint');
+					$form.find('#url').val($this.html());
+				});
+			}
 		},
 		error:function(response){
 			if(response.responseJSON != null){
@@ -493,6 +532,7 @@ $('fieldset form').submit(function(e){
 			$parameters.show();
 		} else {
 			$parameters.hide();
+			resetParamForm();
 		}
 	});
 

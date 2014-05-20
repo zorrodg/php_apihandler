@@ -39,6 +39,19 @@ class Mysql_driver extends Database{
 	 * @return mixed             Response depends on query. Most common is the query result.
 	 */
 	public function query($query, $response = TRUE){
+
+		// Check if query is a DELETE query, in order to retrieve data before deletion
+		preg_match("/^DELETE FROM `(\w+)` (WHERE .*)/", $query, $delete);
+		if(!empty($delete)){
+			array_shift($delete);
+			$table = array_shift($delete);
+			$delq = array_pop($delete);
+			$q = $this->conn->query("SELECT * FROM `{$table}` $delq");
+			if(is_object($q)){
+				$obj_to_delete = $q->fetch_assoc();
+			}
+		}
+		
 		$q = $this->conn->query($query);
 		if($this->conn->errno > 0){
 			throw new APIexception("Query failed: " . $this->conn->error . " Query: ". $query, $this->conn->errno, 400);
@@ -59,6 +72,8 @@ class Mysql_driver extends Database{
 					if(is_object($q)){
 						return $q->fetch_assoc();
 					}
+				} elseif(isset($obj_to_delete)){
+					return $obj_to_delete;
 				} else {
 					if($this->conn->affected_rows > 0){
 						preg_match("/`(\w+)`/", $query, $table);

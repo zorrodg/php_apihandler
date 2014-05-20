@@ -1,11 +1,11 @@
 <?php session_start();
+	$url = parse_url($_REQUEST['oauth_redirect'], PHP_URL_QUERY);
+	if(isset($url)) parse_str($url);
 	if(isset($_SESSION['oauth_verifier'])){
-		$url = parse_url($_REQUEST['oauth_redirect'], PHP_URL_QUERY);
-		parse_str($url);
 		if($oauth_token === $_SESSION['request_token'])
 			header('Location: '.$_SESSION['app_callback']."?oauth_verifier=".$_SESSION['oauth_verifier']);
 	}
-	if(isset($_SESSION['oauth_token']))
+	if(isset($_SESSION['oauth_token']) && $oauth_token === $_SESSION['request_token'])
 		header('Location: '.$_SESSION['app_callback']);
  ?>
  <!doctype html>
