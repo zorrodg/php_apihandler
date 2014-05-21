@@ -95,7 +95,9 @@ class APIhandler{
 								$key = Dictionary::get_col_prefix($og_exists).$item;
 								if(array_key_exists($key, $response)){
 									$value = sprintf($join_query,$response[$key]);
-									$res[$num][$key] = Query::execute(array("q"=>$value), TRUE);
+									if($joinq = Query::execute(array("q"=>$value), TRUE)){
+										$res[$num][$key]=$joinq;
+									};
 								}
 							}
 						}

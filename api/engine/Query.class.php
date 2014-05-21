@@ -125,9 +125,9 @@ class Query{
 			$query = self::parse_arguments($query, $data, $filters);
 			$result = self::$db->query($query);
 			if($response){
-
 				return html_encode_recursive($result);
 			}
+			return FALSE;
 		} catch(APIexception $e){
 			die($e->output());
 		}	

@@ -62,7 +62,7 @@ class Mysql_driver extends Database{
 					while($res = $q->fetch_assoc()){
 						$arr[] = $res;
 					}
-					if(empty($arr)) throw new APIexception("No data to display", 12);
+					if(empty($arr)) return FALSE;
 					
 					return $arr;
 				} elseif($this->conn->insert_id){
