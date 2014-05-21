@@ -4,16 +4,132 @@
 	<meta charset="UTF-8">
 	<title>PHP API Handler</title>
 	<link rel="stylesheet" href="components/css/bootstrap.min.css">
+	<style>
+		.navbar{
+			border-radius: 0;
+			margin:0;
+			padding: 0;
+		}
+		pre{
+			padding: 20px;
+		}
+	</style>
 </head>
 <body>
-	<header class="page-heading">
-		<h1>PHP API Handler</h1>
-	</header>
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<div class="navbar-brand">PHP API Handler</div>
+			</div>
+		</div>
+	</nav>
+	<div class="jumbotron">
+		<div class="container">
+			<header class="row page-header">
+				<h1>PHP API Handler</h1>
+				<h3>Create your REST API in minutes :)</h3>
+			</header>
+		</div>
+	</div>
 	<div class="container">
-		Content
+		<div class="content row">
+			<aside class="col-sm-3">
+				<ul class="nav nav-stacked hidden-xs">
+					<li class="active"><a href="#about" data-toggle="tab">About</a></li>
+					<li><a href="#start" data-toggle="tab">Getting Started</a></li>
+					<li><a href="#docs" data-toggle="tab">OAuth Reference</a></li>
+					<li><a href="#docs" data-toggle="tab">Docs Reference</a></li>
+					<li><a href="#licence" data-toggle="tab">Licence</a></li>
+				</ul>
+			</aside>
+			<div class="col-sm-9">
+				<section class="tab-content">
+					<article class="tab-pane active" id="about">
+						<h2>About</h2>
+						<blockquote>
+							<p>Define some Endpoints and get your app running!</p>
+							<p>Version: <strong>0.1.0</strong></p>
+							<p>Author: <strong><a href="http://7orro.info">Andrés Zorro</a> <a href="mailto:zorrodg@gmail.com">&lt;zorrodg@gmail.com&gt;</a> </strong></p>
+							<p>GitHub: <a href="http://github.com/zorrodg/php_apihandler" target="_blank">http://github.com/zorrodg/php_apihandler</a></p>
+						</blockquote>
+						<p>Due to web technologies in constant change, and the growing popular use of Front End technologies such as <strong>Backbone</strong>, <strong>Ember</strong> and <strong>AngujarJS</strong>, the need for server side MVC frameworks that render HTML templates has become increasingly obsolete, and API endpoints to get data from has become a major need.</p>
+						<p>Just to think about installing <strong>CodeIgniter</strong>, <strong>Laravel</strong>, even <strong>Slim</strong> to deal with simple database calls and no HTML display, made me think about a better solution. I know that there are services that deal with APIs, but my needs (and for many other developers I suppouse) require full control over the data I am sending and storing. That's why I developed <strong>PHP API Handler.</strong></p>
+						<p>The idea behind API Handler is to make it simple to develop API endpoints throught PHP. You define some Getters, Posters, Putters and that's it. API Handler does all the heavylifting (Database queries, identify resources, encode to json or xml and output).</p>
+						<p>Currently API Handler works with MySQL and Outputs to JSON and XML formats. It's intended to support more database engines and more output formats. Coming soon...</p>
+						<p>&nbsp;</p>
+						<h4>Enjoy!</h4>
+					</article>
+					<article class="tab-pane" id="start">
+						<h2>Getting Started</h2>
+						<p>Follow this guide to get your API up and running.</p>
+						<hr>
+						<h3>Installation</h3>
+						<ol>
+							<li>
+								<p>Download <strong>PHP API Handler</strong> or clone it from GitHub repo. <a href="http://github.com/zorrodg/php_apihandler"target="_blank">http://github.com/zorrodg/php_apihandler</a></p>
+							</li>
+							<li>
+								<p>For <strong>OAuth 1.0a</strong> signature server support to work, PHP API Handler uses oauth-php library from Marc Worrell. <a href="http://github.com/zorrodg/mworrell-oauth-php" target="_blank">http://github.com/zorrodg/php_apihandler</a></p>
+								<p>You can automatically install all dependencies using <a href="http://getcomposer.org" target="_blank">Composer</a></p>
+								<p>Go to the <code>apihandler/api</code> folder in Terminal and run:</p>
+								<p>
+									<pre>composer update</pre>
+								</p>
+							</li>
+							<li>
+								<p>Move <code>apihandler/api</code> folder to where you want your API to be. <div class="alert alert-info">Make sure the server you use support <strong>PHP 5.4></strong> and Apache <strong>mod_rewrite</strong> is enabled.</div></p>
+							</li>
+							<li>
+								<p>Search for <code>apihandler/api/api.config.php</code> and modify your configuration for your server:</p>
+								<ul>
+									<li><strong>Database Configuration:</strong> Define your database name, database username and password, (optional) database table prefix and hostname,</li>
+									<li><strong>Database Engine:</strong> Currently suporting <code>mysql</code>. Other engines coming soon.</li>
+									<li><strong>Cache:</strong> Set to <code>TRUE</code> in order to cache API calls. When <code>TRUE</code>, default GET calls are cached and POST and DELETE calls are not. You can configure each call separatedely. Also define the name of the folder that will store your cached files, and the time in seconds that the cached file will be valid (default 60s).</li>
+									<li><strong>Security:</strong> Set to <code>oauth1.0a</code> to use OAuth 1.0a security for your endpoints. Default GET calls are unsecured and POST and DELETE calls are secured.</li>
+									<li><strong>Environment:</strong> Set error display for API calls: (<code>dev</code>, <code>stage</code> or <code>prod</code>)</li>
+								</ul>
+							</li>
+						</ol>
+
+					</article>
+					<article class="tab-pane" id="docs">OAuth Reference</article>
+					<article class="tab-pane" id="docs">Docs Reference</article>
+					<article class="tab-pane" id="licence">
+						<h2>Licence</h2>
+						<p>PHP API Handler is licenced under MIT Licence:</p>
+						<hr>
+						<h4>The MIT License (MIT)</h4>
+
+						<p><strong>Copyright &copy; 2014 zorrodg</strong></p>
+
+						<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+						of this software and associated documentation files (the "Software"), to deal
+						in the Software without restriction, including without limitation the rights
+						to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+						copies of the Software, and to permit persons to whom the Software is
+						furnished to do so, subject to the following conditions:</p>
+
+						<p>The above copyright notice and this permission notice shall be included in all
+						copies or substantial portions of the Software.</p>
+
+						<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+						IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+						FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+						AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+						LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+						OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+						SOFTWARE.</p>
+					</article>
+				</section>
+			</div>
+		</div>
 	</div>
 	<footer>
-		
+		<div class="container">
+			<hr>
+			<strong>&copy; 2014 <a href="http://github.com/zorrodg">zorrodg</a> / <a href="http://github.com/zorrodg/php_apihandler">API Handler Site</a></strong>
+			<p>&nbsp;</p>
+		</div>
 	</footer>
 	<script src="components/js/jquery.min.js"></script>
 	<script src="components/js/bootstrap.min.js"></script>
