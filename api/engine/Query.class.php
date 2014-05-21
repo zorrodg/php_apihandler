@@ -125,12 +125,23 @@ class Query{
 			$query = self::parse_arguments($query, $data, $filters);
 			$result = self::$db->query($query);
 			if($response){
-				
+
 				return html_encode_recursive($result);
 			}
 		} catch(APIexception $e){
 			die($e->output());
 		}	
+	}
+
+	/**
+	 * Uses Database Driver method to return a query
+	 * @param  string $q      Endpoint verb.
+	 * @param  string $table  Endpoint name. APIHandler associates the endpoint name with the database name.
+	 * @param  array  $params Endpoint custom params.
+	 * @return string         Formatted database query.
+	 */
+	static public function construct_query($q, $table, $params){
+		return self::$db->construct_query($q, $table, $params);
 	}
 
 	/**

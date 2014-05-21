@@ -88,7 +88,18 @@ class APIhandler{
 				if(empty($cached_content)){
 					$data = $this->server->data;
 					$filters = $this->server->args;
-					$res = Query::execute($query["q"], true, $data, $filters);
+					$res = Query::execute($query["q"], TRUE, $data, $filters);
+					if($query['q']['join']){
+						foreach($query['q']['join'] as $item => $join_query){
+							foreach($res as $num => $response){
+								$key = Dictionary::get_col_prefix($og_exists).$item;
+								if(array_key_exists($key, $response)){
+									$value = sprintf($join_query,$response[$key]);
+									$res[$num][$key] = Query::execute(array("q"=>$value), TRUE);
+								}
+							}
+						}
+					}
 
 					if(CACHE && $cacheable){
 						$res = Cache::write($res);

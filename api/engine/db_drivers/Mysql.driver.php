@@ -62,9 +62,8 @@ class Mysql_driver extends Database{
 					while($res = $q->fetch_assoc()){
 						$arr[] = $res;
 					}
-					if(empty($arr))
-						throw new APIexception("No data to display", 12);
-						
+					if(empty($arr)) throw new APIexception("No data to display", 12);
+					
 					return $arr;
 				} elseif($this->conn->insert_id){
 					preg_match("/^INSERT INTO `(\w+)`/", $query, $table);
@@ -110,12 +109,12 @@ class Mysql_driver extends Database{
 				if(isset($params['show'])){
 					$cols = array();
 					foreach($params['show'] as $col){
-						$cols[] = "`".$col_prefix.$col."`";
+						$cols[] = "`main`.`".$col_prefix.$col."`";
 					}
 					$columns = implode(',', $cols);
 					$query .= " ".$columns." FROM";
 				} else {
-					$query.=" * FROM";
+					$query.=" `main`.* FROM";
 				}
 				break;
 			case 'INSERT':
@@ -125,7 +124,7 @@ class Mysql_driver extends Database{
 					$vals = array();
 					foreach($params['columns'] as $col){
 						$col = explode("|", $col);
-						$cols[] = "`".$col_prefix."%".$col[0]."\$k`";
+						$cols[] = "`main`.`".$col_prefix."%".$col[0]."\$k`";
 						$vals[] = "'%".$col[0]."\$v'";
 					}
 					$set = " (".implode(',',$cols).") VALUES (".implode(',',$vals).")";
@@ -139,7 +138,7 @@ class Mysql_driver extends Database{
 					$cols = array();
 					foreach($params['columns'] as $col){
 						$col = explode("|", $col);
-						$cols[] = "`".$col_prefix."%$col[0]\$k`='%$col[0]\$v'";
+						$cols[] = "`main`.`".$col_prefix."%$col[0]\$k`='%$col[0]\$v'";
 					}
 					$set = " SET ".implode(',',$cols);
 				} else {
@@ -152,18 +151,17 @@ class Mysql_driver extends Database{
 		}
 
 		// Adds table name.
-		$query.=" `$table`";
+		$query.=" `$table` AS `main`";
 
 		// Order query on given conditions.
-		if(isset($set))
-			$query.=$set;
+		if(isset($set)) $query.=$set;
 
 		// Add filters to given queries.
 		if(isset($params['filters'])){
 			$query .= " WHERE ";
 			$f=array();
 			foreach($params['filters'] as $filter){
-				$f[] = "`$filter`='%s'";
+				$f[] = "main.`$filter`='%s'";
 			}
 			$filters = implode(' AND ', $f);
 			$query.=$filters;
@@ -171,7 +169,7 @@ class Mysql_driver extends Database{
 
 		if(isset($params['sort'])){
 			$order = explode("|", $params['sort']);
-			$query.= " ORDER BY `". $col_prefix.$order[0] . "` " . (isset($order[1]) ? strtoupper($order[1]) : "DESC");
+			$query.= " ORDER BY `main`.`". $col_prefix.$order[0] . "` " . (isset($order[1]) ? strtoupper($order[1]) : "DESC");
 		}
 
 		if(isset($params['limit'])){

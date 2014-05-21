@@ -42,6 +42,12 @@
  * 														Supported asc (ASC), desc (DESC)
  * 		- query:					(string) Set a custom query to the database
  * 		- cacheable:				(bool) Whether the endpoind results will be cached or not. Default FALSE.
+ * 		- join:						(array) Set the colimns that will be joined to current query.
+ * 									Special notation (assoc array) {key} => {first_col}|{second_col}|{cols_to_fetch}
+ * 										key:			Table name that will be joined
+ * 										first_col:		Value from current table query.
+ * 										second_col:		Value from table that will be joined.
+ * 										cols_to_fetch:	One or more columns (separated by ",") that will be fetched in the joined column.
  *
  * => [Optional] Secured (bool): Defines if endpoint is secured with defined security.
  * 
@@ -55,11 +61,12 @@ new Getter("users", array(
 	"create_new_table"=>TRUE,
 	"modify_existing_table" =>TRUE,
 	"columns" => array("first_name|string|200", "last_name|string|200", "group_id|int"),
-	"show" => array("first_name", "last_name"),
+	"show" => array("first_name", "last_name", "group_id"),
 	"limit" => "count",
 	"sort" => "group_id|asc",
 	"col_prefix" => "aph_",
-	"cacheable" => TRUE
+	"cacheable" => FALSE, 
+	"join" => array("groups" => "group_id|id|group_name,group_desc")
 	));
 
 new Getter("groups", array(
@@ -76,7 +83,8 @@ new Getter("users/:id", array(
 	// When on custom queries, col_prefix must be added manually
 	"query" => "SELECT * FROM `api_users` WHERE `id` = %id\$v AND `aph_group_id` = '%group_id\$v'",
 	"columns" => array("group_id"),
-	"cacheable" => TRUE
+	"cacheable" => TRUE,
+	"join" => array("groups" => "group_id|id")
 	));
 
 new Getter("groups/:id");
@@ -86,7 +94,7 @@ new Poster("users/add",array(
 	));
 
 new Poster("users/edit/:id",array(
-		"columns" => array("first_name", "last_name")
+		"columns" => array("first_name", "last_name", "group_id")
 	)); 
 
 new Poster("groups/create",array(

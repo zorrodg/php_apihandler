@@ -6,7 +6,7 @@
 			if(isset($_SESSION['loggedin']))
 				session_destroy();
 				header('Location: '.$_SERVER['PHP_SELF']);
-				exit(); //optional
+				exit();
 		} else {
 			if(!isset($_SESSION['loggedin'])){
 				$_SESSION['user_name'] = htmlentities($_POST['user_name']);
