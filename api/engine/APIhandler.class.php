@@ -96,7 +96,12 @@ class APIhandler{
 								if(array_key_exists($key, $response)){
 									$value = sprintf($join_query,$response[$key]);
 									if($joinq = Query::execute(array("q"=>$value), TRUE)){
-										$res[$num][$key]=$joinq;
+										if(count($joinq) > 1){
+											$res[$num][$key]=$joinq;
+										} else {
+											$res[$num][$key]=$joinq[0];
+										}
+											
 									};
 								}
 							}

@@ -66,7 +66,7 @@ new Getter("users", array(
 	"sort" => "group_id|asc",
 	"col_prefix" => "aph_",
 	"cacheable" => FALSE, 
-	"join" => array("groups" => "group_id|id|group_name,group_desc")
+	"join" => array("groups" => "group_id|id|id,group_name,group_desc")
 	));
 
 new Getter("groups", array(

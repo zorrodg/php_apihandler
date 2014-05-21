@@ -89,7 +89,10 @@ abstract class Endpoint{
 				$params = array();
 				if(isset($cols[2])){
 					$params['show'] = array_map(function($val){
-						return $this->col_prefix.$val;
+						if($val !== "id" && $val !== "updated"){
+							return $this->col_prefix.$val;
+						}
+						return $val;	
 					}, explode(",", $cols[2]));
 				}
 				$params['filters'][] = $cols[1];

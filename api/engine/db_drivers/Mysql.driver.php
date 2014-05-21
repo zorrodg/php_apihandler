@@ -109,12 +109,12 @@ class Mysql_driver extends Database{
 				if(isset($params['show'])){
 					$cols = array();
 					foreach($params['show'] as $col){
-						$cols[] = "`main`.`".$col_prefix.$col."`";
+						$cols[] = "`{$table}`.`".$col_prefix.$col."`";
 					}
 					$columns = implode(',', $cols);
 					$query .= " ".$columns." FROM";
 				} else {
-					$query.=" `main`.* FROM";
+					$query.=" `{$table}`.* FROM";
 				}
 				break;
 			case 'INSERT':
@@ -124,7 +124,7 @@ class Mysql_driver extends Database{
 					$vals = array();
 					foreach($params['columns'] as $col){
 						$col = explode("|", $col);
-						$cols[] = "`main`.`".$col_prefix."%".$col[0]."\$k`";
+						$cols[] = "`{$table}`.`".$col_prefix."%".$col[0]."\$k`";
 						$vals[] = "'%".$col[0]."\$v'";
 					}
 					$set = " (".implode(',',$cols).") VALUES (".implode(',',$vals).")";
@@ -138,7 +138,7 @@ class Mysql_driver extends Database{
 					$cols = array();
 					foreach($params['columns'] as $col){
 						$col = explode("|", $col);
-						$cols[] = "`main`.`".$col_prefix."%$col[0]\$k`='%$col[0]\$v'";
+						$cols[] = "`{$table}`.`".$col_prefix."%$col[0]\$k`='%$col[0]\$v'";
 					}
 					$set = " SET ".implode(',',$cols);
 				} else {
@@ -151,7 +151,7 @@ class Mysql_driver extends Database{
 		}
 
 		// Adds table name.
-		$query.=" `$table` AS `main`";
+		$query.=" `$table`";
 
 		// Order query on given conditions.
 		if(isset($set)) $query.=$set;
@@ -161,7 +161,7 @@ class Mysql_driver extends Database{
 			$query .= " WHERE ";
 			$f=array();
 			foreach($params['filters'] as $filter){
-				$f[] = "main.`$filter`='%s'";
+				$f[] = "`{$table}`.`$filter`='%s'";
 			}
 			$filters = implode(' AND ', $f);
 			$query.=$filters;
@@ -169,7 +169,7 @@ class Mysql_driver extends Database{
 
 		if(isset($params['sort'])){
 			$order = explode("|", $params['sort']);
-			$query.= " ORDER BY `main`.`". $col_prefix.$order[0] . "` " . (isset($order[1]) ? strtoupper($order[1]) : "DESC");
+			$query.= " ORDER BY `{$table}`.`". $col_prefix.$order[0] . "` " . (isset($order[1]) ? strtoupper($order[1]) : "DESC");
 		}
 
 		if(isset($params['limit'])){
