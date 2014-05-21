@@ -1,9 +1,10 @@
 <?php
 
-// Composer autoloader
-require "vendor/autoload.php";
-
 try{
+	// Composer autoloader
+	if(!file_exists("vendor/autoload.php")) throw new Exception("Composer not updated. Please update Composer in order to proceed.");
+	require "vendor/autoload.php";
+
 	if (session_status() == PHP_SESSION_NONE) session_start();
 	if(!isset($_SESSION['api_uri'])) throw new Exception('No API url', 1);
 	if(!isset($_SESSION['app_callback'])) throw new Exception('No callback url', 2);

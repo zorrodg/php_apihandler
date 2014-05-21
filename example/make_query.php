@@ -1,9 +1,10 @@
 <?php
 
-// Composer autoloader
-require "vendor/autoload.php";
-
 try{
+	// Composer autoloader
+	if(!file_exists("vendor/autoload.php")) throw new Exception("Composer not updated. Please update Composer in order to proceed.");
+	require "vendor/autoload.php";
+
 	$consumer_key = isset($_POST['oauth_token']) ? htmlentities($_POST['consumer_key']) : "";
 	$consumer_secret = isset($_POST['oauth_token']) ? htmlentities($_POST['consumer_secret']) : "";
 	$oauth_token = isset($_POST['oauth_token']) ? htmlentities($_POST['oauth_token']) : "";

@@ -31,10 +31,9 @@ define('CACHE_TIMEOUT', 60);
 //Possible choices: "json", "xml"
 define('DEFAULT_OUTPUT',"json");
 
-//Set security type
+//Set security type. Leave it blank to leave endpoints unsecured
 //TODO: Need to add support for other security types
-define('SECURE_TYPE', "oauth");
-define('OAUTH_SERVICE', "self");
+define('SECURE_TYPE', "oauth1.0a");
 
 //Set Environment (error definitions)
 //Possible choices: "dev", "stage", "prod"

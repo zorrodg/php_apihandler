@@ -176,14 +176,15 @@ function engineAutoload($class){
 // Register Class Autoloader
 spl_autoload_register('engineAutoload');
 
-// Composer autoloader
-require 'vendor/autoload.php';
-
-//Init measure time
-Stopwatch::start();
-
 //Load API
 try{
+    // Composer autoloader
+    if(!file_exists("vendor/autoload.php")) throw new APIexception("Composer not updated. Please update Composer in order to proceed.");
+    require 'vendor/autoload.php';
+
+    //Init measure time
+    Stopwatch::start();
+
 	$API = new APIhandler();
     echo $API->endpoint_process();
     //echo $API->endpoint_info();

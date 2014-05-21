@@ -28,11 +28,9 @@ class APIhandler{
 				include_once "registered_endpoints/$e";
 		}
 		if(defined('SECURE_TYPE')){
-			if(SECURE_TYPE === "oauth"){
-				if(OAUTH_SERVICE === "self")
-					require_once dirname(__FILE__)."/db_drivers/".DB_ENGINE.".install.php";
-
-				require_once "oauth/1.0a/".OAUTH_SERVICE.".oauth.php";
+			if(SECURE_TYPE === "oauth1.0a"){
+				require_once dirname(__FILE__)."/db_drivers/".DB_ENGINE.".install.php";
+				require_once "oauth/1.0a/oauth.config.php";
 			}
 		}
 		$this->server = new Server();
@@ -61,7 +59,7 @@ class APIhandler{
 
 				// Request security for endpoints with security enabled
 				if($query['signed']){
-					if(SECURE_TYPE === "oauth"){
+					if(SECURE_TYPE === "oauth1.0a"){
 						if(OAuth1\OAuthRequestVerifier::requestIsSigned()){
 							try{
 								$req = new OAuth1\OAuthRequestVerifier();

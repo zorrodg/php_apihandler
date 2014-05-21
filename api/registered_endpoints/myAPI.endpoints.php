@@ -42,7 +42,7 @@
  * 														Supported asc (ASC), desc (DESC)
  * 		- query:					(string) Set a custom query to the database
  * 		- cacheable:				(bool) Whether the endpoind results will be cached or not. Default FALSE.
- * 		- join:						(array) Set the colimns that will be joined to current query.
+ * 		- join:						(array) Set the columns that will be joined to current query.
  * 									Special notation (assoc array) {key} => {first_col}|{second_col}|{cols_to_fetch}
  * 										key:			Table name that will be joined
  * 										first_col:		Value from current table query.
