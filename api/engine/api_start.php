@@ -132,14 +132,18 @@ if(!function_exists('kvsprintf')) {
  */
 if(!function_exists('html_decode_recursive')) {
     function html_decode_recursive($data){
-        foreach($data as $rk => $rv){
-            if(!is_scalar($rv)) {
-                $data[$rk] = html_decode_recursive($rv);
-            } else {
-                $data[$rk] = html_entity_decode($rv);
+        if(!is_scalar($data)){
+           foreach($data as $rk => $rv){
+                if(!is_scalar($rv)) {
+                    $data[$rk] = html_decode_recursive($rv);
+                } else {
+                    $data[$rk] = html_entity_decode($rv);
+                }
             }
+            return $data; 
         }
-        return $data;
+        return html_entity_decode($data);
+        
     }
 }
 
@@ -150,14 +154,17 @@ if(!function_exists('html_decode_recursive')) {
  */
 if(!function_exists('html_encode_recursive')) {
     function html_encode_recursive($data){
-        foreach($data as $rk => $rv){
-            if(!is_scalar($rv)) {
-                $data[$rk] = html_encode_recursive($rv);
-            } else {
-                $data[$rk] = htmlentities($rv);
+        if(!is_scalar($data)){
+            foreach($data as $rk => $rv){
+                if(!is_scalar($rv)) {
+                    $data[$rk] = html_encode_recursive($rv);
+                } else {
+                    $data[$rk] = htmlentities($rv);
+                }
             }
+            return $data;
         }
-        return $data;
+        return htmlentities($data);
     }
 }
 
