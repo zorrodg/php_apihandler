@@ -119,26 +119,26 @@
 										<h4><div class="label label-default">Composer</div> Install dependencies</h4>
 										<p>For <strong>OAuth 1.0a</strong> signature server support to work, PHP API Handler uses oauth-php library from Marc Worrell. <a href="http://github.com/zorrodg/mworrell-oauth-php" target="_blank">http://github.com/zorrodg/php_apihandler</a>.</p>
 										<p>You can automatically install all dependencies using <a href="http://getcomposer.org" target="_blank">Composer</a>.</p>
-										<p>Go to the <code>apihandler/api</code> folder in Terminal and run:</p>
+										<p>Go to the <code>api</code> folder in Terminal and run:</p>
 										<p>
 											<pre>composer update</pre>
 										</p>
 									</li>
 									<li>
 										<h4>Move to your server</h4>
-										<p>Move <code>apihandler/api</code> folder to where you want your API to be. <div class="alert alert-info">Make sure the server you use support <strong>PHP 5.4></strong> and Apache <strong>mod_rewrite</strong> is enabled.</div></p>
+										<p>Move <code>api</code> folder to where you want your API to be. <div class="alert alert-info">Make sure the server you use support <strong>PHP 5.4></strong> and Apache <strong>mod_rewrite</strong> is enabled. Also check that you give <strong>0777</strong> (full access) permissions to <code>api/cache</code> folder, for <strong>PHP API Handler</strong> to create cache files.</div></p>
 									</li>
 									<li>
 										<h4>Configure API Handler</h4>
 										<p>Locate <code>apihandler/api/api.config.php</code> and modify your configuration for your server:</p>
-										<ul>
-											<li><strong>Database Configuration:</strong> Define your database name, database username and password, (optional) database table prefix and hostname,</li>
-											<li><strong>Database Engine:</strong> Currently suporting <code>mysql</code>. Other engines coming soon.</li>
-											<li><strong>Cache:</strong> Set to <code>TRUE</code> in order to cache API calls. When <code>TRUE</code>, default GET calls are cached and POST and DELETE calls are not. You can configure each call separatedely. Also define the name of the folder that will store your cached files, and the time in seconds that the cached file will be valid (default 60s).</li>
-											<li><strong>Output:</strong> <code>json</code> and <code>xml</code> supported. Other outputs coming soon.</li>
-											<li><strong>Security:</strong> Set to <code>oauth1.0a</code> to use OAuth 1.0a security for your endpoints. Default GET calls are unsecured and POST and DELETE calls are secured.</li>
-											<li><strong>Environment:</strong> Set error display for API calls: (<code>dev</code>, <code>stage</code> or <code>prod</code>)</li>
-										</ul>
+										<dl class="dl-horizontal">
+											<dt><strong>DB Configuration:</strong></dt><dd> Define your database name, database username and password, database table prefix (optional) and hostname.</dd>
+											<dt><strong>Database Engine:</strong></dt><dd> Currently suporting <code>mysql</code>. Other engines coming soon.</dd>
+											<dt><strong>Cache:</strong> </dt><dd> Set to <code>TRUE</code> in order to cache API calls. When <code>TRUE</code>, default GET calls are cached and POST and DELETE calls are not. You can configure each call separatedely. Also define the name of the folder that will store your cached files, and the time in seconds that the cached file will be valid (default 60s).</dd>
+											<dt><strong>Output:</strong></dt><dd> <code>json</code> and <code>xml</code> supported. Other outputs coming soon.</dd>
+											<dt><strong>Security:</strong> </dt><dd>Set to <code>oauth1.0a</code> to use OAuth 1.0a security for your endpoints. Default GET calls are unsecured and POST and DELETE calls are secured.</dd>
+											<dt><strong>Environment:</strong></dt><dd> Set error display for API calls: (<code>dev</code>, <code>stage</code> or <code>prod</code>).</dd>
+										</dl>
 									</li>
 									<li>
 										<h4>Test installation:</h4>
@@ -165,22 +165,22 @@
 										</p>
 										<p>There are three classes that you can declare, each corresponds to its HTTP counterpart:</p>
 										<p>
-											<ul>
-												<li><code>new Getter()</code> -> Declares a new GET endpoint.</li>
-												<li><code>new Poster()</code> -> Declares a new POST endpoint.</li>
-												<li><code>new Deleter()</code> -> Declares a new DELETE endpoint.</li>
-											</ul>
+											<dl class="dl-horizontal">
+												<dt><code>new Getter()</code></dt><dd> -> Declares a new GET endpoint.</dd>
+												<dt><code>new Poster()</code></dt><dd> -> Declares a new POST endpoint.</dd>
+												<dt><code>new Deleter()</code></dt><dd> -> Declares a new DELETE endpoint.</dd>
+											</dl>
 										</p>
 										<p>The first parameter that class accept is the endpoint name. Endpoint name has a special notation, passed as a string, as follows:</p>
 										<p>
 											<pre>{name}/{verb}/{arg_name}</pre>
 										</p>
 										<p>
-											<ul>
-												<li><code>name</code> -> <div class="label label-danger">Required</div class="label label-danger"> The endpoint name. It refers to the database table name from which data will be retrieved.</li>
-												<li><code>verb</code> -> <div class="label label-warning">Optional</div> The action that will be performed to the database. *</li>
-												<li><code>arg_name</code> -> <div class="label label-warning">Optional</div> Can be one or several arguments separated by slashes "/". If preceded by a colon ":", indicates that the argument is a variable</li>
-											</ul>
+											<dl class="dl-horizontal">
+												<dt><code>name</code><div class="label label-danger">Required</div></dt> <dd> ->  The endpoint name. It refers to the database table name from which data will be retrieved.</dd>
+												<dt><code>verb</code><div class="label label-warning">Optional</div></dt><dd> -> The action that will be performed to the database. *</dd>
+												<dt><code>arg_name</code><div class="label label-warning">Optional</div></dt><dd> ->  Can be one or several arguments separated by slashes "/". If preceded by a colon ":", indicates that the argument is a variable</dd>
+											</dl>
 										</p>
 										<p>* - PHP API Handler is designed to "guess" action to be made on database based on common used verbs. i.e: <code>users/create</code>, <strong>"create"</strong> verb will be translated as <code>INSERT</code> in a MySQL statement. Of course, there will be verbs that are not included on the list. If you need a verb to be added, please let me know. ;)</p>
 									</li>
@@ -343,7 +343,130 @@
 							</div>
 						</div>
 					</article>
-					<article class="tab-pane" id="docs">Docs Reference</article>
+					<article class="tab-pane" id="docs">
+						<h2>Options Reference</h2>
+						<p>Here's a list of all options that could be set to each endpoint, with explained examples.</p>
+						<hr>
+						<p>This options refer to the array of options that could be passed to each defined endpoint. Here's an example on where this options should be:</p>
+						<p>
+							<pre>new Getter("users", array(&lt;options here&gt;), TRUE);</pre>
+						</p>
+						<hr>
+						<h3><code>description (string)</code></h3>
+						<p>Endpoint description. Not really useful, in fact. But it could become handy whenever you want to make your API documentation ;)</p>
+						<dl class="dl-horizontal">
+							<dt>Example:</dt>
+							<dd><pre>"description" => "Get all users."</pre></dd>
+						</dl>
+						<hr>
+						<h3><code>create_new_table (bool)</code></h3>
+						<p>Creates a new table in database with given endpoint name, if not exists. This option will not create a table if it exists.</p>
+						<p><div class="alert alert-warning"><strong>Note</strong>: If you set <code>create_new_table</code> or <code>modify_existing_table</code> to <strong>TRUE</strong>, PHP API Handler automatically will create two aditional columns without prefix called <code>id</code> (int) and <code>updated</code> (datetime).</div></p>
+						<dl class="dl-horizontal">
+							<dt>Example:</dt>
+							<dd><pre>"create_new_table" => TRUE</pre></dd>
+						</dl>
+						<hr>
+						<h3><code>modify_existing_table (bool)</code></h3>
+						<p>Modifies an existing table, if exists and if it's params change. This option will modify table, if you change table names, change column names, data type or data length. If left TRUE, it will not modify existing tables if there are no changes.</p>
+						<p><div class="alert alert-warning"><strong>Note</strong>: If you set <code>create_new_table</code> or <code>modify_existing_table</code> to <strong>TRUE</strong>, PHP API Handler automatically will create two aditional columns without prefix called <code>id</code> (int) and <code>updated</code> (datetime).</div></p>
+						<dl class="dl-horizontal">
+							<dt>Example:</dt>
+							<dd><pre>"modify_existing_table" => TRUE</pre></dd>
+						</dl>
+						<hr>
+						<h3><code>columns (array)</code></h3>
+						<p>Define table columns in which endpoint operates. This is an array of strings. Each string has an special notation, separated by <code>|</code> (pipe) character.</p>
+						<p>Depending on the HTTP call, columns will define parameters for your query, i.e. you can call your endpoint with a filter: <code>GET http://{YOUR_ENDPOINT_LOCATION}/users.json?last_name=zorro</code></p>
+						<p><div class="alert alert-warning"><strong>Note</strong>: If you set <code>create_new_table</code> or <code>modify_existing_table</code> to <strong>TRUE</strong>, columns will modify database to fit this columns.</div></p>
+						<p>Special Notation: <code>{column_name}|{var_type}|{var_length}|{unique}</code></p>
+						<p>
+							<table class="table">
+								<tr>
+									<th class="text-center">Parameter</th>
+									<th class="text-center" width="200">Default Value</th>
+									<th>Description</th>
+								</tr>
+								<tr>
+									<td class="text-center"><code>column_name</code></td>
+									<td class="text-center"><div class="label label-danger">Required</div></td>
+									<td>The name of the column.</td>
+								</tr>
+								<tr>
+									<td class="text-center"><code>var_type</code></td>
+									<td class="text-center">"string"</td>
+									<td>Database column data type. Values supported <code>int</code> (INT), <code>char</code> (CHAR), <code>string</code> (VARCHAR), <code>text</code> (TEXT), <code>bigint</code> (BIGINT), <code>date</code>, (DATETIME)</td>
+								</tr>
+								<tr>
+									<td class="text-center"><code>var_length</code></td>
+									<td class="text-center">"200"</td>
+									<td>The length of the data accepted. (Only for <code>int</code>, <code>char</code>, <code>bigint</code> and <code>string</code>)</td>
+								</tr>
+								<tr>
+									<td class="text-center"><code>unique</code></td>
+									<td class="text-center">""</td>
+									<td>Set column key to <code>unique</code>.</td>
+								</tr>
+
+							</table>
+						</p>
+						<dl class="dl-horizontal">
+							<dt>Example:</dt>
+							<dd><pre>"columns" => array(
+	"first_name|string|200|unique", 
+	"last_name|string|200", 
+	"group_id|int"
+)</pre></dd>
+						</dl>
+						<hr>
+						<h3><code>col_prefix (string)</code></h3>
+						<p>Add a column prefix to the columns. If you define one, instead of looking at <code>col_name</code> column, it will look for <code>{prefix}col_name</code>.</p>
+						<dl class="dl-horizontal">
+							<dt>Example:</dt>
+							<dd><pre>"col_prefix" => "aph_"</pre></dd>
+						</dl>
+						<hr>
+						<h3><code>limit (string)</code></h3>
+						<p>Set a word to use as a parameter on query string to limit results number. i.e. if you set it to <code>count</code>, you could call an endpoint like this: <code>http://{YOUR_ENDPOINT_LOCATION}/users.json?count=5</code>.</p>
+						<dl class="dl-horizontal">
+							<dt>Example:</dt>
+							<dd><pre>"limit" => "count"</pre></dd>
+						</dl>
+						<hr>
+						<h3><code>show (array)</code></h3>
+						<p>Set the columns that will be displayed. Columns not listed will be hidden. If this option is not set, PHP API Handler will bring data from all columns.</p>
+						<p><div class="alert alert-warning"><strong>Note</strong>: If you set <code>create_new_table</code> or <code>modify_existing_table</code> to <strong>TRUE</strong>, PHP API Handler automatically will create two aditional columns without prefix called <code>id</code> (int) and <code>updated</code> (datetime). You can show them also.</div></p>
+						<dl class="dl-horizontal">
+							<dt>Example:</dt>
+							<dd><pre>"show" => array("first_name", "last_name")</pre></dd>
+						</dl>
+						<hr>
+						<h3><code>sort (string)</code></h3>
+						<p>Sets the column to order the results. This string has an special notation, separated by <code>|</code> (pipe) character. Default order is <code>id</code> column.</p>
+						<p>Special Notation: <code>{column_name}|{order_type}</code></p>
+						<p>
+							<table class="table">
+								<tr>
+									<th class="text-center">Parameter</th>
+									<th class="text-center" width="200">Default Value</th>
+									<th>Description</th>
+								</tr>
+								<tr>
+									<td class="text-center"><code>column_name</code></td>
+									<td class="text-center"><div class="label label-danger">Required</div></td>
+									<td>The name of the column.</td>
+								</tr>
+								<tr>
+									<td class="text-center"><code>var_type</code></td>
+									<td class="text-center">"desc"</td>
+									<td>The order to display. Supported values <code>asc</code> (ASC), <code>desc</code> (DESC)</td>
+								</tr>
+							</table>
+						</p>
+						<dl class="dl-horizontal">
+							<dt>Example:</dt>
+							<dd><pre>"sort" => "first_name|asc"</pre></dd>
+					</article>
 					<article class="tab-pane" id="changelog">
 						<h2>Changelog</h2>
 						<p>What's new on PHP API Handler!</p>
