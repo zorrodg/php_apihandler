@@ -4,7 +4,7 @@
  * Example API endpoint registry
  *
  * You can instantiate any number of endpoints with classnames 
- * Getter, Poster, Putter and Deleter. Each one will execute corresponding
+ * Getter, Poster and Deleter. Each one will execute corresponding
  * http method and will accept no other.
  *
  * PARAMS ----------------------------------------------------------------------------------------
