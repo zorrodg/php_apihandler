@@ -10,19 +10,42 @@
 			margin:0;
 			padding: 0;
 		}
+		#side-navbar{
+			margin-top: 20px;
+		}
+		.main-content article{
+			padding-top:20px;
+		}
 		pre{
 			padding: 20px;
 		}
 		li > ul li {
 			list-style: none;
 		}
+		.navbar-toggle{
+			float:left;
+			margin-left:15px;
+			margin-right: 0;
+		}
 	</style>
 </head>
 <body>
-	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-		<div class="container">
+	<a href="https://github.com/zorrodg"><img style="position: absolute; top: 0; right: 0; border: 0;z-index:9999;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+	<nav class="navbar navbar-inverse" role="navigation">
+		<div class="container-fluid">
 			<div class="navbar-header">
+				<button type="button" class="navbar-toggle navbar-left" data-toggle="collapse" data-target="#main-navbar">Menu</button>
 				<div class="navbar-brand">PHP API Handler</div>
+			</div>
+			<div class="collapse navbar-collapse" id="main-navbar">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="#about" data-toggle="tab">About</a></li>
+					<li><a href="#start" data-toggle="tab">Getting Started</a></li>
+					<li><a href="#oauth" data-toggle="tab">OAuth Reference</a></li>
+					<li><a href="#docs" data-toggle="tab">Docs Reference</a></li>
+					<li><a href="#changelog" data-toggle="tab">Changelog</a></li>
+					<li><a href="#licence" data-toggle="tab">Licence</a></li>
+				</ul>
 			</div>
 		</div>
 	</nav>
@@ -36,12 +59,10 @@
 	</div>
 	<div class="container">
 		<div class="content row">
-			<aside class="col-sm-3">
+			<aside class="col-sm-3" id="side-navbar">
 				<ul class="nav nav-stacked hidden-xs">
 					<li class="active"><a href="#about" data-toggle="tab">About</a></li>
-					<li>
-						<a href="#start" data-toggle="tab">Getting Started</a>
-					</li>
+					<li><a href="#start" data-toggle="tab">Getting Started</a></li>
 					<li><a href="#oauth" data-toggle="tab">OAuth Reference</a></li>
 					<li><a href="#docs" data-toggle="tab">Docs Reference</a></li>
 					<li><a href="#changelog" data-toggle="tab">Changelog</a></li>
@@ -49,12 +70,12 @@
 				</ul>
 			</aside>
 			<div class="col-sm-9">
-				<section class="tab-content">
+				<section class="tab-content main-content">
 					<article class="tab-pane active" id="about">
 						<h2>About</h2>
 						<hr>
 						<blockquote>
-							<p>Define some Endpoints and get your app running!</p>
+							<p>Define some endpoints and get your app running!</p>
 							<p>Version: <strong>1.0.0</strong></p>
 							<p>Author: <strong><a href="http://7orro.info">Andrés Zorro</a> <a href="mailto:zorrodg@gmail.com">&lt;zorrodg@gmail.com&gt;</a> </strong></p>
 							<p>GitHub: <a href="http://github.com/zorrodg/php_apihandler" target="_blank">http://github.com/zorrodg/php_apihandler</a></p>
@@ -62,7 +83,7 @@
 						<p>Due to web technologies in constant change, and the growing popular use of Front End technologies such as <strong>Backbone</strong>, <strong>Ember</strong> and <strong>AngujarJS</strong>, the need for server side MVC frameworks that render HTML templates has become increasingly obsolete, and API endpoints to get data from has become a major need.</p>
 						<p>Just to think about installing <strong>CodeIgniter</strong>, <strong>Laravel</strong>, even <strong>Slim</strong> to deal with simple database calls and no HTML display, made me think about a better solution. I know that there are services that deal with APIs, but my needs (and for many other developers I suppouse) require full control over the data I am sending and storing. That's why I developed <strong>PHP API Handler.</strong></p>
 						<p>The idea behind API Handler is to make it simple to develop API endpoints throught PHP. You define some Getters, Posters, Deleters and that's it. API Handler does all the heavylifting (Database queries, identify resources, encode to json or xml and output).</p>
-						<p>Currently API Handler works with MySQL and Outputs to JSON and XML formats. It's intended to support more database engines and more output formats. Coming soon...</p>
+						<p>Currently API Handler works with MySQL and outputs to JSON and XML formats. It's intended to support more database engines and more output formats. Coming soon...</p>
 						<p>&nbsp;</p>
 						<h2>There's still a lot to do!</h2>
 						<hr>
@@ -96,8 +117,8 @@
 									</li>
 									<li>
 										<h4><div class="label label-default">Composer</div> Install dependencies</h4>
-										<p>For <strong>OAuth 1.0a</strong> signature server support to work, PHP API Handler uses oauth-php library from Marc Worrell. <a href="http://github.com/zorrodg/mworrell-oauth-php" target="_blank">http://github.com/zorrodg/php_apihandler</a></p>
-										<p>You can automatically install all dependencies using <a href="http://getcomposer.org" target="_blank">Composer</a></p>
+										<p>For <strong>OAuth 1.0a</strong> signature server support to work, PHP API Handler uses oauth-php library from Marc Worrell. <a href="http://github.com/zorrodg/mworrell-oauth-php" target="_blank">http://github.com/zorrodg/php_apihandler</a>.</p>
+										<p>You can automatically install all dependencies using <a href="http://getcomposer.org" target="_blank">Composer</a>.</p>
 										<p>Go to the <code>apihandler/api</code> folder in Terminal and run:</p>
 										<p>
 											<pre>composer update</pre>
@@ -152,7 +173,7 @@
 										</p>
 										<p>The first parameter that class accept is the endpoint name. Endpoint name has a special notation, passed as a string, as follows:</p>
 										<p>
-											<pre>{name}/{verb}/:{arg_name}</pre>
+											<pre>{name}/{verb}/{arg_name}</pre>
 										</p>
 										<p>
 											<ul>
@@ -167,13 +188,45 @@
 										<h4>Specify</h4>
 										<p>You can pass options to your endpoint, in form of an array:</p>
 										<p>
-											<pre>new Getter("users/:id", array(&lt;options&gt;));</pre>
+											<pre>new Getter("users/:id", array(
+												"description" => "Get users by id.",
+												"show" => array("first_name", "last_name"),
+												"cacheable" => TRUE
+											));</pre>
 										</p>
+										<p>Full options documentation is available <a href="#docs" data-toggle="tab">here</a>.</p>
+									</li>
+									<li>
+										<h4>Secure</h4>
+										<p>There's a third parameter that you can pass to your API endpoint and it refers to security. You can control for each endpoint if you grant public access to it or user will need to authenticate in order to access data.</p>
+										<p>
+											<pre>new Poster("users/create", array(&lt;options here&gt;), TRUE);</pre>
+										</p>
+										<p><code>GET</code> endpoints are by default unsecured (<code>FALSE</code>) while <code>POST</code> and <code>DELETE</code> endpoints are secured (<code>TRUE</code>).</p>
 									</li>
 								</ol>
 							</div>
 							<div id="test" class="tab-pane">
-								
+								<h3>Test</h3>
+								<p>Time to test if everything went right.</p>
+								<hr>
+								<p>When you finish your endpoint setup, you can test if everything went right by any of these methods:</p>
+								<p>
+									<ol>
+										<li>
+											<p>Going directly to your API endpoint URL, typed in this format:</p>
+											<p><pre>http://{YOUR_API_LOCATION}/{YOUR_ENDPOINT_NAME}.{YOUR_FORMAT}</pre></p>
+											<p>You can specify format in <code>YOUR_FORMAT</code> part, regardless of the default format you specified in config.</p>
+											<p>i.e.: <code>http://localhost/apihandler/api/users.json</code></p>
+										</li>
+										<li>
+											<p>If you use Google Chrome Browser, there's an excellent tool called <a href="https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm?hl=en" target="_blank">POSTMAN</a> to test API endpoints. Use the same url notation.</p>
+										</li>
+										<li>
+											<p>There's an <code>example</code> folder included in the repository, which contains a basic API test tool. It's coded using <a href="https://github.com/sraka1/oauth1" target="_blank">Abraham Williams' OAuth1 PHP Library</a>, as an example, but you can use any other OAuth1.0a library in your project. Remember to <code>composer update</code> on this folder too, to get latest library.</p>
+										</li>
+									</ol>
+								</p>
 							</div>
 						</div>
 
@@ -220,6 +273,36 @@
 	</footer>
 	<script src="components/js/jquery.min.js"></script>
 	<script src="components/js/bootstrap.min.js"></script>
+	<script>
+		(function($){
+			var hash = window.location.hash,
+				nav = hash.substr(1).split("-"),
+				$main =	$('#main-navbar');
+				$side = $('#side-navbar');
 
+			$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+				var $target = $(e.target), main = "", secondary = "", hash;
+				if($target.closest($main).length > 0 || $target.closest($side).length > 0){
+					main = $target.attr('href');
+					$main.find('li').removeClass('active');
+					$main.find('a[href="'+main+'"]').parent('li').addClass('active');
+				} else {
+					main = '#' + $target.parents(".tab-pane").attr('id');
+					secondary = $target.attr('href').replace('#','-');
+				}
+				hash = main+secondary;
+			  	if(window.location.hash !== hash){
+			  		window.location.hash = hash;
+			  	}
+			});
+
+			if(nav.length > 1){
+				$main.find('a[href="#'+nav[0]+'"]').tab('show');
+				$('#'+nav[0]).children('.nav').find('a[href="#'+nav[1]+'"]').tab('show');
+			} else {
+				$main.find('a[href="#'+nav[0]+'"]').tab('show');
+			}
+		})($);
+	</script>
 </body>
 </html>
