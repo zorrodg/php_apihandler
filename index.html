@@ -245,14 +245,14 @@
 								<p>Authentication process used by sites like Twitter.</p>
 								<hr>
 								<p><strong>PHP API Handler</strong> makes use of OAuth 1.0a protocol, and specifically, 3-Legged OAuth process in order to make signed requests. The steps to authenticate your endpoint calls via OAuth 1.0a are the same that are used ins sites like Twitter. </p>
+								<p>There's an example of the complete OAuth flow in the <code>example</code> folder of this repository.</p>
 								<p>Each one of <strong>PHP API Handler</strong> endpoint calls will return URL encoded data.</p>
 								<p>The flow is as follows:</p>
 								<ol>
 									<li>
 										<h4>Register a consumer</h4>
-										<p>In order for an app to make use of your API, they must be registered consumers, that you authorize. You define how your consumers must access your API (i.e. registering in your site as developers). You must provide a form to developers in order to register their applications to make use of your API.</p>
-										<p>There's an example of this registration in the <code>example</code> folder of this repository.</p>
-										<p><strong>PHP API Handler</strong> provides an OAuth registry endpoint by default taht you can access like this:</p>
+										<p>In order for an app to make use of your API, they must be registered consumers, that you authorize. You define how your consumers must access your API (i.e. registering in your site as developers). You must provide a form for developers to register their applications in order to make use of your API.</p>
+										<p><strong>PHP API Handler</strong> provides an OAuth registry endpoint by default that you can access like this:</p>
 										<p>
 											<pre>http://{YOUR_API_LOCATION}/oauth/1.0a/register</pre>
 										</p>
@@ -279,7 +279,7 @@
 												<td>The URI from where the developer's app will call your API</td>
 											</tr>
 											<tr>
-												<td><code>app_uri</code></td>
+												<td><code>app_callback</code></td>
 												<td>The URI to where the developer's app will redirect your user to</td>
 											</tr>
 											<tr>
@@ -289,7 +289,52 @@
 										</table>
 										<p>This endpoint should return an <strong>OAuth Consumer Key</strong> and an <strong>OAuth Consumer Secret</strong> to your developer for them to authenticate their calls.</p>
 									</li>
+									<li>
+										<h4>Request token</h4>
+										<p><div class="alert alert-danger"><strong>Note:</strong> From this point on, developers need to send signed requests to the endpoint in order to work. I recommend using a library for automatic sign requests, (i.e. <a href="https://github.com/sraka1/oauth1" target="_blank">Abraham Williams' OAuth1 PHP Library</a>). Read more about OAuth signed request <a href="http://oauthbible.com/#signed-requests" target="_blank">here</a>.</div></p>
+										<p>Once a developer is registered in your API as a consumer, he could ask for a request token, to the following endpoint:</p>
+										<p>
+											<pre>http://{YOUR_API_LOCATION}/oauth/1.0a/request</pre>
+										</p>
+										<p>This endpoint must be signed using <strong>OAuth Consumer Key</strong> and <strong>OAuth Consumer Secret</strong> obtained from App registration. This endpoint should return temporary credentials, in form of <strong>Request Token</strong> and <strong>Request Token Secret</strong></p>
+									</li>
+									<li>
+										<h4>Authorization from user</h4>
+										<p>Developer should drive users to an authorization window where logged in users authorize application to make use of your API. The user must be presented the choice to decline authorization. From this window, developer should send a signed request to this endpoint:</p>
+										<p>
+											<pre>http://{YOUR_API_LOCATION}/oauth/1.0a/authorize</pre>
+										</p>
+										<p>This endpoint expects the following <code>REQUEST</code> parameters in order to return data:</p>
+										<table class="table">
+											<tr>
+												<th>Parameter</th>
+												<th>Description</th>
+											</tr>
+											<tr>
+												<td><code>user_id</code></td>
+												<td>The ID from the user who authorizes data usage</td>
+											</tr>
+											<tr>
+												<td><code>user_approve</code></td>
+												<td>Response from user, whether he authorizes the developer's app or not</td>
+											</tr>
+										</table>
+										<p>This endpoint must be signed using <strong>OAuth Consumer Key</strong> and <strong>OAuth Consumer Secret</strong> obtained from App registration. This endpoint should return to the defined <strong>App Callback</strong> with an <strong>OAuth Verifier</strong> query parameter that will be used on the next step.</p>
+									</li>
+									<li>
+										<h4>Exchange Request Token for an Access Token</h4>
+										<p>Once developer has obtained <strong>Request Token</strong>, <strong>Request Token Secret</strong> and <strong>OAuth Verifier</strong>, he must exchange this token for an <strong>Access Token</strong> that will be needed to make signed request to your API endpoints.</p>
+										<p>Developer should send a signed request with <strong>OAuth Consumer Key</strong>, <strong>OAuth Consumer Secret</strong>, <strong>Request Token</strong>, <strong>Request Token Secret</strong> and <strong>OAuth Verifier</strong> to this endpoint:</p>
+										<p>
+											<pre>http://{YOUR_API_LOCATION}/oauth/1.0a/access</pre>
+										</p>
+										<p>This endpoint should return an <strong>Access token</strong> and an <strong>Access Token Secret</strong> that in combination with <strong>OAuth Consumer Key</strong> and <strong>OAuth Consumer Secret</strong> are needed in order to make signed queries to your API.</p>
+									</li>
 								</ol>
+								<p>&nbsp;</p>
+								<h3>Making a signed request</h3>
+								<hr>
+								<p>If one of your API endpoints is signed, developer should sign his call with <strong>Access Token</strong>, <strong>Access Token Secret</strong>, <strong>OAuth Consumer Key</strong> and <strong>OAuth Consumer Secret</strong>, obtained from previous flow, in order to successfully fetch your API data.</p>
 							</div>
 							<div id="oauth2" class="tab-pane">
 								<h3>OAuth 2.0</h3>
@@ -299,7 +344,23 @@
 						</div>
 					</article>
 					<article class="tab-pane" id="docs">Docs Reference</article>
-					<article class="tab-pane" id="changelog">Changelog</article>
+					<article class="tab-pane" id="changelog">
+						<h2>Changelog</h2>
+						<p>What's new on PHP API Handler!</p>
+						<hr>
+						<h3>Version 1.0.0</h3>
+						<p>Initial release. It has several features:</p>
+						<ul>
+							<li>Define Getter, Poster and Deleter classes to create API endpoints</li>
+							<li>Support for JSON and XML output formats</li>
+							<li>Support for MySQL database engine</li>
+							<li>Support for OAuth 1.0a signed calls (Using <a href="https://github.com/sraka1/oauth1" target="_blank">mworrell-oauth-php</a>)</li>
+							<li>Predefined OAuth flow endpoints to authorize applications</li>
+							<li>Support for custom database query strings, to handle personalized data handling</li>
+							<li>Support for join replace queries, relationship between tables with fields in common</li>
+							<li>JSON Test application example provided, to test API endpoints</li>
+						</ul>
+					</article>
 					<article class="tab-pane" id="licence">
 						<h2>Licence</h2>
 						<p>PHP API Handler is licenced under MIT Licence:</p>
