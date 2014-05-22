@@ -64,7 +64,7 @@
 					<li class="active"><a href="#about" data-toggle="tab">About</a></li>
 					<li><a href="#start" data-toggle="tab">Getting Started</a></li>
 					<li><a href="#oauth" data-toggle="tab">OAuth Reference</a></li>
-					<li><a href="#docs" data-toggle="tab">Docs Reference</a></li>
+					<li><a href="#docs" data-toggle="tab">Options Reference</a></li>
 					<li><a href="#changelog" data-toggle="tab">Changelog</a></li>
 					<li><a href="#licence" data-toggle="tab">Licence</a></li>
 				</ul>
@@ -192,7 +192,7 @@
 												"description" => "Get users by id.",
 												"show" => array("first_name", "last_name"),
 												"cacheable" => TRUE
-											));</pre>
+));</pre>
 										</p>
 										<p>Full options documentation is available <a href="#docs" data-toggle="tab">here</a>.</p>
 									</li>
@@ -231,7 +231,73 @@
 						</div>
 
 					</article>
-					<article class="tab-pane" id="oauth">OAuth Reference</article>
+					<article class="tab-pane" id="oauth">
+						<h2>OAuth reference</h2>
+						<p>Find out more about authentication processes if you are securing your API.</p>
+						<hr>
+						<ul class="nav nav-tabs">
+							<li class="active"><a href="#oauth1" data-toggle="tab">OAuth 1.0a</a></li>
+							<li><a href="#oauth2" data-toggle="tab">OAuth 2.0</a></li>
+						</ul>
+						<div class="tab-content">
+							<div id="oauth1" class="tab-pane active">
+								<h3>OAuth 1.0a</h3>
+								<p>Authentication process used by sites like Twitter.</p>
+								<hr>
+								<p><strong>PHP API Handler</strong> makes use of OAuth 1.0a protocol, and specifically, 3-Legged OAuth process in order to make signed requests. The steps to authenticate your endpoint calls via OAuth 1.0a are the same that are used ins sites like Twitter. </p>
+								<p>Each one of <strong>PHP API Handler</strong> endpoint calls will return URL encoded data.</p>
+								<p>The flow is as follows:</p>
+								<ol>
+									<li>
+										<h4>Register a consumer</h4>
+										<p>In order for an app to make use of your API, they must be registered consumers, that you authorize. You define how your consumers must access your API (i.e. registering in your site as developers). You must provide a form to developers in order to register their applications to make use of your API.</p>
+										<p>There's an example of this registration in the <code>example</code> folder of this repository.</p>
+										<p><strong>PHP API Handler</strong> provides an OAuth registry endpoint by default taht you can access like this:</p>
+										<p>
+											<pre>http://{YOUR_API_LOCATION}/oauth/1.0a/register</pre>
+										</p>
+										<p>This endpoint expects the following <code>POST</code> parameters in order to register a new consumer:</p>
+										<table class="table">
+											<tr>
+												<th>Parameter</th>
+												<th>Description</th>
+											</tr>
+											<tr>
+												<td><code>user_id</code></td>
+												<td>The ID from the user associated to the consumer</td>
+											</tr>
+											<tr>
+												<td><code>user_name</code></td>
+												<td>The name from the user associated to the consumer</td>
+											</tr>
+											<tr>
+												<td><code>user_email</code></td>
+												<td>The email from the user associated to the consumer</td>
+											</tr>
+											<tr>
+												<td><code>app_uri</code></td>
+												<td>The URI from where the developer's app will call your API</td>
+											</tr>
+											<tr>
+												<td><code>app_uri</code></td>
+												<td>The URI to where the developer's app will redirect your user to</td>
+											</tr>
+											<tr>
+												<td><code>api_uri</code></td>
+												<td>The API URI. You should fill this one out, since the developer will be consulting your own API, and none other.</td>
+											</tr>
+										</table>
+										<p>This endpoint should return an <strong>OAuth Consumer Key</strong> and an <strong>OAuth Consumer Secret</strong> to your developer for them to authenticate their calls.</p>
+									</li>
+								</ol>
+							</div>
+							<div id="oauth2" class="tab-pane">
+								<h3>OAuth 2.0</h3>
+								<hr>
+								<div class="alert alert-info">Coming soon...</div>
+							</div>
+						</div>
+					</article>
 					<article class="tab-pane" id="docs">Docs Reference</article>
 					<article class="tab-pane" id="changelog">Changelog</article>
 					<article class="tab-pane" id="licence">
