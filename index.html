@@ -13,6 +13,9 @@
 		pre{
 			padding: 20px;
 		}
+		li > ul li {
+			list-style: none;
+		}
 	</style>
 </head>
 <body>
@@ -36,9 +39,12 @@
 			<aside class="col-sm-3">
 				<ul class="nav nav-stacked hidden-xs">
 					<li class="active"><a href="#about" data-toggle="tab">About</a></li>
-					<li><a href="#start" data-toggle="tab">Getting Started</a></li>
-					<li><a href="#docs" data-toggle="tab">OAuth Reference</a></li>
+					<li>
+						<a href="#start" data-toggle="tab">Getting Started</a>
+					</li>
+					<li><a href="#oauth" data-toggle="tab">OAuth Reference</a></li>
 					<li><a href="#docs" data-toggle="tab">Docs Reference</a></li>
+					<li><a href="#changelog" data-toggle="tab">Changelog</a></li>
 					<li><a href="#licence" data-toggle="tab">Licence</a></li>
 				</ul>
 			</aside>
@@ -46,54 +52,135 @@
 				<section class="tab-content">
 					<article class="tab-pane active" id="about">
 						<h2>About</h2>
+						<hr>
 						<blockquote>
 							<p>Define some Endpoints and get your app running!</p>
-							<p>Version: <strong>0.1.0</strong></p>
+							<p>Version: <strong>1.0.0</strong></p>
 							<p>Author: <strong><a href="http://7orro.info">Andrés Zorro</a> <a href="mailto:zorrodg@gmail.com">&lt;zorrodg@gmail.com&gt;</a> </strong></p>
 							<p>GitHub: <a href="http://github.com/zorrodg/php_apihandler" target="_blank">http://github.com/zorrodg/php_apihandler</a></p>
 						</blockquote>
 						<p>Due to web technologies in constant change, and the growing popular use of Front End technologies such as <strong>Backbone</strong>, <strong>Ember</strong> and <strong>AngujarJS</strong>, the need for server side MVC frameworks that render HTML templates has become increasingly obsolete, and API endpoints to get data from has become a major need.</p>
 						<p>Just to think about installing <strong>CodeIgniter</strong>, <strong>Laravel</strong>, even <strong>Slim</strong> to deal with simple database calls and no HTML display, made me think about a better solution. I know that there are services that deal with APIs, but my needs (and for many other developers I suppouse) require full control over the data I am sending and storing. That's why I developed <strong>PHP API Handler.</strong></p>
-						<p>The idea behind API Handler is to make it simple to develop API endpoints throught PHP. You define some Getters, Posters, Putters and that's it. API Handler does all the heavylifting (Database queries, identify resources, encode to json or xml and output).</p>
+						<p>The idea behind API Handler is to make it simple to develop API endpoints throught PHP. You define some Getters, Posters, Deleters and that's it. API Handler does all the heavylifting (Database queries, identify resources, encode to json or xml and output).</p>
 						<p>Currently API Handler works with MySQL and Outputs to JSON and XML formats. It's intended to support more database engines and more output formats. Coming soon...</p>
 						<p>&nbsp;</p>
-						<h4>Enjoy!</h4>
+						<h2>There's still a lot to do!</h2>
+						<hr>
+						<p>If you want to help developing this code, there's a lot of room for improvement. Just make a pull request and work on one of the following items:</p>
+						<ul>
+							<li>Improve API security overall</li>
+							<li>Add support for OAuth 2.0 server authentication</li>
+							<li>Add support for other Database Engines. Currently supporting MySQL only :(</li>
+							<li>Add support for other Outputs. Currently supporting JSON and XML</li>
+						</ul>
+						<h2>Enjoy!</h2>
 					</article>
 					<article class="tab-pane" id="start">
 						<h2>Getting Started</h2>
 						<p>Follow this guide to get your API up and running.</p>
 						<hr>
-						<h3>Installation</h3>
-						<ol>
-							<li>
-								<p>Download <strong>PHP API Handler</strong> or clone it from GitHub repo. <a href="http://github.com/zorrodg/php_apihandler"target="_blank">http://github.com/zorrodg/php_apihandler</a></p>
-							</li>
-							<li>
-								<p>For <strong>OAuth 1.0a</strong> signature server support to work, PHP API Handler uses oauth-php library from Marc Worrell. <a href="http://github.com/zorrodg/mworrell-oauth-php" target="_blank">http://github.com/zorrodg/php_apihandler</a></p>
-								<p>You can automatically install all dependencies using <a href="http://getcomposer.org" target="_blank">Composer</a></p>
-								<p>Go to the <code>apihandler/api</code> folder in Terminal and run:</p>
-								<p>
-									<pre>composer update</pre>
-								</p>
-							</li>
-							<li>
-								<p>Move <code>apihandler/api</code> folder to where you want your API to be. <div class="alert alert-info">Make sure the server you use support <strong>PHP 5.4></strong> and Apache <strong>mod_rewrite</strong> is enabled.</div></p>
-							</li>
-							<li>
-								<p>Search for <code>apihandler/api/api.config.php</code> and modify your configuration for your server:</p>
-								<ul>
-									<li><strong>Database Configuration:</strong> Define your database name, database username and password, (optional) database table prefix and hostname,</li>
-									<li><strong>Database Engine:</strong> Currently suporting <code>mysql</code>. Other engines coming soon.</li>
-									<li><strong>Cache:</strong> Set to <code>TRUE</code> in order to cache API calls. When <code>TRUE</code>, default GET calls are cached and POST and DELETE calls are not. You can configure each call separatedely. Also define the name of the folder that will store your cached files, and the time in seconds that the cached file will be valid (default 60s).</li>
-									<li><strong>Security:</strong> Set to <code>oauth1.0a</code> to use OAuth 1.0a security for your endpoints. Default GET calls are unsecured and POST and DELETE calls are secured.</li>
-									<li><strong>Environment:</strong> Set error display for API calls: (<code>dev</code>, <code>stage</code> or <code>prod</code>)</li>
-								</ul>
-							</li>
-						</ol>
+						<ul class="nav nav-tabs">
+							<li class="active"><a href="#install" data-toggle="tab">Install</a></li>
+							<li><a href="#setup" data-toggle="tab">Setup</a></li>
+							<li><a href="#test" data-toggle="tab">Test</a></li>
+						</ul>
+						<div class="tab-content">
+							<div id="install" class="tab-pane active">
+								<h3>Installation</h3>
+								<p>In five simple steps.</p>
+								<hr>
+								<ol>
+									<li>
+										<h4>Download</h4>
+										<p>Download <strong>PHP API Handler</strong> or clone it from GitHub repo. <a href="http://github.com/zorrodg/php_apihandler"target="_blank">http://github.com/zorrodg/php_apihandler</a></p>
+									</li>
+									<li>
+										<h4><div class="label label-default">Composer</div> Install dependencies</h4>
+										<p>For <strong>OAuth 1.0a</strong> signature server support to work, PHP API Handler uses oauth-php library from Marc Worrell. <a href="http://github.com/zorrodg/mworrell-oauth-php" target="_blank">http://github.com/zorrodg/php_apihandler</a></p>
+										<p>You can automatically install all dependencies using <a href="http://getcomposer.org" target="_blank">Composer</a></p>
+										<p>Go to the <code>apihandler/api</code> folder in Terminal and run:</p>
+										<p>
+											<pre>composer update</pre>
+										</p>
+									</li>
+									<li>
+										<h4>Move to your server</h4>
+										<p>Move <code>apihandler/api</code> folder to where you want your API to be. <div class="alert alert-info">Make sure the server you use support <strong>PHP 5.4></strong> and Apache <strong>mod_rewrite</strong> is enabled.</div></p>
+									</li>
+									<li>
+										<h4>Configure API Handler</h4>
+										<p>Locate <code>apihandler/api/api.config.php</code> and modify your configuration for your server:</p>
+										<ul>
+											<li><strong>Database Configuration:</strong> Define your database name, database username and password, (optional) database table prefix and hostname,</li>
+											<li><strong>Database Engine:</strong> Currently suporting <code>mysql</code>. Other engines coming soon.</li>
+											<li><strong>Cache:</strong> Set to <code>TRUE</code> in order to cache API calls. When <code>TRUE</code>, default GET calls are cached and POST and DELETE calls are not. You can configure each call separatedely. Also define the name of the folder that will store your cached files, and the time in seconds that the cached file will be valid (default 60s).</li>
+											<li><strong>Output:</strong> <code>json</code> and <code>xml</code> supported. Other outputs coming soon.</li>
+											<li><strong>Security:</strong> Set to <code>oauth1.0a</code> to use OAuth 1.0a security for your endpoints. Default GET calls are unsecured and POST and DELETE calls are secured.</li>
+											<li><strong>Environment:</strong> Set error display for API calls: (<code>dev</code>, <code>stage</code> or <code>prod</code>)</li>
+										</ul>
+									</li>
+									<li>
+										<h4>Test installation:</h4>
+										<p>Go to your API installation URL. If everything went right, you should see a message encoded in your default output with this message:</p>
+										<pre>No endpoint.</pre>
+									</li>
+								</ol>
+							</div>
+							<div id="setup" class="tab-pane">
+								<h3>Setup</h3>
+								<p>Now that you have your API up, it's time to make some endpoints.</p>
+								<hr>
+								<ol>
+									<li>
+										<h4>Locate</h4>
+										<p>Locate <code>apihandler/api/registered_endpoints/</code> folder inside your API directory.</p>
+										<p>There's an example file called <code>myAPI.endpoints.php</code> that you can use for reference. Every file named with this convention will be added to API Handler: <code>YOUR_FILE_NAME.endpoints.php</code></p>
+									</li>
+									<li>
+										<h4>Declare</h4>
+										<p>Create your first API endpoint. It's as easy as declaring a new class:</p>
+										<p>
+											<pre>new Getter("users");</pre>
+										</p>
+										<p>There are three classes that you can declare, each corresponds to its HTTP counterpart:</p>
+										<p>
+											<ul>
+												<li><code>new Getter()</code> -> Declares a new GET endpoint.</li>
+												<li><code>new Poster()</code> -> Declares a new POST endpoint.</li>
+												<li><code>new Deleter()</code> -> Declares a new DELETE endpoint.</li>
+											</ul>
+										</p>
+										<p>The first parameter that class accept is the endpoint name. Endpoint name has a special notation, passed as a string, as follows:</p>
+										<p>
+											<pre>{name}/{verb}/:{arg_name}</pre>
+										</p>
+										<p>
+											<ul>
+												<li><code>name</code> -> <div class="label label-danger">Required</div class="label label-danger"> The endpoint name. It refers to the database table name from which data will be retrieved.</li>
+												<li><code>verb</code> -> <div class="label label-warning">Optional</div> The action that will be performed to the database. *</li>
+												<li><code>arg_name</code> -> <div class="label label-warning">Optional</div> Can be one or several arguments separated by slashes "/". If preceded by a colon ":", indicates that the argument is a variable</li>
+											</ul>
+										</p>
+										<p>* - PHP API Handler is designed to "guess" action to be made on database based on common used verbs. i.e: <code>users/create</code>, <strong>"create"</strong> verb will be translated as <code>INSERT</code> in a MySQL statement. Of course, there will be verbs that are not included on the list. If you need a verb to be added, please let me know. ;)</p>
+									</li>
+									<li>
+										<h4>Specify</h4>
+										<p>You can pass options to your endpoint, in form of an array:</p>
+										<p>
+											<pre>new Getter("users/:id", array(&lt;options&gt;));</pre>
+										</p>
+									</li>
+								</ol>
+							</div>
+							<div id="test" class="tab-pane">
+								
+							</div>
+						</div>
 
 					</article>
-					<article class="tab-pane" id="docs">OAuth Reference</article>
+					<article class="tab-pane" id="oauth">OAuth Reference</article>
 					<article class="tab-pane" id="docs">Docs Reference</article>
+					<article class="tab-pane" id="changelog">Changelog</article>
 					<article class="tab-pane" id="licence">
 						<h2>Licence</h2>
 						<p>PHP API Handler is licenced under MIT Licence:</p>
