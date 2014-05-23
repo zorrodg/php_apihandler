@@ -1,19 +1,52 @@
 ERROR CODES:
 
 1. 	No endpoint
+Happens when you go to your API URI without any endpoint.
+
 2. 	Unexpected Header
+Happens when you pass an HTTP header that is not reckognized by API Handler.
+
 3. 	Duplicated endpoint on dictionary
+Happens when you try to create an endpoint that is already registered.
+
 4. 	Couldn't guess verb
+Happens when the verb you used for your endpoint construction is not on the supported list. 
+
 5. 	No columns to insert
+Happens when you set create_new_table or modyfy_existing_table to TRUE without defining columns option.
+
 6. 	Endpoint not found
+Happens when you try to access an Endpoint that is not yet defined.
+
 7. 	Output not supported
+Happens when you try to access an endpoint with an output extension other that the ones PHP API handler support at the time.
+
 8. 	DB driver not supported
-9. 	Parameter not found or not in order
-10.	Filter not found or not registered 
-11.	Method mismatch 
+Happens when you set in your configuration file (api.config.php) a non-supported database driver.
+
+9. 	Parameter not found
+Happens when you pass an argument to your endpoint that is not included in the arguments you defined.
+
+10.	Filter not found or not registered
+Happens when you pass a filter that is not included in your columns option.
+
+11.	Method mismatch
+Happens when you try to use a different HTTP method other that the one you defined.
+
 12.	No data to display (Table is empty)
-13.	Table doesn't exists 
+Happens when the database table is empty.
+
+13.	Table doesn't exists
+Happens when database table couldn't be found.
+
 14.	Missing or mismatch arguments.
+Happens when you pass less or more arguments that are defined.
+
 15.	OAuth Server/Consumer does not exists.
+Happens when you sign a request with OAuth consumer/server that has not been registered. 
+
 16.	Cannot create cache folder.
+Happens when you have not set permissions 0777 to cache folder on api.
+
 17.	No server defined on cache instance.
+Happens when a server instance is not set (That means, when tries to access an api endpoint without parameters).
