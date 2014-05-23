@@ -1,6 +1,6 @@
 PHP API Handler
 ==============
-## Create your REST API in minutes. :)
+### Create your REST API in minutes. :)
 
 > Define some endpoints and get your app running!
 
