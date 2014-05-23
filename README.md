@@ -3,7 +3,9 @@ PHP API Handler
 ## Create your REST API in minutes. :)
 
 > Define some endpoints and get your app running!
+
 > Version: 1.0.0
+
 > Author: Andrés Zorro <zorrodg@gmail.com>
 
 --
