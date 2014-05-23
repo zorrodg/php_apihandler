@@ -95,6 +95,19 @@
 							<li>Add support for other Outputs. Currently supporting JSON and XML</li>
 						</ul>
 						<h2>Enjoy!</h2>
+						<hr>
+						<p>If you want to thank me, I won't mind accepting a beer. :)</p>
+						<p><form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<input type="hidden" name="cmd" value="_donations">
+<input type="hidden" name="business" value="zorrodg@gmail.com">
+<input type="hidden" name="lc" value="US">
+<input type="hidden" name="item_name" value="PHP API Handler">
+<input type="hidden" name="no_note" value="0">
+<input type="hidden" name="currency_code" value="USD">
+<input type="hidden" name="bn" value="PP-DonationsBF:btn_donateCC_LG.gif:NonHostedGuest">
+<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+</form></p>
 					</article>
 					<article class="tab-pane" id="start">
 						<h2>Getting Started</h2>
@@ -361,7 +374,7 @@
 						<hr>
 						<h3><code>create_new_table (bool)</code></h3>
 						<p>Creates a new table in database with given endpoint name, if not exists. This option will not create a table if it exists.</p>
-						<p><div class="alert alert-warning"><strong>Note</strong>: If you set <code>create_new_table</code> or <code>modify_existing_table</code> to <strong>TRUE</strong>, PHP API Handler automatically will create two aditional columns without prefix called <code>id</code> (int) and <code>updated</code> (datetime).</div></p>
+						<p><div class="alert alert-warning"><strong>Note</strong>: If you set <code>create_new_table</code> or <code>modify_existing_table</code> to <strong>TRUE</strong>, PHP API Handler automatically will create two aditional columns without prefix called <code>id</code> (int) and <code>updated</code> (timestamp).</div></p>
 						<dl class="dl-horizontal">
 							<dt>Example:</dt>
 							<dd><pre>"create_new_table" => TRUE</pre></dd>
@@ -369,7 +382,7 @@
 						<hr>
 						<h3><code>modify_existing_table (bool)</code></h3>
 						<p>Modifies an existing table, if exists and if it's params change. This option will modify table, if you change table names, change column names, data type or data length. If left TRUE, it will not modify existing tables if there are no changes.</p>
-						<p><div class="alert alert-warning"><strong>Note</strong>: If you set <code>create_new_table</code> or <code>modify_existing_table</code> to <strong>TRUE</strong>, PHP API Handler automatically will create two aditional columns without prefix called <code>id</code> (int) and <code>updated</code> (datetime).</div></p>
+						<p><div class="alert alert-warning"><strong>Note</strong>: If you set <code>create_new_table</code> or <code>modify_existing_table</code> to <strong>TRUE</strong>, PHP API Handler automatically will create two aditional columns without prefix called <code>id</code> (int) and <code>updated</code> (timestamp).</div></p>
 						<dl class="dl-horizontal">
 							<dt>Example:</dt>
 							<dd><pre>"modify_existing_table" => TRUE</pre></dd>
@@ -435,7 +448,7 @@
 						<hr>
 						<h3><code>show (array)</code></h3>
 						<p>Set the columns that will be displayed. Columns not listed will be hidden. If this option is not set, PHP API Handler will bring data from all columns.</p>
-						<p><div class="alert alert-warning"><strong>Note</strong>: If you set <code>create_new_table</code> or <code>modify_existing_table</code> to <strong>TRUE</strong>, PHP API Handler automatically will create two aditional columns without prefix called <code>id</code> (int) and <code>updated</code> (datetime). You can show them also.</div></p>
+						<p><div class="alert alert-warning"><strong>Note</strong>: If you set <code>create_new_table</code> or <code>modify_existing_table</code> to <strong>TRUE</strong>, PHP API Handler automatically will create two aditional columns without prefix called <code>id</code> (int) and <code>updated</code> (timestamp). You can show them also.</div></p>
 						<dl class="dl-horizontal">
 							<dt>Example:</dt>
 							<dd><pre>"show" => array("first_name", "last_name")</pre></dd>
@@ -466,6 +479,69 @@
 						<dl class="dl-horizontal">
 							<dt>Example:</dt>
 							<dd><pre>"sort" => "first_name|asc"</pre></dd>
+						</dl>
+						<hr>
+						<h3><code>query (string)</code></h3>
+						<p>Set a custom query to the database. If set, custom query is used instead of the one API Handler creates.</p>
+						<p><div class="alert alert-warning"><strong>About kvsprintf:</strong> PHP API Handler uses a modified version of <code>vsprintf()</code> PHP native function, that supports associative arrays. It uses a special notation for identifying array keys and values: <code>%{array_key_name}\$k</code> and <code>%{array_key_name}\$v</code> replacing {array_key_name} for coresponding array key name.</div></p>
+						<p><div class="alert alert-danger">When set, <strong>query must include table prefixes in order to work</strong>. If endpoint has variable arguments, column names must be included manually and with column prefixes.</div></p>
+						<dl>
+							<dt>Example 1: Endpoint -> <code>users</code></dt>
+							<dd><pre>"query" => "SELECT * FROM `api_users` WHERE `%first_name\$k` = '%first_name\$v'"</pre></dd>
+						</dl>
+						<dl>
+							<dt>Example 2: Endpoint -> <code>users/:first_name</code></dt>
+							<dd><pre>"query" => "SELECT * FROM `api_users` WHERE `aph_first_name` = '%first_name\$v'"</pre></dd>
+						</dl>
+						<p>Notice on <strong>Example 2</strong> column prefix <code>aph_</code> is included for it to work.</p>
+						<hr>
+						<h3><code>cacheable (bool)</code></h3>
+						<p>Set whether the endpoint results will be cached or not. Default <code>FALSE</code>.</p>
+						<dl class="dl-horizontal">
+							<dt>Example:</dt>
+							<dd><pre>"cacheable" => TRUE</pre></dd>
+						</dl>
+						<hr>
+						<h3><code>join (assoc array)</code></h3>
+						<p>Set the columns from other tables that will be joined to current query. This associative array has an special notation, with key name and string value, separated by <code>|</code> (pipe) character.</p>
+						<p><code>join</code> option will override result from the first query with the result of the second query, returning a complex object.</p>
+						<p>You can <code>join</code> as many tables as you want, as long as there are columns in common with your current query.</p>
+						<p>Special Notation: <code>{key} => {first_col}|{second_col}|{cols_to_fetch}</code></p>
+						<p>
+							<table class="table">
+								<tr>
+									<th class="text-center">Parameter</th>
+									<th class="text-center" width="200">Default Value</th>
+									<th>Description</th>
+								</tr>
+								<tr>
+									<td class="text-center"><code>key</code></td>
+									<td class="text-center"><div class="label label-danger">Required</div></td>
+									<td>The name of the table that will be joined.</td>
+								</tr>
+								<tr>
+									<td class="text-center"><code>first_col</code></td>
+									<td class="text-center"><div class="label label-danger">Required</div></td>
+									<td>Column from the first table (primary table, if you wish) that will be associated.</td>
+								</tr>
+								<tr>
+									<td class="text-center"><code>second_col</code></td>
+									<td class="text-center"><div class="label label-danger">Required</div></td>
+									<td>Column from the second table that will be associated. The values fomr the first and the second must match.</td>
+								</tr>
+								<tr>
+									<td class="text-center"><code>cols_to_fetch</code></td>
+									<td class="text-center">FALSE</td>
+									<td>Columns that will be fetched from the second table, separated by <code>,</code>. If you don't assign it, It will fetch all columns from second table (similar to <code>show</code> option)</td>
+								</tr>
+							</table>
+						</p>
+						<dl class="dl-horizontal">
+							<dt>Example:</dt>
+							<dd><pre>"join" => array("groups" => "group_id|id",
+		"teams" => "team_id|id|team_name,team_desc"
+		)</pre></dd>
+						</dl>
 					</article>
 					<article class="tab-pane" id="changelog">
 						<h2>Changelog</h2>
