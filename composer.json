@@ -1,0 +1,15 @@
+{
+    "name": "zorrodg/php_apihandler",
+    "description": "Create your REST API in minutes :)",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andres Zorro",
+            "email": "zorrodg@gmail.com"
+        }
+    ],
+    "minimum-stability": "alpha",
+    "require": {
+
+    }
+}

@@ -4,3 +4,5 @@ api/vendor/*
 !api/vendor/.htacess
 example/bower_components/*
 example/vendor/*
+
+/vendor/
