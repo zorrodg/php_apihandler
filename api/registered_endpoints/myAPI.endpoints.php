@@ -21,7 +21,7 @@
  * 
  * 		- description:				(string) Endpoint description.
  * 		- create_new_table:			(bool) Creates a new table in database with endpoint name, if not exists.
- * 		- modify_existing_table:	(bool) Modifies an existing table, if exists and if it's params change.
+ * 		- modify_existing_table:		(bool) Modifies an existing table, if exists and if it's params change.
  * 		- columns:					(array) Define table columns in which endpoint operates. 
  * 									Special notation: {column_name}|{var_type}|{var_length}|{unique}
  * 										column_name:	[required] The name of the column.
@@ -32,7 +32,7 @@
  * 										var_length:		[optional: default "200"] The length of the data 
  * 														accepted. (Only for int, char, bigint and string)
  * 										unique:			[optional] Set column key to unique.
- * 		- col_prefix:				(string) Add a column prefix to the column. 
+ * 		- col_prefix:					(string) Add a column prefix to the column. 
  * 		- limit:					(string) Set a word to use as a parameter on query to limit results number.
  * 		- show:						(array) Set the columns that will be displayed.
  * 		- sort:						(string) Sets the column to order the results.
@@ -41,13 +41,13 @@
  * 										order_type:		[optional default "desc"] The order to display, 
  * 														Supported asc (ASC), desc (DESC)
  * 		- query:					(string) Set a custom query to the database
- * 		- cacheable:				(bool) Whether the endpoind results will be cached or not. Default FALSE.
+ * 		- cacheable:					(bool) Whether the endpoind results will be cached or not. Default FALSE.
  * 		- join:						(array) Set the columns that will be joined to current query.
  * 									Special notation (assoc array) {key} => {first_col}|{second_col}|{cols_to_fetch}
- * 										key:			Table name that will be joined
- * 										first_col:		Value from current table query.
- * 										second_col:		Value from table that will be joined.
- * 										cols_to_fetch:	One or more columns (separated by ",") that will be fetched in the joined column.
+ * 										key:		[required] Table name that will be joined
+ * 										first_col:	[required] Value from current table query.
+ * 										second_col:	[required] Value from table that will be joined.
+ * 										cols_to_fetch:	[optional] One or more columns (separated by ",") that will be fetched in the joined column.
  *
  * => [Optional] Secured (bool): Defines if endpoint is secured with defined security.
  * 
