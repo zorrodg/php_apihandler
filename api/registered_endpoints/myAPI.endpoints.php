@@ -48,6 +48,7 @@
  * 										first_col:	[required] Value from current table query.
  * 										second_col:	[required] Value from table that will be joined.
  * 										cols_to_fetch:	[optional] One or more columns (separated by ",") that will be fetched in the joined column.
+ * 		- table_alias				(string) Set an alias for given table. Useful for hiding real table names from endpoint users.
  *
  * => [Optional] Secured (bool): Defines if endpoint is secured with defined security.
  * 
@@ -69,14 +70,15 @@ new Getter("users", array(
 	"join" => array("groups" => "group_id|id|id,group_name,group_desc")
 	));
 
-new Getter("groups", array(
+new Getter("teams", array(
 	"description" => "Get all groups",
 	"create_new_table"=>TRUE,
 	"modify_existing_table" =>TRUE,
 	"columns" => array("group_name|string|100|unique", "group_desc|text", "group_meeting|date"),
 	"limit" => "number",
 	"cacheable" => FALSE,
-	"col_prefix" => "aph_"
+	"col_prefix" => "aph_",
+	"table_alias" => "groups"
 	));
 
 new Getter("users/:id", array(

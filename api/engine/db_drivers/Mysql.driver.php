@@ -97,6 +97,7 @@ class Mysql_driver extends Database{
 	 * @return string         Formatted database query.
 	 */
 	public function construct_query($q, $table, $params){
+		if(isset($params['table_alias'])) $table = $params['table_alias'];
 		$table = DB_PREFIX.$table;
 		$col_prefix = isset($params['col_prefix']) ? $params['col_prefix'] : "";
 
@@ -186,6 +187,7 @@ class Mysql_driver extends Database{
 	 * @param  string $col_prefix 	Include column prefix.
 	 */
 	public function create_new_table($table, $columns, $col_prefix = ""){
+		if(isset($params['table_alias'])) $table = $params['table_alias'];
 		$table = DB_PREFIX.$table;
 		$columns = $this->set_columns($columns, $col_prefix);
 
@@ -219,6 +221,7 @@ class Mysql_driver extends Database{
 	 * @param  string $col_prefix 	Include column prefix.
 	 */
 	public function modify_existing_table($table, $columns, $col_prefix = ""){
+		if(isset($params['table_alias'])) $table = $params['table_alias'];
 		$table = DB_PREFIX.$table;
 
 		// Retrieve existing table

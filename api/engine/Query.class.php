@@ -52,11 +52,13 @@ class Query{
 	/**
 	 * Constructor. Creates a query and sets all parameters.
 	 * @param string 	$method   	HTTP method. Used to lock other methods for use current endpoint.
-	 * @param endpoint 	$endpoint 	Endpoint name.
+	 * @param string 	$endpoint 	Endpoint name.
 	 * @param string 	$verb     	Endpoint verb. Used to guess database verb to use.
 	 * @param array  	$params   	Endpoint parameters.
 	 */
 	public function __construct($method, $endpoint, $verb = NULL, $params = array()){
+		// Table alias option
+		if(isset($params['table_alias'])) $endpoint = $params['table_alias'];
 
 		// Creates a database driver instance
 		if(array_search(DB_ENGINE, $this->supported_drivers) === FALSE)
