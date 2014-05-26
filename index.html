@@ -365,30 +365,27 @@
 						<p>
 							<pre>new Getter("users", array(&lt;options here&gt;), TRUE);</pre>
 						</p>
+
 						<hr>
-						<h3><code>description (string)</code></h3>
-						<p>Endpoint description. Not really useful, in fact. But it could become handy whenever you want to make your API documentation ;)</p>
+					<!-- cacheable -->
+						<h3><code>cacheable (bool)</code></h3>
+						<p>Set whether the endpoint results will be cached or not. Default <code>FALSE</code>.</p>
 						<dl class="dl-horizontal">
 							<dt>Example:</dt>
-							<dd><pre>"description" => "Get all users."</pre></dd>
+							<dd><pre>"cacheable" => TRUE</pre></dd>
 						</dl>
+						
 						<hr>
-						<h3><code>create_new_table (bool)</code></h3>
-						<p>Creates a new table in database with given endpoint name, if not exists. This option will not create a table if it exists.</p>
-						<p><div class="alert alert-warning"><strong>Note</strong>: If you set <code>create_new_table</code> or <code>modify_existing_table</code> to <strong>TRUE</strong>, PHP API Handler automatically will create two aditional columns without prefix called <code>id</code> (int) and <code>updated</code> (timestamp).</div></p>
+					<!-- col_prefix -->
+						<h3><code>col_prefix (string)</code></h3>
+						<p>Add a column prefix to the columns. If you define one, instead of looking at <code>col_name</code> column, it will look for <code>{prefix}col_name</code>.</p>
 						<dl class="dl-horizontal">
 							<dt>Example:</dt>
-							<dd><pre>"create_new_table" => TRUE</pre></dd>
+							<dd><pre>"col_prefix" => "aph_"</pre></dd>
 						</dl>
+
 						<hr>
-						<h3><code>modify_existing_table (bool)</code></h3>
-						<p>Modifies an existing table, if exists and if it's params change. This option will modify table, if you change table names, change column names, data type or data length. If left TRUE, it will not modify existing tables if there are no changes.</p>
-						<p><div class="alert alert-warning"><strong>Note</strong>: If you set <code>create_new_table</code> or <code>modify_existing_table</code> to <strong>TRUE</strong>, PHP API Handler automatically will create two aditional columns without prefix called <code>id</code> (int) and <code>updated</code> (timestamp).</div></p>
-						<dl class="dl-horizontal">
-							<dt>Example:</dt>
-							<dd><pre>"modify_existing_table" => TRUE</pre></dd>
-						</dl>
-						<hr>
+					<!-- columns -->		
 						<h3><code>columns (array)</code></h3>
 						<p>Define table columns in which endpoint operates. This is an array of strings. Each string has an special notation, separated by <code>|</code> (pipe) character.</p>
 						<p>Depending on the HTTP call, columns will define parameters for your query, i.e. you can call your endpoint with a filter: <code>GET http://{YOUR_ENDPOINT_LOCATION}/users.json?last_name=zorro</code></p>
@@ -433,76 +430,26 @@
 )</pre></dd>
 						</dl>
 						<hr>
-						<h3><code>col_prefix (string)</code></h3>
-						<p>Add a column prefix to the columns. If you define one, instead of looking at <code>col_name</code> column, it will look for <code>{prefix}col_name</code>.</p>
+					<!-- create_new_table -->
+						<h3><code>create_new_table (bool)</code></h3>
+						<p>Creates a new table in database with given endpoint name, if not exists. This option will not create a table if it exists.</p>
+						<p><div class="alert alert-warning"><strong>Note</strong>: If you set <code>create_new_table</code> or <code>modify_existing_table</code> to <strong>TRUE</strong>, PHP API Handler automatically will create two aditional columns without prefix called <code>id</code> (int) and <code>updated</code> (timestamp).</div></p>
 						<dl class="dl-horizontal">
 							<dt>Example:</dt>
-							<dd><pre>"col_prefix" => "aph_"</pre></dd>
+							<dd><pre>"create_new_table" => TRUE</pre></dd>
 						</dl>
+
 						<hr>
-						<h3><code>limit (string)</code></h3>
-						<p>Set a word to use as a parameter on query string to limit results number. i.e. if you set it to <code>count</code>, you could call an endpoint like this: <code>http://{YOUR_ENDPOINT_LOCATION}/users.json?count=5</code>.</p>
+					<!-- description -->
+						<h3><code>description (string)</code></h3>
+						<p>Endpoint description. Not really useful, in fact. But it could become handy whenever you want to make your API documentation ;)</p>
 						<dl class="dl-horizontal">
 							<dt>Example:</dt>
-							<dd><pre>"limit" => "count"</pre></dd>
+							<dd><pre>"description" => "Get all users."</pre></dd>
 						</dl>
+						
 						<hr>
-						<h3><code>show (array)</code></h3>
-						<p>Set the columns that will be displayed. Columns not listed will be hidden. If this option is not set, PHP API Handler will bring data from all columns.</p>
-						<p><div class="alert alert-warning"><strong>Note</strong>: If you set <code>create_new_table</code> or <code>modify_existing_table</code> to <strong>TRUE</strong>, PHP API Handler automatically will create two aditional columns without prefix called <code>id</code> (int) and <code>updated</code> (timestamp). You can show them also.</div></p>
-						<dl class="dl-horizontal">
-							<dt>Example:</dt>
-							<dd><pre>"show" => array("first_name", "last_name")</pre></dd>
-						</dl>
-						<hr>
-						<h3><code>sort (string)</code></h3>
-						<p>Sets the column to order the results. This string has an special notation, separated by <code>|</code> (pipe) character. Default order is <code>id</code> column.</p>
-						<p>Special Notation: <code>{column_name}|{order_type}</code></p>
-						<p>
-							<table class="table">
-								<tr>
-									<th class="text-center">Parameter</th>
-									<th class="text-center" width="200">Default Value</th>
-									<th>Description</th>
-								</tr>
-								<tr>
-									<td class="text-center"><code>column_name</code></td>
-									<td class="text-center"><div class="label label-danger">Required</div></td>
-									<td>The name of the column.</td>
-								</tr>
-								<tr>
-									<td class="text-center"><code>var_type</code></td>
-									<td class="text-center">"desc"</td>
-									<td>The order to display. Supported values <code>asc</code> (ASC), <code>desc</code> (DESC)</td>
-								</tr>
-							</table>
-						</p>
-						<dl class="dl-horizontal">
-							<dt>Example:</dt>
-							<dd><pre>"sort" => "first_name|asc"</pre></dd>
-						</dl>
-						<hr>
-						<h3><code>query (string)</code></h3>
-						<p>Set a custom query to the database. If set, custom query is used instead of the one API Handler creates.</p>
-						<p><div class="alert alert-warning"><strong>About kvsprintf:</strong> PHP API Handler uses a modified version of <code>vsprintf()</code> PHP native function, that supports associative arrays. It uses a special notation for identifying array keys and values: <code>%{array_key_name}\$k</code> and <code>%{array_key_name}\$v</code> replacing {array_key_name} for coresponding array key name.</div></p>
-						<p><div class="alert alert-danger">When set, <strong>query must include table prefixes in order to work</strong>. If endpoint has variable arguments, column names must be included manually and with column prefixes.</div></p>
-						<dl>
-							<dt>Example 1: Endpoint -> <code>users</code></dt>
-							<dd><pre>"query" => "SELECT * FROM `api_users` WHERE `%first_name\$k` = '%first_name\$v'"</pre></dd>
-						</dl>
-						<dl>
-							<dt>Example 2: Endpoint -> <code>users/:first_name</code></dt>
-							<dd><pre>"query" => "SELECT * FROM `api_users` WHERE `aph_first_name` = '%first_name\$v'"</pre></dd>
-						</dl>
-						<p>Notice on <strong>Example 2</strong> column prefix <code>aph_</code> is included for it to work.</p>
-						<hr>
-						<h3><code>cacheable (bool)</code></h3>
-						<p>Set whether the endpoint results will be cached or not. Default <code>FALSE</code>.</p>
-						<dl class="dl-horizontal">
-							<dt>Example:</dt>
-							<dd><pre>"cacheable" => TRUE</pre></dd>
-						</dl>
-						<hr>
+					<!-- join -->
 						<h3><code>join (assoc array)</code></h3>
 						<p>Set the columns from other tables that will be joined to current query. This associative array has an special notation, with key name and string value, separated by <code>|</code> (pipe) character.</p>
 						<p><code>join</code> option will override result from the first query with the result of the second query, returning a complex object.</p>
@@ -543,6 +490,81 @@
 		"teams" => "team_id|id|team_name,team_desc"
 		)</pre></dd>
 						</dl>
+
+						<hr>
+					<!-- limit -->
+						<h3><code>limit (string)</code></h3>
+						<p>Set a word to use as a parameter on query string to limit results number. i.e. if you set it to <code>count</code>, you could call an endpoint like this: <code>http://{YOUR_ENDPOINT_LOCATION}/users.json?count=5</code>.</p>
+						<dl class="dl-horizontal">
+							<dt>Example:</dt>
+							<dd><pre>"limit" => "count"</pre></dd>
+						</dl>
+
+						<hr>
+					<!-- modify_existing_table -->
+						<h3><code>modify_existing_table (bool)</code></h3>
+						<p>Modifies an existing table, if exists and if it's params change. This option will modify table, if you change table names, change column names, data type or data length. If left TRUE, it will not modify existing tables if there are no changes.</p>
+						<p><div class="alert alert-warning"><strong>Note</strong>: If you set <code>create_new_table</code> or <code>modify_existing_table</code> to <strong>TRUE</strong>, PHP API Handler automatically will create two aditional columns without prefix called <code>id</code> (int) and <code>updated</code> (timestamp).</div></p>
+						<dl class="dl-horizontal">
+							<dt>Example:</dt>
+							<dd><pre>"modify_existing_table" => TRUE</pre></dd>
+						</dl>
+							
+						<hr>
+					<!-- query -->
+						<h3><code>query (string)</code></h3>
+						<p>Set a custom query to the database. If set, custom query is used instead of the one API Handler creates.</p>
+						<p><div class="alert alert-warning"><strong>About kvsprintf:</strong> PHP API Handler uses a modified version of <code>vsprintf()</code> PHP native function, that supports associative arrays. It uses a special notation for identifying array keys and values: <code>%{array_key_name}\$k</code> and <code>%{array_key_name}\$v</code> replacing {array_key_name} for coresponding array key name.</div></p>
+						<p><div class="alert alert-danger">When set, <strong>query must include table prefixes in order to work</strong>. If endpoint has variable arguments, column names must be included manually and with column prefixes.</div></p>
+						<dl>
+							<dt>Example 1: Endpoint -> <code>users</code></dt>
+							<dd><pre>"query" => "SELECT * FROM `api_users` WHERE `%first_name\$k` = '%first_name\$v'"</pre></dd>
+						</dl>
+						<dl>
+							<dt>Example 2: Endpoint -> <code>users/:first_name</code></dt>
+							<dd><pre>"query" => "SELECT * FROM `api_users` WHERE `aph_first_name` = '%first_name\$v'"</pre></dd>
+						</dl>
+						<p>Notice on <strong>Example 2</strong> column prefix <code>aph_</code> is included for it to work.</p>
+
+						<hr>
+					<!-- show -->
+						<h3><code>show (array)</code></h3>
+						<p>Set the columns that will be displayed. Columns not listed will be hidden. If this option is not set, PHP API Handler will bring data from all columns.</p>
+						<p><div class="alert alert-warning"><strong>Note</strong>: If you set <code>create_new_table</code> or <code>modify_existing_table</code> to <strong>TRUE</strong>, PHP API Handler automatically will create two aditional columns without prefix called <code>id</code> (int) and <code>updated</code> (timestamp). You can show them also.</div></p>
+						<dl class="dl-horizontal">
+							<dt>Example:</dt>
+							<dd><pre>"show" => array("first_name", "last_name")</pre></dd>
+						</dl>
+
+						<hr>
+					<!-- sort -->
+						<h3><code>sort (string)</code></h3>
+						<p>Sets the column to order the results. This string has an special notation, separated by <code>|</code> (pipe) character. Default order is <code>id</code> column.</p>
+						<p>Special Notation: <code>{column_name}|{order_type}</code></p>
+						<p>
+							<table class="table">
+								<tr>
+									<th class="text-center">Parameter</th>
+									<th class="text-center" width="200">Default Value</th>
+									<th>Description</th>
+								</tr>
+								<tr>
+									<td class="text-center"><code>column_name</code></td>
+									<td class="text-center"><div class="label label-danger">Required</div></td>
+									<td>The name of the column.</td>
+								</tr>
+								<tr>
+									<td class="text-center"><code>var_type</code></td>
+									<td class="text-center">"desc"</td>
+									<td>The order to display. Supported values <code>asc</code> (ASC), <code>desc</code> (DESC)</td>
+								</tr>
+							</table>
+						</p>
+						<dl class="dl-horizontal">
+							<dt>Example:</dt>
+							<dd><pre>"sort" => "first_name|asc"</pre></dd>
+						</dl>
+
 					</article>
 					<article class="tab-pane" id="changelog">
 						<h2>Changelog</h2>
