@@ -49,6 +49,13 @@ class APIhandler{
 			try{
 				// Get endpoint query
 				$query = Dictionary::get_query($og_exists);
+
+				// Before callback function call
+				if($before = Dictionary::get_before($og_exists)){
+					if (is_callable($before))
+						$query['q']['q'] = call_user_func($before, $query['q']['q']);
+				}
+
 				// Check is endpoint is cacheable
 				$cacheable = Dictionary::is_cacheable($og_exists);
 				if(!$query)
@@ -78,6 +85,11 @@ class APIhandler{
 				if(CACHE && $cacheable){
 					$cached_content = Cache::search($this->server);
 					if($cached_content){
+						// After callback function call
+						if($after = Dictionary::get_after($og_exists)){
+							if(is_callable($after))
+								$cached_content = call_user_func($after, $cached_content);
+						}
 						return Output::encode(json_decode($cached_content), $this->server->output, TRUE);
 					}
 				}
@@ -109,7 +121,11 @@ class APIhandler{
 					if(CACHE && $cacheable){
 						$res = Cache::write($res);
 					}
-
+					// After callback function call
+					if($after = Dictionary::get_after($og_exists)){
+						if(is_callable($after))
+							$res = call_user_func($after, $res);
+					}
 					return Output::encode($res, $this->server->output);
 				}
 

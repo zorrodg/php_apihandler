@@ -88,6 +88,36 @@ final class Dictionary{
 	}
 
 	/**
+	 * Gets before function callback from given endpoint search.
+	 * @param  string  $endpoint 	Endpoint to search
+	 * @return array           		Query array or FALSE if none
+	 */
+	static public function get_before($endpoint){
+		$ep = self::search($endpoint);
+		if($ep){
+			if(isset($ep['params']['before'])){
+				return $ep['params']['before'];
+			}
+		}
+		return FALSE;
+	}
+
+	/**
+	 * Gets after function callback from given endpoint search.
+	 * @param  string  $endpoint 	Endpoint to search
+	 * @return array           		Query array or FALSE if none
+	 */
+	static public function get_after($endpoint){
+		$ep = self::search($endpoint);
+		if($ep){
+			if(isset($ep['params']['after'])){
+				return $ep['params']['after'];
+			}
+		}
+		return FALSE;
+	}
+
+	/**
 	 * Test if searched endpoint has col_prefix.
 	 * @param  string  $endpoint Endpoint to search
 	 * @return boolean           Column prefix or FALSE if none

@@ -49,6 +49,8 @@
  * 										second_col:	[required] Value from table that will be joined.
  * 										cols_to_fetch:	[optional] One or more columns (separated by ",") that will be fetched in the joined column.
  * 		- table_alias				(string) Set an alias for given table. Useful for hiding real table names from endpoint users.
+ * 		- before 						(function) Set a callback function to manipulate query before execution. Must return Database Query.
+ * 		- after 						(function) Set a callback function to manipulate data after fetch and before encoding. 
  *
  * => [Optional] Secured (bool): Defines if endpoint is secured with defined security.
  * 
@@ -67,7 +69,13 @@ new Getter("users", array(
 	"sort" => "group_id|asc",
 	"col_prefix" => "aph_",
 	"cacheable" => FALSE, 
-	"join" => array("groups" => "group_id|id|id,group_name,group_desc")
+	"join" => array("groups" => "group_id|id|id,group_name,group_desc"),
+	"before" => function($query){
+			return $query;
+		},
+	"after" => function($result){
+			return html_decode_recursive($result);
+		}
 	));
 
 new Getter("teams", array(
