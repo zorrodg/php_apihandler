@@ -77,7 +77,7 @@
 						<hr>
 						<blockquote>
 							<p>Define some endpoints and get your app running!</p>
-							<p>Version: <strong>1.0.0</strong></p>
+							<p>Version: <strong>1.0.1</strong></p>
 							<p>Author: <strong><a href="http://7orro.info">Andrés Zorro</a> <a href="mailto:zorrodg@gmail.com">&lt;zorrodg@gmail.com&gt;</a> </strong></p>
 							<p>GitHub: <a href="http://github.com/zorrodg/php_apihandler" target="_blank">http://github.com/zorrodg/php_apihandler</a></p>
 						</blockquote>
@@ -365,6 +365,29 @@
 						<p>
 							<pre>new Getter("users", array(&lt;options here&gt;), TRUE);</pre>
 						</p>
+						<hr>
+					<!-- after -->
+						<h3><div class="label label-success">new!</div> <code>after (function)</code></h3>
+						<p>Set a custom callback fuction that executes after data retrieval. It has one parameter that is data retrieved (response).</p>
+						<dl class="dl-horizontal">
+							<dt>Example:</dt>
+							<dd><pre>"after" => function($response){
+		foreach($response as $key => $val){
+			//.. Do something with the response
+		}
+	}</pre></dd>
+						</dl>
+
+						<hr>
+					<!-- before -->
+						<h3><div class="label label-success">new!</div> <code>before (function)</code></h3>
+						<p>Set a custom callback fuction that executes before query fetch. It has one parameter that is query string to be send.</p>
+						<dl class="dl-horizontal">
+							<dt>Example:</dt>
+							<dd><pre>"before" => function($query){
+		//.. Do something with the query string
+	}</pre></dd>
+						</dl>
 
 						<hr>
 					<!-- cacheable -->
@@ -565,11 +588,31 @@
 							<dd><pre>"sort" => "first_name|asc"</pre></dd>
 						</dl>
 
+						<hr>
+					<!-- table_alias -->
+						<h3><div class="label label-success">new!</div> <code>table_alias (string)</code></h3>
+						<p>Set an alias name for your endpoint. <code>table_alias</code> will hold your table name, while it is aliased on the endpoint.</p>
+						<dl>
+							<dt>Example:</dt>
+							<dd><p>Given this endpoint: <code>people.json</code> it will search for <strong>users</strong> table instead of <strong>people</strong> table, if option set.</p>
+							<pre>"table_alias" => "users"</pre></dd>
+						</dl>
+
 					</article>
 					<article class="tab-pane" id="changelog">
 						<h2>Changelog</h2>
 						<p>What's new on PHP API Handler!</p>
 						<hr>
+					<!-- 1.0.1 -->
+						<h3>Version 1.0.1</h3>
+						<p>Minor fixes. Three new features:</p>
+						<ul>
+							<li>Fixed html recursive encode/decode function bug throwing warnings on <code>null</code> data.</li>
+							<li>Added <code>table_alias</code> option, to hide table names from endpoints.</li>
+							<li>Added <code>before</code> and <code>after</code> options. Use them as callbacks before query sent and after data retrieval.</li>
+						</ul>
+						<hr>
+					<!-- 1.0.0 -->
 						<h3>Version 1.0.0</h3>
 						<p>Initial release. It has several features:</p>
 						<ul>
