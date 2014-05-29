@@ -1,9 +1,9 @@
 #!/bin/bash
 # API Update Script
-red="\033[0;31m"
-blue="\033[0;36m"
-green="\033[0;32m"
-nc="\033[0m"
+red="\[\033[0;31m\]"
+blue="\[\033[0;36m\]"
+green="\[\033[0;32m\]"
+nc="\[\033[0m\]"
 api_dir=$(pwd)/api/
 
 #capture option flags
