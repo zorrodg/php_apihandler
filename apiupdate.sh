@@ -181,6 +181,7 @@ fi
 # Updating composer dependencies
 cd ${api_dir}
 composer update
+chmod 0777 cache
 
 echo "${blue}Update completed"
 echo
