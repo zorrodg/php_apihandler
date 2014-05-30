@@ -6,7 +6,7 @@
  * 
  * @author Andrés Zorro <zorrodg@gmail.com>
  * @github https://github.com/zorrodg/php_apihandler
- * @version 0.1
+ * @version 1.0.1
  * @licence MIT
  *
  */

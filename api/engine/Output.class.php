@@ -4,7 +4,7 @@
  *
  * @package APIhandler
  * @author Andrés Zorro <zorrodg@gmail.com>
- * @version 0.1
+ * @version 1.0.1
  * @licence MIT
  *
  */

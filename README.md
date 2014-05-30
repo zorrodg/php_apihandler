@@ -4,7 +4,7 @@ PHP API Handler
 
 > Define some endpoints and get your app running!
 
-> Version: 1.0.0
+> Version: 1.0.1
 
 > Author: Andrés Zorro <zorrodg@gmail.com>
 
